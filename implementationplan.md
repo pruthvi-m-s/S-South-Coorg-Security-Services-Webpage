@@ -14,29 +14,28 @@ Phases run in order. Each phase is broken into small, single-objective prompts. 
 
 ---
 
-## Phase 1 — Design system & core components
+## Phase 1 — Navigation
 
-1.1 Build themed shadcn primitives: Button (3 variants), Input/Textarea/Select, Card, Accordion, Badge.
-1.2 Build `SectionContainer` + spacing/rhythm primitives.
-1.3 Build `AnimatedCounter` with `prefers-reduced-motion` support.
-1.4 Build reusable `Seo` component.
-1.5 Build reusable `CTAButtons` block.
+1.1 Global Header & Navigation: sticky header, scroll-aware shadow, content-layer-driven branding, desktop flat nav with active highlighting, accessible mobile menu (hamburger + Framer Motion slide-down), primary CTA.
+1.2 Full Footer.
+1.3 Floating WhatsApp Button.
+1.4 Sticky Mobile Call Button.
+1.5 Back-to-Top Button.
+1.6 Page transitions + Lenis smooth scrolling.
 
-**Exit criteria:** style-guide/demo route showing all components themed correctly.
+**Exit criteria:** navigating the site feels premium, polished and consistent.
 
 ---
 
-## Phase 2 — Navigation & layout polish
+## Phase 2 — Design system & core components
 
-2.1 Full Header with services dropdown, sticky behavior, phone + Get Quote CTA.
-2.2 Mobile navigation (hamburger, full-screen menu).
-2.3 Full Footer.
-2.4 Floating WhatsApp Button.
-2.5 Sticky Mobile Call Button.
-2.6 Back-to-Top Button.
-2.7 Page transitions + Lenis smooth scrolling.
+2.1 Build themed shadcn primitives: Button (3 variants), Input/Textarea/Select, Card, Accordion, Badge.
+2.2 Build `SectionContainer` + spacing/rhythm primitives.
+2.3 Build `AnimatedCounter` with `prefers-reduced-motion` support.
+2.4 Build reusable `Seo` component.
+2.5 Build reusable `CTAButtons` block.
 
-**Exit criteria:** navigating the site feels premium, polished and consistent.
+**Exit criteria:** style-guide/demo route showing all components themed correctly.
 
 ---
 
@@ -52,7 +51,7 @@ Phases run in order. Each phase is broken into small, single-objective prompts. 
 ## Phase 4 — Core pages
 
 4.1 Home.
-4.2 About (Company History, Why Choose Us, Certifications, Process).
+4.2 About.
 4.3 Industries.
 4.4 Clients.
 4.5 Gallery.
@@ -63,12 +62,11 @@ Phases run in order. Each phase is broken into small, single-objective prompts. 
 
 ---
 
-## Phase 5 — Service page template & 13 service pages
+## Phase 5 — Service pages
 
 5.1 Build `ServicePageTemplate`.
 5.2 Dynamic routing + Services hub.
-5.3 QA against 2–3 services.
-5.4 Verify all 13 service pages.
+5.3 Verify all 13 service pages.
 
 **Exit criteria:** all service pages live and cross-linked.
 
@@ -92,6 +90,8 @@ Phases run in order. Each phase is broken into small, single-objective prompts. 
 7.3 sitemap.xml, robots.txt, Open Graph images.
 7.4 Local SEO optimization pass.
 7.5 Google Analytics 4 integration.
+7.6 Enterprise SEO and GEO quality pass: audit page intent, metadata, schema, internal links, crawl files, and AI-readable content against the SEO documentation.
+7.7 Enterprise trust and compliance pass: publish the content-driven Compliance page, sitewide pending/verified PSARA signal, and honest certification-status presentation; defer founder and case-study surfaces until real data exists.
 
 ---
 

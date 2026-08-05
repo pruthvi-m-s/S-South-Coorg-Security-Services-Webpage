@@ -79,15 +79,19 @@ src/
 
 All 13 service pages share a single template driven by structured content data.
 
+The `/compliance` route is a content-driven trust page. It reads the existing `Certification[]` records and does not maintain a parallel registration or document source.
+
 ---
 
 ## 4. SEO & metadata
 
-- Per-page title, description, canonical URL and Open Graph metadata.
-- JSON-LD (`LocalBusiness`, `Service`, `FAQPage`) where appropriate.
+- One route-aware SEO component owns page title, description, canonical URL, robots, author, theme color, Open Graph, and Twitter Card metadata. Page and service content records remain the metadata source.
+- Reusable JSON-LD generators provide `Organization`, `LocalBusiness`, `WebSite`, `Service`, `FAQPage`, and `BreadcrumbList` schemas only on appropriate routes.
 - Natural integration of local SEO keywords.
 - Google Business Profile link + embedded map.
-- Sitemap.xml and robots.txt generated during build.
+- `sitemap.xml` and `robots.txt` are generated during the Vite build from the content-layer service routes. `VITE_SITE_URL` must be set to the production origin in the hosting environment.
+- `llms.txt` is generated during the same build from the site, services, and industries content records. AI crawler directives are generated alongside the standard robots rules.
+- Canonical paths use a no-trailing-slash convention (except `/`); a future redirect map is maintained in `src/lib/redirects.ts` when public URLs change.
 
 ---
 

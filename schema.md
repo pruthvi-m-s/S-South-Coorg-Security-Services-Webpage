@@ -167,3 +167,18 @@ Validation (Zod, enforced client-side per `techspec.md`):
 Every content file's records should default `isPlaceholder`/`status: "pending-upload"` fields to placeholder state at launch, per `prd.md` assumptions. Do not hardcode fabricated specifics (exact certificate numbers, exact client names, invented quotes) — leave those fields structurally present but empty/placeholder until supplied by the client.
 
 **Note:** No schema is required for small stateless UI components (e.g. floating WhatsApp button, sticky mobile CTA, quick-call button). These remain presentational components without associated content models.
+
+## 13. Compliance page content
+
+```ts
+interface CompliancePageContent {
+  seo: SeoMeta;
+  hero: { title: string; subtitle: string };
+  introduction: { title: string; description: string };
+  certificationDetails: Partial<Record<Certification["type"], { title: string; description: string }>>;
+  statusLabels: { verified: string; pending: string };
+  psaraBadge: { verified: string; pending: string };
+}
+```
+
+The compliance page, `ComplianceSection`, and `PSARABadge` must read certification status and document images from the single `Certification[]` source. This page-level shape may provide explanatory copy and state labels, but must not duplicate certification records, registration numbers, or document data.

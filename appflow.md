@@ -5,6 +5,7 @@
 ```
 /                          Home
 /about                     About
+/compliance                Compliance & documentation
 /services                  Services hub (grid of all 13, links out)
 /services/:slug            Individual service landing page (×13)
 /industries                Industries served
@@ -23,7 +24,7 @@
 
 **Header:** Logo | Home · About · Services (dropdown/mega-menu listing all 13) · Industries · Clients · Gallery · FAQs · Contact | Phone CTA (always visible) | "Get Quote" button (always visible, primary color)
 
-**Footer:** Sitemap links grouped (Company / Services / Resources), certification badges, address + GBP map link, phone/WhatsApp/email, social links (if any), copyright.
+**Footer:** Sitemap links grouped (including Compliance), certification badge, address + GBP map link, phone/WhatsApp/email, social links (if any), copyright.
 
 **Mobile:** Hamburger → full-screen navigation; phone CTA and "Get Quote" button remain pinned/sticky.
 
