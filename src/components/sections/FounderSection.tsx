@@ -54,9 +54,9 @@ export default function FounderSection({
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
+style={{
           backgroundImage:
-            "linear-gradient(to right, #8B1E1E 1px, transparent 1px), linear-gradient(to bottom, #8B1E1E 1px, transparent 1px)",
+            "linear-gradient(to right, var(--primary) 1px, transparent 1px), linear-gradient(to bottom, var(--primary) 1px, transparent 1px)",
           backgroundSize: "48px 48px",
         }}
       />

@@ -161,88 +161,89 @@
 }
 
 /* ============================================================
-   2. CSS CUSTOM PROPERTIES — Light Theme (Default)
-   All values directly from design.md
+   2. CSS CUSTOM PROPERTIES — Premium Dark Theme (Default)
+   All values from the premium palette: bg #080806, text #EAECE4,
+   primary #C3C8B2, secondary #474662, accent #A381A5
    ============================================================ */
 :root {
-    /* ─── shadcn Base Radius ──────────────────────────── */
+/* ─── shadcn Base Radius ──────────────────────────── */
     --radius: 0.5rem;
 
     /* ─── Background & Foreground ─────────────────────── */
-    --background: oklch(1 0 0);              /* #FFFFFF — Surface white */
-    --foreground: oklch(0.039 0 0);           /* #0A0A0A — Ink black */
+    --background: oklch(0.133 0.005 107.1);      /* #080806 — Premium near-black */
+    --foreground: oklch(0.939 0.011 118.0);      /* #EAECE4 — Soft off-white */
 
     /* ─── Cards ───────────────────────────────────────── */
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.039 0 0);
+    --card: oklch(0.163 0.004 106.8);            /* #0E0E0C — Slightly lighter than bg */
+    --card-foreground: oklch(0.939 0.011 118.0);
 
     /* ─── Popovers ────────────────────────────────────── */
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.039 0 0);
+    --popover: oklch(0.163 0.004 106.8);
+    --popover-foreground: oklch(0.939 0.011 118.0);
 
-    /* ─── Primary — Deep Red (brand accent) ────────────── */
-    --primary: oklch(0.37 0.125 27.5);         /* #8B1E1E */
-    --primary-foreground: oklch(0.985 0 0);    /* White text on primary */
+    /* ─── Primary — Sage (brand accent) ──────────────── */
+    --primary: oklch(0.823 0.031 117.5);         /* #C3C8B2 */
+    --primary-foreground: oklch(0.133 0.005 107.1); /* Dark text on primary */
 
-    /* ─── Secondary ───────────────────────────────────── */
-    --secondary: oklch(0.965 0 0);             /* Near-white grey */
-    --secondary-foreground: oklch(0.039 0 0);
+    /* ─── Secondary — Muted Indigo ────────────────────── */
+    --secondary: oklch(0.407 0.047 285.8);       /* #474662 */
+    --secondary-foreground: oklch(0.939 0.011 118.0);
 
     /* ─── Muted — Section alternation, cards, borders ──── */
-    --muted: oklch(0.961 0.005 60);            /* #F5F5F4 */
-    --muted-foreground: oklch(0.45 0.01 60);   /* Mid grey for secondary text */
+    --muted: oklch(0.181 0.004 106.8);           /* #121210 — subtle elevation */
+    --muted-foreground: oklch(0.794 0.011 118.0);/* Derived text @ ~70% opacity */
 
-    /* ─── Accent ──────────────────────────────────────── */
-    --accent: oklch(0.961 0.005 60);
-    --accent-foreground: oklch(0.039 0 0);
+    /* ─── Accent — Mauve (use sparingly) ──────────────── */
+    --accent: oklch(0.647 0.066 324.5);          /* #A381A5 */
+    --accent-foreground: oklch(0.133 0.005 107.1);
 
     /* ─── Destructive ─────────────────────────────────── */
-    --destructive: oklch(0.577 0.245 27.325);  /* Accessible red */
-    --destructive-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);    /* Accessible red */
+    --destructive-foreground: oklch(0.133 0.005 107.1);
 
     /* ─── Borders & Inputs ────────────────────────────── */
-    --border: oklch(0.922 0.005 60);           /* #EBEBE9 — Subtle border */
-    --input: oklch(0.922 0.005 60);
-    --ring: oklch(0.37 0.125 27.5);             /* Matches primary for focus rings */
+    --border: oklch(0.939 0.011 118.0 / 0.12);   /* Low-contrast border */
+    --input: oklch(0.939 0.011 118.0 / 0.16);
+    --ring: oklch(0.823 0.031 117.5);            /* Matches primary for focus rings */
 
     /* ─── Charts (shadcn compat) ──────────────────────── */
-    --chart-1: oklch(0.37 0.125 27.5);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
+    --chart-1: oklch(0.823 0.031 117.5);
+    --chart-2: oklch(0.407 0.047 285.8);
+    --chart-3: oklch(0.647 0.066 324.5);
+    --chart-4: oklch(0.562 0 0);
+    --chart-5: oklch(0.4 0 0);
 
     /* ─── Sidebar (shadcn compat) ─────────────────────── */
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.039 0 0);
-    --sidebar-primary: oklch(0.37 0.125 27.5);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.965 0 0);
-    --sidebar-accent-foreground: oklch(0.039 0 0);
-    --sidebar-border: oklch(0.922 0.005 60);
-    --sidebar-ring: oklch(0.37 0.125 27.5);
+    --sidebar: oklch(0.163 0.004 106.8);
+    --sidebar-foreground: oklch(0.939 0.011 118.0);
+    --sidebar-primary: oklch(0.823 0.031 117.5);
+    --sidebar-primary-foreground: oklch(0.133 0.005 107.1);
+    --sidebar-accent: oklch(0.181 0.004 106.8);
+    --sidebar-accent-foreground: oklch(0.939 0.011 118.0);
+    --sidebar-border: oklch(0.939 0.011 118.0 / 0.12);
+    --sidebar-ring: oklch(0.823 0.031 117.5);
 
     /* ================================================================
        SSCSS Brand Extension Tokens
        Used by future components via var() or Tailwind utilities
        ================================================================ */
 
-    /* ─── Primary Color Palette ──────────────────────────── */
-    --primary-50: oklch(0.93 0.03 27.5);         /* Lightest red tint */
-    --primary-100: oklch(0.85 0.06 27.5);        /* Subtle red wash */
-    --primary-700: oklch(0.28 0.09 27.5);         /* #6B1414 — Hover/emphasis */
-    --primary-800: oklch(0.22 0.06 27.5);         /* Deepest red */
+/* ─── Primary Color Palette (Sage) ─────────────────── */
+    --primary-50: oklch(0.242 0.012 129.0);      /* #1E211B — Dark sage chip bg */
+    --primary-100: oklch(0.278 0.015 129.1);     /* #262A22 — Dark sage panel */
+    --primary-700: oklch(0.739 0.037 117.9);     /* #A8AE94 — Hover/emphasis */
+    --primary-800: oklch(0.677 0.039 117.6);     /* #959B80 — Deepest sage */
 
     /* ─── Neutral Palette ───────────────────────────────── */
-    --ink: oklch(0.039 0 0);                     /* #0A0A0A */
-    --surface: oklch(1 0 0);                     /* #FFFFFF */
-    --muted-light: oklch(0.961 0.005 60);        /* #F5F5F4 */
+    --ink: oklch(0.939 0.011 118.0);             /* #EAECE4 — Primary text */
+    --surface: oklch(0.133 0.005 107.1);         /* #080806 — Base background */
+    --muted-light: oklch(0.217 0.006 106.9);     /* #1A1A17 — Elevated surface */
 
     /* ─── Semantic Colors (Subtle, accessible) ──────────── */
     --success: oklch(0.527 0.154 150);           /* Subtle green */
-    --success-foreground: oklch(0.985 0 0);      /* White on success */
-    --error: oklch(0.577 0.245 27.325);          /* Accessible red (same as destructive) */
-    --error-foreground: oklch(0.985 0 0);        /* White on error */
+    --success-foreground: oklch(0.133 0.005 107.1);
+    --error: oklch(0.704 0.191 22.216);          /* Accessible red (same as destructive) */
+    --error-foreground: oklch(0.133 0.005 107.1);
 
     /* ─── Header Height ───────────────────────────────── */
     --header-height: 3.5rem;                     /* 56px — mobile first */
@@ -256,55 +257,55 @@
 }
 
 /* ============================================================
-   3. CSS CUSTOM PROPERTIES — Dark Theme
-   Minimal dark mode support (project is primarily light mode)
+   3. CSS CUSTOM PROPERTIES — Dark Theme (Mirror of default)
+   Kept for `.dark` compatibility — identical to the default theme.
    ============================================================ */
 .dark {
-    --background: oklch(0.12 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.16 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.16 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.6 0.1 27.5);
-    --primary-foreground: oklch(0.12 0 0);
-    --secondary: oklch(0.24 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.24 0 0);
-    --muted-foreground: oklch(0.65 0 0);
-    --accent: oklch(0.24 0 0);
-    --accent-foreground: oklch(0.985 0 0);
+    --background: oklch(0.133 0.005 107.1);
+    --foreground: oklch(0.939 0.011 118.0);
+    --card: oklch(0.163 0.004 106.8);
+    --card-foreground: oklch(0.939 0.011 118.0);
+    --popover: oklch(0.163 0.004 106.8);
+    --popover-foreground: oklch(0.939 0.011 118.0);
+    --primary: oklch(0.823 0.031 117.5);
+    --primary-foreground: oklch(0.133 0.005 107.1);
+    --secondary: oklch(0.407 0.047 285.8);
+    --secondary-foreground: oklch(0.939 0.011 118.0);
+    --muted: oklch(0.181 0.004 106.8);
+    --muted-foreground: oklch(0.794 0.011 118.0);
+    --accent: oklch(0.647 0.066 324.5);
+    --accent-foreground: oklch(0.133 0.005 107.1);
     --destructive: oklch(0.704 0.191 22.216);
-    --destructive-foreground: oklch(0.12 0 0);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.6 0.1 27.5);
-    --chart-1: oklch(0.6 0.1 27.5);
-    --chart-2: oklch(0.65 0 0);
-    --chart-3: oklch(0.55 0 0);
-    --chart-4: oklch(0.45 0 0);
-    --chart-5: oklch(0.35 0 0);
-    --sidebar: oklch(0.16 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.6 0.1 27.5);
-    --sidebar-primary-foreground: oklch(0.12 0 0);
-    --sidebar-accent: oklch(0.24 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.6 0.1 27.5);
+    --destructive-foreground: oklch(0.133 0.005 107.1);
+    --border: oklch(0.939 0.011 118.0 / 0.12);
+    --input: oklch(0.939 0.011 118.0 / 0.16);
+    --ring: oklch(0.823 0.031 117.5);
+    --chart-1: oklch(0.823 0.031 117.5);
+    --chart-2: oklch(0.407 0.047 285.8);
+    --chart-3: oklch(0.647 0.066 324.5);
+    --chart-4: oklch(0.562 0 0);
+    --chart-5: oklch(0.4 0 0);
+    --sidebar: oklch(0.163 0.004 106.8);
+    --sidebar-foreground: oklch(0.939 0.011 118.0);
+    --sidebar-primary: oklch(0.823 0.031 117.5);
+    --sidebar-primary-foreground: oklch(0.133 0.005 107.1);
+    --sidebar-accent: oklch(0.181 0.004 106.8);
+    --sidebar-accent-foreground: oklch(0.939 0.011 118.0);
+    --sidebar-border: oklch(0.939 0.011 118.0 / 0.12);
+    --sidebar-ring: oklch(0.823 0.031 117.5);
 
-    /* SSCSS dark overrides */
-    --ink: oklch(0.985 0 0);
-    --surface: oklch(0.12 0 0);
-    --muted-light: oklch(0.2 0 0);
-    --primary-50: oklch(0.2 0.03 27.5);
-    --primary-100: oklch(0.25 0.05 27.5);
-    --primary-700: oklch(0.45 0.08 27.5);
-    --primary-800: oklch(0.5 0.09 27.5);
+    /* SSCSS brand extension overrides */
+    --ink: oklch(0.939 0.011 118.0);
+    --surface: oklch(0.133 0.005 107.1);
+    --muted-light: oklch(0.217 0.006 106.9);
+--primary-50: oklch(0.242 0.012 129.0);
+    --primary-100: oklch(0.278 0.015 129.1);
+    --primary-700: oklch(0.739 0.037 117.9);
+    --primary-800: oklch(0.677 0.039 117.6);
     --success: oklch(0.527 0.154 150);
-    --success-foreground: oklch(0.12 0 0);
+    --success-foreground: oklch(0.133 0.005 107.1);
     --error: oklch(0.704 0.191 22.216);
-    --error-foreground: oklch(0.12 0 0);
+    --error-foreground: oklch(0.133 0.005 107.1);
 }
 
 /* ============================================================
@@ -341,9 +342,9 @@
         color: var(--ink);
     }
 
-    /* ─── Selection Highlight ─────────────────────────── */
+/* ─── Selection Highlight ─────────────────────────── */
     ::selection {
-        background-color: oklch(0.85 0.06 27.5);    /* primary-100 */
+        background-color: oklch(0.278 0.015 129.1);    /* primary-100 (dark sage) */
         color: var(--ink);
     }
 

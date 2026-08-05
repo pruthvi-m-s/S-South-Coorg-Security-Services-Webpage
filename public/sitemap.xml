@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>http://localhost:5173/</loc></url>
+  <url><loc>http://localhost:5173/about</loc></url>
+  <url><loc>http://localhost:5173/compliance</loc></url>
+  <url><loc>http://localhost:5173/services</loc></url>
+  <url><loc>http://localhost:5173/industries</loc></url>
+  <url><loc>http://localhost:5173/clients</loc></url>
+  <url><loc>http://localhost:5173/gallery</loc></url>
+  <url><loc>http://localhost:5173/faqs</loc></url>
+  <url><loc>http://localhost:5173/contact</loc></url>
+  <url><loc>http://localhost:5173/services/security-guards</loc></url>
+  <url><loc>http://localhost:5173/services/corporate-security</loc></url>
+  <url><loc>http://localhost:5173/services/industrial-security</loc></url>
+  <url><loc>http://localhost:5173/services/residential-security</loc></url>
+  <url><loc>http://localhost:5173/services/housekeeping</loc></url>
+  <url><loc>http://localhost:5173/services/front-office-management</loc></url>
+  <url><loc>http://localhost:5173/services/skilled-labour</loc></url>
+  <url><loc>http://localhost:5173/services/unskilled-labour</loc></url>
+  <url><loc>http://localhost:5173/services/corporate-staffing</loc></url>
+  <url><loc>http://localhost:5173/services/ex-army-security-guards</loc></url>
+  <url><loc>http://localhost:5173/services/event-security</loc></url>
+  <url><loc>http://localhost:5173/services/background-verification</loc></url>
+  <url><loc>http://localhost:5173/services/private-detective-services</loc></url>
+  <url><loc>http://localhost:5173/services/facility-management</loc></url>
+</urlset>
