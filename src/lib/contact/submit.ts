@@ -23,24 +23,49 @@ const GOOGLE_FORM_URL =
 export async function submitContactForm(
   data: ContactFormData,
 ): Promise<ContactSubmissionResult> {
-  const formData = new URLSearchParams();
-
-  formData.append("entry.890003161", data.name);
-  formData.append("entry.476556914", data.company || "");
-  formData.append("entry.1119866674", data.phone);
-  formData.append("entry.44778419", data.email);
-  formData.append("entry.1876012013", data.service || "");
-  formData.append("entry.1098291040", data.message);
-
   try {
-    await fetch(GOOGLE_FORM_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: formData.toString(),
+    const iframeName = `google-form-${Date.now()}`;
+
+    // Hidden iframe prevents Google Forms from navigating
+    // the user's current page.
+    const iframe = document.createElement("iframe");
+    iframe.name = iframeName;
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = GOOGLE_FORM_URL;
+    form.target = iframeName;
+    form.style.display = "none";
+
+    const fields = {
+      "entry.890003161": data.name,
+      "entry.476556914": data.company || "",
+      "entry.1119866674": data.phone,
+      "entry.44778419": data.email,
+      "entry.1876012013": data.service || "",
+      "entry.1098291040": data.message,
+    };
+
+    Object.entries(fields).forEach(([name, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
     });
+
+    document.body.appendChild(form);
+    form.submit();
+
+    // Google Forms does not provide a reliable CORS response,
+    // so the submission is considered successful once the
+    // browser accepts the POST.
+    window.setTimeout(() => {
+      form.remove();
+      iframe.remove();
+    }, 3000);
 
     return {
       success: true,
