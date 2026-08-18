@@ -97,7 +97,8 @@ export default function FaqPreview({
                   className={cn(
                     "rounded-xl border border-border bg-card p-6 sm:p-8",
                     "transition-all duration-300 ease-premium-out",
-                    "hover:border-primary/20 hover:shadow-md",
+                    "hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md",
+                    "focus-within:border-primary/30 focus-within:shadow-[0_0_0_4px_rgba(139,30,30,0.12)]",
                   )}
                 >
                   {/* Question */}

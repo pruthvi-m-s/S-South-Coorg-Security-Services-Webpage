@@ -9,6 +9,10 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import HeadlineReveal from "@/components/common/HeadlineReveal";
+import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
+import HeroSkeleton from "@/components/common/HeroSkeleton";
+import { BorderTrail } from "../../../components/motion-primitives/border-trail";
 import type { ImageRef } from "@/types";
 import {
   staggerContainer,
@@ -62,9 +66,10 @@ export default function ServiceDetailHero({
               Our Services
             </motion.span>
 
-            {/* Service name — H1 for the page */}
-            <motion.h1
-              variants={fadeUp}
+{/* Service name — H1 for the page, Apple-style mask reveal */}
+            <HeadlineReveal
+              as="h1"
+              delay={0.15}
               className={cn(
                 "font-heading text-4xl font-semibold leading-tight tracking-tight",
                 "sm:text-5xl lg:text-6xl",
@@ -72,7 +77,7 @@ export default function ServiceDetailHero({
               )}
             >
               {name}
-            </motion.h1>
+            </HeadlineReveal>
 
             {/* Tagline */}
             <motion.p
@@ -93,10 +98,12 @@ export default function ServiceDetailHero({
               variants={scaleIn}
               className="flex justify-center"
             >
-              <figure className="relative">
-              <img
+<figure className="relative rounded-lg">
+              <ImageWithSkeleton
                 src={image.src}
                 alt={image.alt}
+                skeleton={<HeroSkeleton className="h-full w-full" />}
+                containerClassName="w-full max-w-lg"
                 className={cn(
                   "h-auto w-full max-w-lg rounded-lg object-cover",
                   "shadow-lg",
@@ -106,6 +113,11 @@ export default function ServiceDetailHero({
                 loading="lazy"
                 decoding="async"
                 fetchPriority="low"
+              />
+              <BorderTrail
+                size={60}
+                className="bg-primary/50"
+                transition={{ repeat: Infinity, duration: 9, ease: "linear" }}
               />
                 {image.isPlaceholder && image.credit && (
                   <figcaption className="sr-only">{image.credit}</figcaption>

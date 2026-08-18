@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { getIcon } from "@/lib/icons";
+import SectionBackground from "@/components/common/SectionBackground";
 import {
   staggerContainer,
   fadeUp,
@@ -49,9 +50,10 @@ export default function CoverageSection({
         "relative bg-muted",
         className,
       )}
-      aria-label="Coverage and Deployment"
+aria-label="Coverage and Deployment"
     >
-      <div className="section-container section-padding">
+      <SectionBackground />
+      <div className="section-container section-padding relative z-10">
         <motion.div
           variants={staggerContainer}
           initial="hidden"

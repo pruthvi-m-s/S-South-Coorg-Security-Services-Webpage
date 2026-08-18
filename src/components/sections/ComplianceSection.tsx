@@ -1,6 +1,8 @@
 import { createElement } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
+import Skeleton from "@/components/common/Skeleton";
 import { getIcon } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import type { Certification } from "@/types";
@@ -40,8 +42,16 @@ export default function ComplianceSection({ certifications, details, statusLabel
                     {isVerified ? statusLabels.verified : statusLabels.pending}
                   </Badge>
                 </div>
-                {isVerified && certification.documentImage && (
-                  <img src={certification.documentImage.src} alt={certification.documentImage.alt} loading="lazy" decoding="async" className="mt-6 h-auto w-full rounded-lg border border-border" />
+{isVerified && certification.documentImage && (
+                  <ImageWithSkeleton
+                    src={certification.documentImage.src}
+                    alt={certification.documentImage.alt}
+                    skeleton={<Skeleton className="mt-6 h-40 w-full rounded-lg" />}
+                    containerClassName="mt-6 h-auto w-full"
+                    className="h-auto w-full rounded-lg border border-border object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 )}
               </Card>
             );

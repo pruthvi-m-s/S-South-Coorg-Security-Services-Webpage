@@ -1,9 +1,14 @@
 import { createElement } from "react";
 import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
 import { getIcon } from "@/lib/icons";
 import { fadeUp } from "@/lib/motion";
+import {
+  Disclosure,
+  DisclosureTrigger,
+  DisclosureContent,
+} from "../../../components/motion-primitives/disclosure";
 import type { WhyChooseUsItem } from "@/types";
 
 // ─── Props ────────────────────────────────────────────────────
@@ -21,48 +26,67 @@ export default function WhyChooseCard({
 
   return (
     <motion.div variants={fadeUp}>
-      <Card
+      <Disclosure
         className={cn(
-          "group/card flex flex-col p-6 sm:p-8",
+          "group/card flex h-full flex-col p-6 sm:p-8",
           "border border-border bg-card",
           "transition-all duration-300 ease-premium-out",
           "hover:border-primary/20 hover:shadow-md",
-          "h-full",
           className,
         )}
       >
-        {/* Icon */}
-        <div
+        {/* Trigger — Icon + Title + chevron */}
+<DisclosureTrigger
           className={cn(
-            "mb-4 flex size-12 items-center justify-center rounded-full",
-            "bg-primary-50 text-primary",
+            "group flex w-full cursor-pointer items-center gap-4 text-left",
+            "rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
           )}
-          aria-hidden="true"
         >
-          {createElement(getIcon(icon), { size: 22, strokeWidth: 1.5 })}
-        </div>
+          {/* Icon */}
+          <span
+            className={cn(
+              "flex size-12 shrink-0 items-center justify-center rounded-full",
+              "bg-primary-50 text-primary",
+            )}
+            aria-hidden="true"
+          >
+            {createElement(getIcon(icon), { size: 22, strokeWidth: 1.5 })}
+          </span>
 
-        {/* Feature Title */}
-        <h3
-          className={cn(
-            "font-heading text-lg font-semibold leading-snug tracking-tight",
-            "text-ink",
-          )}
-        >
-          {title}
-        </h3>
+          {/* Title */}
+          <h3
+            className={cn(
+              "flex-1 font-heading text-lg font-semibold leading-snug tracking-tight",
+              "text-ink",
+            )}
+          >
+            {title}
+          </h3>
 
-        {/* Feature Description */}
-        <p
-          className={cn(
-            "mt-2 flex-1 text-sm leading-relaxed",
-            "text-muted-foreground",
-          )}
+          {/* Chevron indicator */}
+          <ChevronDown
+            size={18}
+className="shrink-0 text-muted-foreground transition-transform duration-300 ease-premium-out group-aria-expanded:rotate-180"
+            aria-hidden="true"
+          />
+        </DisclosureTrigger>
+
+{/* Content — description */}
+        <DisclosureContent
+          className="mt-3"
         >
-          {description}
-        </p>
-      </Card>
+          <div className="pr-8">
+            <p
+              className={cn(
+                "text-sm leading-relaxed",
+                "text-muted-foreground",
+              )}
+            >
+              {description}
+            </p>
+          </div>
+        </DisclosureContent>
+      </Disclosure>
     </motion.div>
   );
 }
-

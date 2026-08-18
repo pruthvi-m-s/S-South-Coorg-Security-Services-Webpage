@@ -8,6 +8,14 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import HeadlineReveal from "@/components/common/HeadlineReveal";
+import OperationalImageSlider from "@/components/common/OperationalImageSlider";
+import {
+  entranceOfficeGuards,
+  gateSecurity,
+  techPark,
+  techParkGuards,
+} from "@/lib/site-images";
 import {
   staggerContainer,
   fadeUp,
@@ -46,9 +54,10 @@ export default function ClientsHero({
         >
           {/* Text Content */}
           <div>
-            {/* Page Title */}
-            <motion.h1
-              variants={fadeUp}
+{/* Page Title */}
+            <HeadlineReveal
+              as="h1"
+              delay={0.1}
               className={cn(
                 "font-heading text-4xl font-semibold leading-tight tracking-tight",
                 "sm:text-5xl",
@@ -56,7 +65,7 @@ export default function ClientsHero({
               )}
             >
               {title}
-            </motion.h1>
+            </HeadlineReveal>
 
             {/* Subtitle */}
             <motion.p
@@ -71,40 +80,32 @@ export default function ClientsHero({
             </motion.p>
           </div>
 
-          {/* Decorative Visual */}
+          {/* Operational image showcase */}
           <motion.div
             variants={scaleIn}
-            className="hidden lg:block"
-            aria-hidden="true"
+            className="w-full"
           >
-            <div
-              className={cn(
-                "flex items-center justify-center",
-                "rounded-2xl bg-primary-50 p-12",
-              )}
-            >
-              <div className="grid grid-cols-3 gap-4">
-                {["Building2", "Home", "Factory", "Hospital", "GraduationCap", "Landmark"].map(
-                  (iconName) => (
-                    <div
-                      key={iconName}
-                      className={cn(
-                        "flex size-14 items-center justify-center rounded-xl",
-                        "bg-background text-primary",
-                      )}
-                      aria-hidden="true"
-                    >
-                      <span className="text-center text-xs font-medium leading-tight">
-                        {iconName
-                          .replace(/([A-Z])/g, " $1")
-                          .trim()
-                          .split(" ")[0]}
-                      </span>
-                    </div>
-                  ),
-                )}
-              </div>
-            </div>
+            <OperationalImageSlider
+              label="SSCSS client-site security operations"
+              slides={[
+  {
+    src: techPark,
+    alt: "Corporate technology park",
+  },
+  {
+    src: entranceOfficeGuards,
+    alt: "Security personnel at a corporate office",
+  },
+  {
+    src: gateSecurity,
+    alt: "Security officer managing a corporate entrance",
+  },
+  {
+    src: techParkGuards,
+    alt: "Security personnel at a technology park",
+  },
+]}
+            />
           </motion.div>
         </motion.div>
       </div>

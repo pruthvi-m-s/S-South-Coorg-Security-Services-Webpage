@@ -9,6 +9,8 @@ import { createElement } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
+import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
+import HeroSkeleton from "@/components/common/HeroSkeleton";
 import { getIcon } from "@/lib/icons";
 import {
   staggerContainer,
@@ -74,14 +76,20 @@ style={{
             variants={fadeUp}
             className="flex flex-col items-center text-center lg:items-start lg:text-left"
           >
-            {/* Portrait */}
+{/* Portrait */}
             <motion.figure
               variants={scaleIn}
               className="relative w-full max-w-sm"
             >
-              <img
+              <ImageWithSkeleton
                 src={image.src}
                 alt={image.alt}
+                skeleton={
+                  <div className="aspect-[4/5] h-full w-full rounded-2xl">
+                    <HeroSkeleton className="h-full w-full" />
+                  </div>
+                }
+                containerClassName="w-full"
                 className={cn(
                   "aspect-[4/5] w-full rounded-2xl object-cover",
                   "border border-primary/10 shadow-xl",

@@ -2,8 +2,8 @@
 // SSCSS — Home Page
 // Hero (Milestone 1.2) + Trust Indicators (Milestone 1.3)
 // + Services Preview (Milestone 1.4)
-// + Why Choose Us (Milestone 1.6)
-// + Process (Milestone 1.7)
+// + Engagement Process (Milestone 1.7)
+// + Real SSCSS people / visual storytelling (ImageWheel)
 // + Testimonials (Milestone 1.8)
 // + Founder (Meet Our Founder)
 // + Final CTA (Milestone 1.9)
@@ -13,14 +13,13 @@
 import Hero from "@/components/sections/Hero";
 import TrustStats from "@/components/sections/TrustStats";
 import ServicesPreview from "@/components/sections/ServicesPreview";
-import WhyChooseUs from "@/components/sections/WhyChooseUs";
-import ProcessSection from "@/components/sections/ProcessSection";
+import HomeProcessTimeline from "@/components/sections/HomeProcessTimeline";
+import ImageWheel from "@/components/sections/ImageWheel";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
-import FounderSection from "@/components/sections/FounderSection";
-import FinalCtaSection from "@/components/sections/FinalCtaSection";
+import HomeContactCta from "@/components/sections/HomeContactCta";
 import TrustRibbon from "@/components/sections/TrustRibbon";
 import EmergencyHotlineCard from "@/components/sections/EmergencyHotlineCard";
-import { HERO, CERTIFICATIONS, STATS, SERVICES, ABOUT, TESTIMONIALS, FOUNDER, FINAL_CTA, COMPLIANCE_PAGE } from "@/content";
+import { HERO, CERTIFICATIONS, STATS, SERVICES, ABOUT, TESTIMONIALS, COMPLIANCE_PAGE } from "@/content";
 
 export default function HomePage() {
   return (
@@ -51,19 +50,10 @@ export default function HomePage() {
         pendingLabel={COMPLIANCE_PAGE.statusLabels.pending}
       />
       <ServicesPreview services={SERVICES} />
-      <WhyChooseUs
-        title={ABOUT.whyChooseUs.title}
-        subtitle={ABOUT.whyChooseUs.subtitle}
-        items={ABOUT.whyChooseUs.items}
-      />
-      <ProcessSection
-        title={ABOUT.process.title}
-        subtitle={ABOUT.process.subtitle}
-        steps={ABOUT.process.steps}
-      />
+      <HomeProcessTimeline steps={ABOUT.process.steps} />
+      <ImageWheel />
       <TestimonialsSection testimonials={TESTIMONIALS} />
-      <FounderSection content={FOUNDER} />
-      <FinalCtaSection content={FINAL_CTA} />
+      <HomeContactCta />
     </>
   );
 }

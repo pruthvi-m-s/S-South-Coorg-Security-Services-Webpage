@@ -88,10 +88,10 @@ export default function TrustHighlights({
                 >
                   <Card
                     className={cn(
-                      "group/card flex flex-col items-center p-6 text-center sm:p-8",
+"group/card flex flex-col items-center p-6 text-center sm:p-8",
                       "border border-border bg-card",
                       "transition-all duration-300 ease-premium-out",
-                      "hover:border-primary/20 hover:shadow-md",
+                      "hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg",
                       "h-full",
                     )}
                   >

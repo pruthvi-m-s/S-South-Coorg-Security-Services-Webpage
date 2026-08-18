@@ -8,6 +8,9 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import HeadlineReveal from "@/components/common/HeadlineReveal";
+import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
+import { techPark } from "@/lib/site-images";
 import {
   staggerContainer,
   fadeUp,
@@ -46,9 +49,10 @@ export default function IndustriesHero({
         >
           {/* Text Content */}
           <div>
-            {/* Page Title */}
-            <motion.h1
-              variants={fadeUp}
+{/* Page Title */}
+            <HeadlineReveal
+              as="h1"
+              delay={0.1}
               className={cn(
                 "font-heading text-4xl font-semibold leading-tight tracking-tight",
                 "sm:text-5xl",
@@ -56,7 +60,7 @@ export default function IndustriesHero({
               )}
             >
               {title}
-            </motion.h1>
+            </HeadlineReveal>
 
             {/* Subtitle */}
             <motion.p
@@ -71,40 +75,12 @@ export default function IndustriesHero({
             </motion.p>
           </div>
 
-          {/* Decorative Visual */}
+          {/* Wide environmental image */}
           <motion.div
             variants={scaleIn}
-            className="hidden lg:block"
-            aria-hidden="true"
+            className="overflow-hidden rounded-2xl border border-border bg-primary-50"
           >
-            <div
-              className={cn(
-                "flex items-center justify-center",
-                "rounded-2xl bg-primary-50 p-12",
-              )}
-            >
-              <div className="grid grid-cols-3 gap-4">
-                {["Building2", "Factory", "Hospital", "GraduationCap", "Warehouse", "Landmark"].map(
-                  (iconName) => (
-                    <div
-                      key={iconName}
-                      className={cn(
-                        "flex size-14 items-center justify-center rounded-xl",
-                        "bg-background text-primary",
-                      )}
-                      aria-hidden="true"
-                    >
-                      <span className="text-xs font-medium text-center leading-tight">
-                        {iconName
-                          .replace(/([A-Z])/g, " $1")
-                          .trim()
-                          .split(" ")[0]}
-                      </span>
-                    </div>
-                  ),
-                )}
-              </div>
-            </div>
+            <ImageWithSkeleton src={techPark} alt="Corporate, residential, industrial and commercial environments served by SSCSS" containerClassName="aspect-[21/9] w-full" className="size-full object-cover object-center" loading="eager" decoding="async" fetchPriority="high" />
           </motion.div>
         </motion.div>
       </div>

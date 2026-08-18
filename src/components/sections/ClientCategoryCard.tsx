@@ -42,10 +42,10 @@ export default function ClientCategoryCard({
     <motion.div variants={fadeUp}>
       <Card
         className={cn(
-          "group/card flex flex-col p-6 sm:p-8",
+"group/card flex flex-col p-6 sm:p-8",
           "border border-border bg-card",
           "transition-all duration-300 ease-premium-out",
-          "hover:border-primary/20 hover:shadow-md",
+          "hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg",
           "h-full",
           className,
         )}

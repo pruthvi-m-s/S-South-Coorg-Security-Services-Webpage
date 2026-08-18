@@ -6,6 +6,7 @@
 // ============================================================
 
 import type { ImageRef } from "../types";
+import { companyOwner } from "@/lib/site-images";
 
 // ─── Founder-specific Types (co-located) ─────────────────────
 
@@ -41,9 +42,9 @@ export const FOUNDER: FounderContent = {
   quote:
     "Security isn't just about guarding property—it's about earning trust every single day.",
   image: {
-    src: "/images/founder/founder.jpg",
+    src: companyOwner,
     alt: "Machettira Subramani, Founder, Proprietor and Managing Director of S South Coorg Security Services",
-    isPlaceholder: true,
+    isPlaceholder: false,
   },
   achievements: [
     {

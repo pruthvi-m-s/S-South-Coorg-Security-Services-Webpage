@@ -13,8 +13,14 @@ export type { NavItem } from "./navigation";
 
 export {
   SERVICES,
+  PRIMARY_SERVICE_CATEGORIES,
   getServiceBySlug,
+  getPrimaryServiceCategories,
   getRelatedServices,
+} from "./services";
+export type {
+  PrimaryServiceCategory,
+  ResolvedPrimaryServiceCategory,
 } from "./services";
 
 export {

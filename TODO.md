@@ -1,25 +1,36 @@
-# TODO — Global Color Palette Redesign ✅ COMPLETE
+# TODO — Final Homepage Cleanup
 
-Migrate the SSCSS design system from the current light/maroon theme to the new premium dark palette.
+Final cleanup/refinement pass making the home page feel like a real premium security
+company rather than an AI-generated SaaS template. This is the **last** homepage
+visual phase — no further visual phases after this.
 
-**New Palette**
-- Background: `#080806`
-- Text (foreground): `#EAECE4`
-- Primary: `#C3C8B2` (sage)
-- Secondary: `#474662` (indigo)
-- Accent: `#A381A5` (mauve)
+## Constraints (locked)
+- Use the real SSCSS photography in `public/images/real/` as the strongest trust signal.
+- Remove the AI-looking hero shield/grid illustration entirely.
+- Remove dashboard-style sections (SecurityOperations, SecurityIntelligence).
+- Remove the generic six-card "Why Choose SSCSS" grid (HomeProofSection).
+- Fix the Services mega-menu hover gap so the dropdown stays open when moving the cursor.
+- Do NOT add dashboards, fake maps/analytics/statistics, AI-looking security interfaces,
+  decorative flow diagrams, unnecessary card grids, more sections, or more animations.
+- Prioritize: real photography + typography + whitespace + composition + subtle motion.
+- Home should feel intentionally shorter and stronger:
+  Hero → Trust → Services → Engagement Process → Real SSCSS people → Testimonials → CTA.
+- Do NOT modify unrelated pages or routes.
+- Do NOT change business claims.
+- Do NOT add dependencies.
+- Do NOT create another visual system.
+- Stop after this cleanup — do not start another visual phase.
 
 ## Steps
-
-- [x] Step 1: Compute exact oklch values for all new palette colors and derived shades.
-- [x] Step 2: Rewrite `:root` semantic color tokens in `src/index.css` to the new dark palette.
-- [x] Step 3: Update `.dark` theme tokens in `src/index.css` to match the new palette.
-- [x] Step 4: Update `::selection` background in base styles.
-- [x] Step 5: Replace hardcoded maroon `#8B1E1E` in `FounderSection.tsx` with a semantic token.
-- [x] Step 6: Update `themeColor` in `src/content/seo.ts` to the new palette (`#080806`).
-- [x] Step 7: Restore 8 deleted infrastructure files (routes, icons, motion, seo, structured-data, seo-files, routes.tsx, ReusableAccordion).
-- [x] Step 8: Update hero placeholder SVG + OG social image to the new palette.
-- [x] Step 9: Verify all pages/components for contrast & consistency.
-
-## Build Status
-✅ `npm run build` passes — production build succeeded (✓ built in 1.36s).
+- [x] Inspect current rendered Home composition (Home.tsx, Hero.tsx, hero content)
+- [x] Inspect Services dropdown implementation (DesktopNav.tsx)
+- [x] Replace Home hero visual with real SSCSS `sscss-guards-team-2.jpg` (editorial frame)
+- [x] Remove `SecurityOperations` from `Home.tsx` (dashboard map/flow)
+- [x] Remove `SecurityIntelligence` from `Home.tsx` (second dashboard panel)
+- [x] Remove `HomeProofSection` from `Home.tsx` (six-card Why Choose SSCSS grid)
+- [x] Fix Services mega-menu hover gap (invisible hover bridge + 220ms close delay)
+- [x] Verify removed sections have no other references (only Home.tsx)
+- [x] Update tracker.md
+- [x] Update implementationplan.md
+- [x] Verify with `npm run build` / lint (clean)
+- [x] Stop after cleanup — no further visual phase

@@ -9,19 +9,21 @@ import type {
   ProcessStep,
 } from "../types";
 import { ROUTES } from "@/lib/routes";
+import { entranceOfficeGuards } from "@/lib/site-images";
 
 export const ABOUT = {
   heroTitle: "About S South Coorg Security Services",
-  heroSubtitle:
+heroSubtitle:
     "Over 15 years of trusted security and manpower solutions in Bengaluru.",
   heroImage: {
-    src: "/images/hero/about-hero.jpg",
-    alt: "Security professional at a Bengaluru client premises — SSCSS company profile image",
-    isPlaceholder: true,
+    src: entranceOfficeGuards,
+    alt: "SSCSS security personnel at a modern corporate entrance",
+    isPlaceholder: false,
   },
 
   story: {
     title: "Our Story",
+    videoSrc: undefined,
     paragraphs: [
       "S South Coorg Security Services (SSCSS) was founded in 2008 with a clear mission: to provide reliable, professional security and manpower solutions to Bengaluru's growing residential and commercial sectors. What started as a small team of dedicated professionals has grown into a trusted partner for over 50 clients across multiple industries.",
       "Our journey has been built on a foundation of discipline, integrity, and an unwavering commitment to service quality. Every guard we deploy, every facility we manage, and every client we serve reflects the values that have guided us for over 15 years.",

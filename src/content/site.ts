@@ -3,16 +3,18 @@
 // Single source of truth for contact details, social links, etc.
 // ============================================================
 
+import { getEnv } from "../lib/env";
+
 export const SITE = {
-  name: "S South Coorg Security Services",
-  shortName: "SSCSS",
-  tagline: "Reliable · Professional · Disciplined · Trusted",
+  name: getEnv("VITE_SITE_NAME", "S South Coorg Security Services"),
+  shortName: getEnv("VITE_SITE_SHORT_NAME", "SSCSS"),
+  tagline: getEnv("VITE_SITE_TAGLINE", "Reliable · Professional · Disciplined · Trusted"),
   established: 2008,
   yearsInBusiness: 15,
   guardsCount: 100,
   clientsCount: 50,
-  primaryServiceArea: "South Bengaluru",
-  secondaryServiceArea: "All of Bengaluru (on request)",
+  primaryServiceArea: getEnv("VITE_PRIMARY_SERVICE_AREA", "South Bengaluru"),
+  secondaryServiceArea: getEnv("VITE_SECONDARY_SERVICE_AREA", "All of Bengaluru (on request)"),
 
   /**
    * Logo asset path.
@@ -24,13 +26,13 @@ export const SITE = {
 } as const;
 
 export const CONTACT = {
-  phone: "+919945178228",
-  whatsapp: "+91 President9945178228",
-  email: "sscsecurityservices@gmail.com",
-  address: "58, 5th Main, C Cross, Avalahalli, Byatarayanapura, Mysore Rd, Avalahalli, New Extension, Banashankari, Bengaluru, Karnataka 560026",
-  officeHours: "Mon – Sat, 9:00 AM – 6:00 PM",
-  googleBusinessProfile: "https://g.page/xxxxxxxx",
-  responseTime: "We typically respond within one business day.",
+  phone: getEnv("VITE_CONTACT_PHONE", "+919945178228"),
+  whatsapp: getEnv("VITE_CONTACT_WHATSAPP", "+91 President9945178228"),
+  email: getEnv("VITE_CONTACT_EMAIL", "sscsecurityservices@gmail.com"),
+  address: getEnv("VITE_CONTACT_ADDRESS", "58, 5th Main, C Cross, Avalahalli, Byatarayanapura, Mysore Rd, Avalahalli, New Extension, Banashankari, Bengaluru, Karnataka 560026"),
+  officeHours: getEnv("VITE_CONTACT_OFFICE_HOURS", "Mon – Sat, 9:00 AM – 6:00 PM"),
+  googleBusinessProfile: getEnv("VITE_GOOGLE_BUSINESS_PROFILE", "https://g.page/xxxxxxxx"),
+  responseTime: getEnv("VITE_CONTACT_RESPONSE_TIME", "We typically respond within one business day."),
 } as const;
 
 /**

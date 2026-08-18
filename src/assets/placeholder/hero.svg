@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SSCSS security placeholder illustration">
   <!-- Background -->
-  <rect width="800" height="600" rx="12" fill="#080806"/>
+  <rect width="800" height="600" rx="12" fill="#04070E"/>
 
   <!-- Subtle grid pattern -->
   <g opacity="0.03">
-    <line x1="0" y1="120" x2="800" y2="120" stroke="#EAECE4" stroke-width="1"/>
-    <line x1="0" y1="240" x2="800" y2="240" stroke="#EAECE4" stroke-width="1"/>
-    <line x1="0" y1="360" x2="800" y2="360" stroke="#EAECE4" stroke-width="1"/>
-    <line x1="0" y1="480" x2="800" y2="480" stroke="#EAECE4" stroke-width="1"/>
-    <line x1="160" y1="0" x2="160" y2="600" stroke="#EAECE4" stroke-width="1"/>
-    <line x1="320" y1="0" x2="320" y2="600" stroke="#EAECE4" stroke-width="1"/>
-    <line x1="480" y1="0" x2="480" y2="600" stroke="#EAECE4" stroke-width="1"/>
-    <line x1="640" y1="0" x2="640" y2="600" stroke="#EAECE4" stroke-width="1"/>
+    <line x1="0" y1="120" x2="800" y2="120" stroke="#E4E8F7" stroke-width="1"/>
+    <line x1="0" y1="240" x2="800" y2="240" stroke="#E4E8F7" stroke-width="1"/>
+    <line x1="0" y1="360" x2="800" y2="360" stroke="#E4E8F7" stroke-width="1"/>
+    <line x1="0" y1="480" x2="800" y2="480" stroke="#E4E8F7" stroke-width="1"/>
+    <line x1="160" y1="0" x2="160" y2="600" stroke="#E4E8F7" stroke-width="1"/>
+    <line x1="320" y1="0" x2="320" y2="600" stroke="#E4E8F7" stroke-width="1"/>
+    <line x1="480" y1="0" x2="480" y2="600" stroke="#E4E8F7" stroke-width="1"/>
+    <line x1="640" y1="0" x2="640" y2="600" stroke="#E4E8F7" stroke-width="1"/>
   </g>
 
   <!-- Shield outline — corporate, minimal -->
   <g transform="translate(400, 300)">
     <!-- Outer ring -->
-    <circle cx="0" cy="0" r="160" fill="none" stroke="#C3C8B2" stroke-width="2" opacity="0.08"/>
+    <circle cx="0" cy="0" r="160" fill="none" stroke="#8AA6DC" stroke-width="2" opacity="0.08"/>
 
     <!-- Central shield shape -->
     <path d="M0 -120 L100 -60 L100 40 C100 100 50 140 0 160 C-50 140 -100 100 -100 40 L-100 -60 Z"
-          fill="#C3C8B2" fill-opacity="0.06" stroke="#C3C8B2" stroke-width="1.5" stroke-opacity="0.15"/>
+          fill="#8AA6DC" fill-opacity="0.06" stroke="#8AA6DC" stroke-width="1.5" stroke-opacity="0.15"/>
 
     <!-- Inner shield line -->
     <path d="M0 -95 L80 -45 L80 30 C80 80 40 115 0 130 C-40 115 -80 80 -80 30 L-80 -45 Z"
-          fill="none" stroke="#C3C8B2" stroke-width="1" stroke-opacity="0.1"/>
+          fill="none" stroke="#8AA6DC" stroke-width="1" stroke-opacity="0.1"/>
 
     <!-- Check mark inside shield -->
     <path d="M-25 15 L-8 35 L30 -10"
-          fill="none" stroke="#C3C8B2" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+          fill="none" stroke="#8AA6DC" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
   </g>
 
   <!-- Decorative dots -->
   <g opacity="0.06">
-    <circle cx="120" cy="480" r="4" fill="#EAECE4"/>
-    <circle cx="680" cy="120" r="4" fill="#EAECE4"/>
-    <circle cx="700" cy="500" r="3" fill="#EAECE4"/>
-    <circle cx="100" cy="100" r="3" fill="#EAECE4"/>
+    <circle cx="120" cy="480" r="4" fill="#E4E8F7"/>
+    <circle cx="680" cy="120" r="4" fill="#E4E8F7"/>
+    <circle cx="700" cy="500" r="3" fill="#E4E8F7"/>
+    <circle cx="100" cy="100" r="3" fill="#E4E8F7"/>
   </g>
 
   <!-- Bottom accent line -->
-  <rect x="200" y="520" width="400" height="3" rx="1.5" fill="#C3C8B2" opacity="0.08"/>
+  <rect x="200" y="520" width="400" height="3" rx="1.5" fill="#8AA6DC" opacity="0.08"/>
 </svg>

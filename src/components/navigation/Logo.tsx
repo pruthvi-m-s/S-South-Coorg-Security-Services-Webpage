@@ -26,11 +26,10 @@ export default function Logo() {
           height="auto"
         />
       ) : (
-        <span className="font-heading text-lg font-bold text-ink tracking-tight md:text-xl">
+        <span className="font-heading text-lg text-ink tracking-[0.01em] md:text-xl">
           {SITE.shortName}
         </span>
       )}
     </Link>
   );
 }
-

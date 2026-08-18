@@ -5,7 +5,7 @@
 // Renders 404 for invalid slugs.
 // ============================================================
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import {
   getServiceBySlug,
@@ -26,9 +26,35 @@ import {
   trackServicePageView,
 } from "@/lib/analytics";
 
+function isSafeSlug(value: string | undefined): value is string {
+  return Boolean(value && /^[a-z0-9-]{1,80}$/.test(value));
+}
+
 export default function ServicePage() {
   const { slug } = useParams<{ slug: string }>();
-  const service = slug ? getServiceBySlug(slug) : undefined;
+  const safeSlug = isSafeSlug(slug) ? slug : undefined;
+
+  // ─── Resolve service from the content layer ──────────────
+  // Stable per slug — memoized to avoid re-scanning the static
+  // SERVICES array on every render.
+  const service = useMemo(
+    () => (safeSlug ? getServiceBySlug(safeSlug) : undefined),
+    [safeSlug],
+  );
+
+// ─── Resolve related services & industries ───────────────
+  // Both are stable per slug — memoized to avoid repeated array
+  // lookups (getServiceBySlug scans the static SERVICES list).
+  // Computed unconditionally (before the early return) to keep
+  // the hook order stable across renders.
+  const relatedServices = useMemo(
+    () => (safeSlug ? getRelatedServices(safeSlug) : []),
+    [safeSlug],
+  );
+  const industries = useMemo(
+    () => (safeSlug ? getIndustriesForService(safeSlug) : []),
+    [safeSlug],
+  );
 
   // ─── Analytics: Track service page view ─────────────────
   useEffect(() => {
@@ -39,15 +65,10 @@ export default function ServicePage() {
     }
   }, [service?.slug]);
 
-  // ─── SEO: Dynamic document title ─────────────────────────
   // ─── Invalid slug → 404 ──────────────────────────────────
   if (!service) {
     return <NotFoundPage />;
   }
-
-  // ─── Resolve related services & industries ───────────────
-  const relatedServices = getRelatedServices(slug!);
-  const industries = getIndustriesForService(slug!);
 
   return (
     <>

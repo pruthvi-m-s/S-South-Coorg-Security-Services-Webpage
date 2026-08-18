@@ -5,6 +5,7 @@
 
 import { createElement, useMemo } from "react";
 import { motion } from "framer-motion";
+import HeadlineReveal from "@/components/common/HeadlineReveal";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -63,11 +64,11 @@ export default function ThankYouPage() {
         <div className="section-container section-padding">
           <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="mx-auto max-w-3xl text-center">
             <motion.div variants={scaleIn} className="mx-auto flex size-16 items-center justify-center rounded-full bg-primary-50 text-primary" aria-hidden="true">
-              <SuccessIcon size={32} strokeWidth={1.5} />
+              {createElement(SuccessIcon, { size: 32, strokeWidth: 1.5 })}
             </motion.div>
-            <motion.h1 variants={fadeUp} className="mt-6 font-heading text-4xl font-semibold leading-tight tracking-tight text-ink sm:text-5xl">
+<HeadlineReveal as="h1" delay={0.1} className="mt-6 font-heading text-4xl font-semibold leading-tight tracking-tight text-ink sm:text-5xl">
               {THANK_YOU.hero.title}
-            </motion.h1>
+            </HeadlineReveal>
 <motion.p variants={fadeUp} className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               {THANK_YOU.hero.description}
             </motion.p>

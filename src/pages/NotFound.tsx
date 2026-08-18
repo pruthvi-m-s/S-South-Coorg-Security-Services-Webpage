@@ -5,6 +5,7 @@
 
 import { createElement, useMemo } from "react";
 import { motion } from "framer-motion";
+import HeadlineReveal from "@/components/common/HeadlineReveal";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -59,7 +60,7 @@ if (CONTACT.phone) {
       <div className="section-container section-padding">
         <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="mx-auto max-w-3xl text-center">
           <motion.p variants={fadeUp} className="font-heading text-7xl font-semibold leading-none tracking-tight text-primary sm:text-8xl">{NOT_FOUND.hero.errorCode}</motion.p>
-          <motion.h1 variants={fadeUp} className="mt-6 font-heading text-4xl font-semibold leading-tight tracking-tight text-ink sm:text-5xl">{NOT_FOUND.hero.title}</motion.h1>
+<HeadlineReveal as="h1" delay={0.1} className="mt-6 font-heading text-4xl font-semibold leading-tight tracking-tight text-ink sm:text-5xl">{NOT_FOUND.hero.title}</HeadlineReveal>
           <motion.p variants={fadeUp} className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">{NOT_FOUND.hero.description}</motion.p>
           <motion.div variants={fadeUp} className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link to={NOT_FOUND.hero.primaryCta.href}><Button variant="default" size="lg" className="w-full sm:w-auto">{NOT_FOUND.hero.primaryCta.label}<ArrowRight className="ml-1.5" size={18} aria-hidden="true" /></Button></Link>

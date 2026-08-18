@@ -1,100 +1,58 @@
-// ============================================================
-// SSCSS — Testimonials Section
-// Homepage testimonials grid.
-// No carousel. No slider. Renders all testimonials from content.
-// Responsive: 3 cols desktop, 2 cols tablet, 1 col mobile.
-// Content-driven: all copy from the content layer.
-// ============================================================
-
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import TestimonialCard from "@/components/sections/TestimonialCard";
-import {
-  staggerContainer,
-  fadeUp,
-  viewportOptions,
-} from "@/lib/motion";
 import type { Testimonial } from "@/types";
 
-// ─── Props ────────────────────────────────────────────────────
 interface TestimonialsSectionProps {
-  title?: string;
-  subtitle?: string;
   testimonials: Testimonial[];
   className?: string;
 }
 
-// ─── Default content (editable) ───────────────────────────────
-const DEFAULT_TITLE = "What Our Clients Say";
-const DEFAULT_SUBTITLE =
-  "Hear from the organizations that trust SSCSS for their security and manpower needs.";
+export default function TestimonialsSection({ testimonials, className }: TestimonialsSectionProps) {
+  const published = testimonials.filter((testimonial) => !testimonial.isPlaceholder);
+  const [active, setActive] = useState(0);
+  const quoteRef = useRef<HTMLDivElement>(null);
 
-// ─── TestimonialsSection ──────────────────────────────────────
-export default function TestimonialsSection({
-  title = DEFAULT_TITLE,
-  subtitle = DEFAULT_SUBTITLE,
-  testimonials,
-  className,
-}: TestimonialsSectionProps) {
-  const publishedTestimonials = testimonials.filter((testimonial) => !testimonial.isPlaceholder);
-  if (publishedTestimonials.length === 0) return null;
+  useEffect(() => {
+    const quote = quoteRef.current;
+    if (!quote || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const animation = gsap.fromTo(quote, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.42, ease: "power2.out" });
+    return () => {
+      animation.revert();
+    };
+  }, [active]);
+
+  if (!published.length) return null;
+  const testimonial = published[active];
+  const showPrevious = () => setActive((index) => (index - 1 + published.length) % published.length);
+  const showNext = () => setActive((index) => (index + 1) % published.length);
 
   return (
-    <section
-      className={cn(
-        "relative bg-background",
-        className,
-      )}
-      aria-label="Testimonials"
-    >
+    <section className={cn("bg-background", className)} aria-labelledby="testimonials-title">
       <div className="section-container section-padding">
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportOptions}
-        >
-          {/* Section Heading */}
-          <motion.h2
-            variants={fadeUp}
-            className={cn(
-              "font-heading text-3xl font-semibold leading-tight tracking-tight",
-              "sm:text-4xl",
-              "text-ink text-center",
+        <div className="grid gap-10 lg:grid-cols-[0.38fr_0.62fr] lg:items-end lg:gap-20">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">Client perspective</p>
+            <h2 id="testimonials-title" className="mt-3 max-w-sm font-heading text-3xl font-semibold tracking-tight text-ink sm:text-4xl">Trusted in the moments that matter.</h2>
+            {published.length > 1 && (
+              <div className="mt-8 flex items-center gap-3">
+                <button type="button" onClick={showPrevious} className="group inline-flex size-10 items-center justify-center border border-border text-ink transition-colors hover:border-primary hover:text-primary" aria-label="Show previous testimonial"><ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5 motion-reduce:transition-none" /></button>
+                <button type="button" onClick={showNext} className="group inline-flex size-10 items-center justify-center border border-border text-ink transition-colors hover:border-primary hover:text-primary" aria-label="Show next testimonial"><ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none" /></button>
+                <span className="ml-2 text-xs font-medium tracking-[0.12em] text-muted-foreground">{String(active + 1).padStart(2, "0")} / {String(published.length).padStart(2, "0")}</span>
+              </div>
             )}
-          >
-            {title}
-          </motion.h2>
+          </div>
 
-          {/* Section Intro */}
-          <motion.p
-            variants={fadeUp}
-            className={cn(
-              "mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed",
-              "sm:text-lg",
-              "text-muted-foreground",
-            )}
-          >
-            {subtitle}
-          </motion.p>
-
-          {/* Testimonials Grid — responsive: 3/2/1 columns */}
-          <motion.div
-            variants={fadeUp}
-            className="mt-12"
-          >
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {publishedTestimonials.map((testimonial) => (
-                <TestimonialCard
-                  key={testimonial.id}
-                  testimonial={testimonial}
-                />
-              ))}
-            </div>
-          </motion.div>
-        </motion.div>
+          <div ref={quoteRef} key={testimonial.id} className="border-l-2 border-primary pl-6 sm:pl-10">
+            <blockquote className="font-heading text-2xl font-medium leading-snug tracking-tight text-ink sm:text-3xl">“{testimonial.quote}”</blockquote>
+            <footer className="mt-8">
+              <cite className="not-italic text-sm font-semibold text-ink">{testimonial.authorName}</cite>
+              {(testimonial.authorRole || testimonial.organization) && <p className="mt-1 text-sm text-muted-foreground">{[testimonial.authorRole, testimonial.organization].filter(Boolean).join(", ")}</p>}
+            </footer>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
-

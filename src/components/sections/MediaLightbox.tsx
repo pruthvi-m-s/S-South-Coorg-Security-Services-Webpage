@@ -9,6 +9,8 @@ import { useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
+import Skeleton from "@/components/common/Skeleton";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 // ─── Media Item Interface ─────────────────────────────────────
@@ -181,7 +183,7 @@ export default function MediaLightbox({
             </button>
           )}
 
-          {/* Media Content */}
+{/* Media Content */}
           <div className="flex max-h-[90vh] max-w-[90vw] flex-col items-center">
             {/* Image */}
             <div className="relative flex items-center justify-center">
@@ -194,9 +196,14 @@ export default function MediaLightbox({
                   aria-label={currentItem.alt}
                 />
               ) : (
-                <img
+<ImageWithSkeleton
+                  key={currentItem.id}
                   src={currentItem.src}
                   alt={currentItem.alt}
+                  skeleton={
+                    <Skeleton className="h-64 w-full max-w-3xl rounded-lg sm:h-96" />
+                  }
+                  containerClassName="max-h-[75vh] max-w-full"
                   className="max-h-[75vh] max-w-full rounded-lg object-contain"
                   loading="lazy"
                   decoding="async"

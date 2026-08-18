@@ -1,30 +1,35 @@
-// ============================================================
-// SSCSS — Desktop Navigation
-// Flat horizontal nav rendered from the content layer.
-// Supports future dropdown expansion without component rewrite.
-// ============================================================
-
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown, ArrowUpRight } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { MAIN_NAVIGATION, type NavItem } from "@/content";
+import { ROUTES, servicePath } from "@/lib/routes";
+import {
+  getPrimaryServiceCategories,
+  MAIN_NAVIGATION,
+  SERVICES,
+  type NavItem,
+  type ResolvedPrimaryServiceCategory,
+} from "@/content";
 
-// ─── Nav Link ────────────────────────────────────────────────
-interface NavLinkProps {
-  item: NavItem;
-  isActive: boolean;
+const PRIMARY_CATEGORIES = getPrimaryServiceCategories(SERVICES);
+
+function isCurrentPath(pathname: string, href: string) {
+  return href === "/" ? pathname === "/" : pathname.startsWith(href);
 }
 
-function NavLink({ item, isActive }: NavLinkProps) {
+function NavLink({ item, isActive }: { item: NavItem; isActive: boolean }) {
   return (
     <Link
       to={item.href}
       className={cn(
-        "relative inline-flex min-h-[44px] items-center px-3.5 py-2 text-sm font-medium transition-colors duration-200",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-md",
-        "hover:text-primary",
+        "relative inline-flex min-h-11 items-center rounded-md px-3 py-2 text-sm font-normal",
+        "tracking-[0.01em] transition-colors duration-200",
+        "after:absolute after:inset-x-3 after:bottom-1 after:h-px after:origin-left after:bg-primary after:transition-transform after:duration-200",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+        "hover:bg-muted/70 hover:text-primary",
         isActive
-          ? "text-primary font-semibold"
-          : "text-muted-foreground",
+          ? "text-primary after:scale-x-100"
+          : "text-muted-foreground after:scale-x-0 hover:after:scale-x-100",
       )}
       aria-current={isActive ? "page" : undefined}
     >
@@ -33,29 +38,243 @@ function NavLink({ item, isActive }: NavLinkProps) {
   );
 }
 
-// ─── DesktopNav ──────────────────────────────────────────────
+function ServiceMegaMenu({ pathname }: { pathname: string }) {
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] =
+    useState<ResolvedPrimaryServiceCategory>(PRIMARY_CATEGORIES[0]);
+
+  const closeTimer = useRef<number | undefined>(undefined);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLAnchorElement>(null);
+
+  const isActive = isCurrentPath(pathname, ROUTES.services);
+
+  const cancelClose = () => window.clearTimeout(closeTimer.current);
+
+  const scheduleClose = () => {
+    closeTimer.current = window.setTimeout(() => setOpen(false), 220);
+  };
+
+  useEffect(() => {
+    return () => window.clearTimeout(closeTimer.current);
+  }, []);
+
+  if (!selected) return null;
+
+  return (
+    <div
+      ref={menuRef}
+      className="relative"
+      onMouseEnter={() => {
+        cancelClose();
+        setOpen(true);
+      }}
+      onMouseLeave={scheduleClose}
+      onFocus={() => {
+        cancelClose();
+        setOpen(true);
+      }}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          scheduleClose();
+        }
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          setOpen(false);
+          triggerRef.current?.focus();
+        }
+      }}
+    >
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 top-full z-40 h-[0.7rem]"
+      />
+
+      <Link
+        ref={triggerRef}
+        to={ROUTES.services}
+        className={cn(
+          "relative inline-flex min-h-11 items-center gap-1 rounded-md px-3 py-2 text-sm font-normal",
+          "tracking-[0.01em] transition-colors duration-200",
+          "after:absolute after:inset-x-3 after:bottom-1 after:h-px after:origin-left after:bg-primary after:transition-transform after:duration-200",
+          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+          "hover:bg-muted/70 hover:text-primary",
+          isActive
+            ? "text-primary after:scale-x-100"
+            : "text-muted-foreground after:scale-x-0 hover:after:scale-x-100",
+        )}
+        aria-haspopup="true"
+        aria-expanded={open}
+        aria-controls="services-mega-menu"
+        onMouseEnter={() => setOpen(true)}
+        onFocus={() => setOpen(true)}
+        onKeyDown={(event) => {
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            setOpen(true);
+
+            window.setTimeout(() => {
+              menuRef.current
+                ?.querySelector<HTMLAnchorElement>("#services-mega-menu a")
+                ?.focus();
+            }, 0);
+          }
+        }}
+      >
+        Services
+
+        <ChevronDown
+          className={cn(
+            "size-3.5 transition-transform duration-200",
+            open && "rotate-180",
+          )}
+          aria-hidden="true"
+        />
+      </Link>
+
+      <div
+        id="services-mega-menu"
+        className={cn(
+          "absolute right-0 top-[calc(100%+0.65rem)] w-[min(58rem,calc(100vw-3rem))]",
+          "origin-top-right overflow-hidden rounded-xl border border-border/80",
+          "bg-popover/96 p-3 shadow-2xl backdrop-blur-xl",
+          "transition-[opacity,transform,visibility] duration-200 ease-premium-out",
+          open
+            ? "visible translate-y-0 opacity-100"
+            : "invisible -translate-y-1 opacity-0",
+        )}
+      >
+        <div className="grid grid-cols-[0.78fr_1fr_0.8fr] gap-3">
+          <div className="border-r border-border/70 pr-3">
+            <p className="px-2 pb-2 pt-1 text-[0.68rem] font-normal uppercase tracking-[0.14em] text-muted-foreground">
+              Primary categories
+            </p>
+
+            <div className="space-y-0.5">
+              {PRIMARY_CATEGORIES.map((category, index) => (
+                <Link
+                  key={category.id}
+                  to={servicePath(category.primarySlug)}
+                  onMouseEnter={() => setSelected(category)}
+                  onFocus={() => setSelected(category)}
+                  className={cn(
+                    "group flex items-center gap-2 rounded-md px-2 py-2 text-sm font-normal",
+                    "transition-colors duration-150",
+                    "hover:bg-muted hover:text-primary",
+                    "focus-visible:outline-2 focus-visible:outline-primary",
+                    category.id === selected.id
+                      ? "text-primary"
+                      : "text-foreground",
+                  )}
+                >
+                  <span
+                    className="w-5 text-[0.68rem] font-normal tabular-nums text-muted-foreground"
+                    aria-hidden="true"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <span className="flex-1">{category.name}</span>
+
+                  <ArrowUpRight
+                    className="size-3.5 opacity-0 transition-opacity group-hover:opacity-100"
+                    aria-hidden="true"
+                  />
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="border-r border-border/70 pr-3">
+            <p className="px-2 pb-2 pt-1 text-[0.68rem] font-normal uppercase tracking-[0.14em] text-muted-foreground">
+              Specific services
+            </p>
+
+            <div className="grid grid-cols-2 gap-1">
+              {selected.services.map((service) => (
+                <Link
+                  key={service.slug}
+                  to={servicePath(service.slug)}
+                  className="rounded-md px-2 py-2 text-sm font-normal text-foreground transition-colors duration-150 hover:bg-muted hover:text-primary focus-visible:outline-2 focus-visible:outline-primary"
+                >
+                  {service.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <aside className="relative min-h-64 overflow-hidden rounded-lg bg-muted">
+            <img
+              key={selected.id}
+              src={selected.image.src}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 size-full object-cover opacity-70 transition-[opacity,transform] duration-500 ease-premium-out"
+            />
+
+            <div
+              className="absolute inset-0 bg-background/55"
+              aria-hidden="true"
+            />
+
+            <div className="relative flex h-full min-h-64 flex-col justify-end p-5">
+              <p className="text-xs font-normal uppercase tracking-[0.14em] text-primary">
+                Service category
+              </p>
+
+              <h3 className="mt-2 text-lg font-normal text-foreground">
+                {selected.name}
+              </h3>
+
+              <p className="mt-1.5 text-sm font-normal leading-6 text-muted-foreground">
+                {selected.primaryService.shortTagline}
+              </p>
+
+              <Link
+                to={servicePath(selected.primarySlug)}
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-normal text-primary hover:text-primary-700 focus-visible:outline-2 focus-visible:outline-primary"
+              >
+                Explore category
+
+                <ArrowUpRight className="size-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </aside>
+        </div>
+
+        <Link
+          to={ROUTES.services}
+          className="mt-3 inline-flex items-center gap-1.5 px-2 py-1 text-sm font-normal text-muted-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-primary"
+        >
+          View all services
+
+          <ArrowUpRight className="size-3.5" aria-hidden="true" />
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export default function DesktopNav() {
   const { pathname } = useLocation();
-
-  const isActivePath = (href: string): boolean => {
-    // Exact match for root, prefix match for other paths
-    if (href === "/") return pathname === "/";
-    return pathname.startsWith(href);
-  };
 
   return (
     <nav
       aria-label="Main navigation"
-      className="hidden items-center gap-1 md:flex"
+      className="hidden items-center gap-0.5 lg:flex"
     >
-      {MAIN_NAVIGATION.map((item) => (
-        <NavLink
-          key={item.href}
-          item={item}
-          isActive={isActivePath(item.href)}
-        />
-      ))}
+      {MAIN_NAVIGATION.map((item) =>
+        item.href === "/services" ? (
+          <ServiceMegaMenu key={item.href} pathname={pathname} />
+        ) : (
+          <NavLink
+            key={item.href}
+            item={item}
+            isActive={isCurrentPath(pathname, item.href)}
+          />
+        ),
+      )}
     </nav>
   );
 }
-

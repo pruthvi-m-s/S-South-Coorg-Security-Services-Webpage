@@ -31,8 +31,8 @@ export default function StickyMobileCallButton({
         "fixed bottom-5 left-5 z-toast",
         "inline-flex min-h-[44px] items-center gap-2 rounded-full",
         "bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-lg",
-        "hover:bg-primary-700 transition-colors duration-300 ease-premium-out",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+        "transition-all duration-300 ease-premium-out hover:-translate-y-0.5 hover:bg-primary-700 hover:shadow-xl active:translate-y-[1px]",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary focus-visible:shadow-[0_0_0_4px_rgba(139,30,30,0.12)]",
         "md:hidden",
         className,
       )}

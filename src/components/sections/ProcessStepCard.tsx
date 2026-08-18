@@ -3,12 +3,14 @@
 // Reusable step card for the "How We Work" timeline section.
 // Desktop: horizontal layout with connecting lines.
 // Mobile: vertical layout with connecting lines.
+// Uses the InView Motion Primitive for a once-per-viewport
+// reveal as each step enters the viewport.
 // No scaling. Subtle hover border/shadow only.
 // ============================================================
 
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { fadeUp } from "@/lib/motion";
+import { premiumEasing } from "@/lib/motion";
+import { InView } from "../../../components/motion-primitives/in-view";
 import type { ProcessStep } from "@/types";
 
 // ─── Props ────────────────────────────────────────────────────
@@ -23,13 +25,22 @@ export default function ProcessStepCard({
   isLast,
 }: ProcessStepCardProps) {
   return (
-    <motion.div
-      variants={fadeUp}
-      className={cn(
+<InView
+      once
+      viewOptions={{ once: true, margin: "0px 0px -10% 0px" }}
+      variants={{
+        hidden: { opacity: 0, y: 24 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.5, ease: premiumEasing },
+        },
+      }}
+    >
+      <div className={cn(
         "relative flex flex-col items-center text-center",
         "lg:flex-1",
-      )}
-    >
+      )}>
       {/* Step Number Circle + Connector */}
       <div className="relative flex flex-col items-center">
         {/* Step Circle */}
@@ -95,10 +106,10 @@ export default function ProcessStepCard({
             "text-muted-foreground",
           )}
         >
-          {step.description}
+{step.description}
         </p>
       </div>
-    </motion.div>
+      </div>
+    </InView>
   );
 }
-

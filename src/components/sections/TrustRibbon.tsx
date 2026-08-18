@@ -37,10 +37,7 @@ export default function TrustRibbon({
       initial="hidden"
       whileInView="visible"
       viewport={viewportOptions}
-      className={cn(
-        "flex flex-wrap items-center justify-center gap-x-8 gap-y-4",
-        className,
-      )}
+      className={cn("grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0", className)}
     >
       {/* Key stats (compact, no counters) */}
       {visibleStats.map((stat) => (
@@ -48,21 +45,21 @@ export default function TrustRibbon({
           key={stat.id}
           variants={fadeUp}
           className={cn(
-            "inline-flex items-baseline gap-1.5",
-            "text-sm font-medium text-muted-foreground",
+            "flex items-baseline justify-between gap-4 px-1 py-5 sm:flex-col sm:items-start sm:justify-center sm:py-6 sm:px-7 first:sm:pl-0 last:sm:pr-0",
           )}
         >
-          <span className="font-heading text-lg font-semibold text-ink">
-            {stat.value}
-            {stat.suffix}
+          <span className="font-heading text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+            {stat.value}<span className="text-primary">+</span>
           </span>
-          {stat.label}
+          <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            {stat.suffix.replace("+ ", "")}
+          </span>
         </motion.span>
       ))}
 
       {/* PSARA badge */}
       {psara && psaraLabels && (
-        <motion.span variants={fadeUp} className="inline-flex items-center">
+        <motion.span variants={fadeUp} className="col-span-full flex items-center justify-center border-t border-border px-1 py-4 sm:col-span-3">
           <PSARABadge
             certification={psara}
             labels={psaraLabels}

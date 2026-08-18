@@ -95,7 +95,8 @@ export default function ContactInfo({
                     "flex items-start gap-4 p-6 sm:p-8",
                     "border border-border bg-card",
                     "transition-all duration-300 ease-premium-out",
-                    isLink && "hover:border-primary/20 hover:shadow-md",
+                    isLink && "hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md",
+                    isLink && "focus-within:border-primary/30 focus-within:shadow-[0_0_0_4px_rgba(139,30,30,0.12)]",
                   )}
                 >
                   {/* Icon */}
@@ -149,8 +150,9 @@ export default function ContactInfo({
                           ? "contact_info_whatsapp"
                           : undefined
                     }
-                    className="block no-underline"
+                    className="group block no-underline"
                     aria-label={`${item.label}: ${item.value}`}
+                    title={isLink ? `${item.label}: ${item.value}` : undefined}
                   >
                     {cardContent}
                   </a>

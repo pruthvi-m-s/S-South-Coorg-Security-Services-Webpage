@@ -138,8 +138,8 @@ export default function Accordion({
                   "font-heading text-base font-medium leading-snug tracking-tight",
                   "sm:text-lg",
                   "text-ink",
-                  "transition-colors duration-300 ease-premium-out",
-                  "hover:text-primary",
+                  "transition-all duration-300 ease-premium-out",
+                  "rounded-md hover:bg-muted/70 hover:text-primary active:translate-y-[1px]",
                   "focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2",
                 )}
                 aria-expanded={isOpen}

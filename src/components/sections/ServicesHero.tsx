@@ -10,6 +10,7 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import HeadlineReveal from "@/components/common/HeadlineReveal";
 import {
   staggerContainer,
   fadeUp,
@@ -45,9 +46,10 @@ export default function ServicesHero({
           viewport={viewportOptions}
           className="mx-auto max-w-4xl text-center"
         >
-          {/* Page Title */}
-          <motion.h1
-            variants={fadeUp}
+{/* Page Title — Apple-style mask reveal */}
+          <HeadlineReveal
+            as="h1"
+            delay={0.1}
             className={cn(
               "font-heading text-4xl font-semibold leading-tight tracking-tight",
               "sm:text-5xl lg:text-6xl",
@@ -55,7 +57,7 @@ export default function ServicesHero({
             )}
           >
             {title}
-          </motion.h1>
+          </HeadlineReveal>
 
           {/* Subtitle */}
           <motion.p

@@ -35,9 +35,10 @@ export default function FloatingWhatsAppButton({
         "fixed bottom-5 right-5 z-toast",
         "flex size-12 items-center justify-center rounded-full",
         "bg-[#25D366] text-white shadow-lg",
-        "transition-colors duration-300 ease-premium-out",
-        "hover:bg-[#1ebe57]",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+        "transition-all duration-300 ease-premium-out",
+        "hover:-translate-y-0.5 hover:bg-[#1ebe57] hover:shadow-xl",
+        "active:translate-y-[1px]",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary focus-visible:shadow-[0_0_0_4px_rgba(139,30,30,0.12)]",
         className,
       )}
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}

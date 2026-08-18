@@ -1,79 +1,57 @@
 // ============================================================
 // SSCSS — Contact Form Submission Adapter
-//
-// Defines the contract for form submission.
-// Today: fake Promise with delay.
-// Tomorrow: replace with fetch() to Formspree endpoint.
-//
-// The UI never changes — only this file is swapped.
+// Google Forms direct submission
 // ============================================================
 
 import type { ContactFormData } from "./validation";
-
-// ─── Submission Result Type ──────────────────────────────────
 
 export interface ContactSubmissionResult {
   success: boolean;
   message: string;
 }
 
-// ─── Success / Error Messages ────────────────────────────────
-
 export const SUBMISSION_MESSAGES = {
   success:
     "Thank you! Your inquiry has been received. Our team will get back to you shortly.",
   error:
-    "Something went wrong while submitting your request. Please try again or contact us directly by phone.",
+    "We could not send your inquiry right now. Please try again in a moment or contact us directly by phone or WhatsApp.",
 } as const;
 
-// ─── Simulated Submit Function ───────────────────────────────
+const GOOGLE_FORM_URL =
+  "https://docs.google.com/forms/d/e/1FAIpQLSf3tUEyL-bChz2JFsXUQ-Vzn7CxgnofqI7BBbiTQsAjMCcUNA/formResponse";
 
-/**
- * Simulated form submission.
- *
- * Replace the body of this function with a real API call:
- *
- * ```ts
- * const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
- *   method: "POST",
- *   headers: { "Content-Type": "application/json" },
- *   body: JSON.stringify(data),
- * });
- *
- * if (!response.ok) throw new Error("Submission failed");
- * ```
- *
- * The return type (ContactSubmissionResult) stays the same.
- */
 export async function submitContactForm(
-  _data: ContactFormData,
+  data: ContactFormData,
 ): Promise<ContactSubmissionResult> {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  void _data;
+  const formData = new URLSearchParams();
 
-  // Simulate network delay (1.2–1.8s)
-  const delay = 1200 + Math.random() * 600;
+  formData.append("entry.890003161", data.name);
+  formData.append("entry.476556914", data.company || "");
+  formData.append("entry.1119866674", data.phone);
+  formData.append("entry.44778419", data.email);
+  formData.append("entry.1876012013", data.service || "");
+  formData.append("entry.1098291040", data.message);
 
-  await new Promise<void>((resolve) => {
-    const timer = setTimeout(() => {
-      clearTimeout(timer);
-      resolve();
-    }, delay);
-  });
+  try {
+    await fetch(GOOGLE_FORM_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: formData.toString(),
+    });
 
-  // Simulate 95% success rate
-  const isSuccess = Math.random() > 0.05;
-
-  if (isSuccess) {
     return {
       success: true,
       message: SUBMISSION_MESSAGES.success,
     };
+  } catch (error) {
+    console.error("Google Form submission failed:", error);
+
+    return {
+      success: false,
+      message: SUBMISSION_MESSAGES.error,
+    };
   }
-
-  return {
-    success: false,
-    message: SUBMISSION_MESSAGES.error,
-  };
 }
-

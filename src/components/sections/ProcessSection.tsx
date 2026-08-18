@@ -10,6 +10,7 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import ProcessStepCard from "@/components/sections/ProcessStepCard";
+import SectionBackground from "@/components/common/SectionBackground";
 import {
   staggerContainer,
   fadeUp,
@@ -42,7 +43,8 @@ export default function ProcessSection({
       )}
       aria-label="How We Work"
     >
-      <div className="section-container section-padding">
+      <SectionBackground />
+      <div className="section-container section-padding relative z-10">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
@@ -93,4 +95,3 @@ export default function ProcessSection({
     </section>
   );
 }
-

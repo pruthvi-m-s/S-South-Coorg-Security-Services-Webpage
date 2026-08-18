@@ -89,17 +89,18 @@ export default function KeyFeatures({
                 <Card
                   key={`${feature.title}-${index}`}
                   className={cn(
-                    "flex flex-col p-6 sm:p-8",
+                    "group relative flex flex-col overflow-hidden p-6 sm:p-8",
                     "border border-border bg-card",
                     "transition-all duration-300 ease-premium-out",
-                    "hover:border-primary/20 hover:shadow-md",
+                    "hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg",
                   )}
                 >
+                  <span className="absolute right-5 top-4 text-xs font-semibold tracking-[0.14em] text-primary/45" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
                   {/* Feature Icon */}
                   <div
                     className={cn(
-                      "mb-4 flex size-12 items-center justify-center rounded-full",
-                      "bg-primary-50 text-primary",
+                      "mb-4 flex size-12 items-center justify-center rounded-xl border border-primary/10",
+                      "bg-primary-50 text-primary transition-transform duration-300 group-hover:scale-105",
                     )}
                     aria-hidden="true"
                   >

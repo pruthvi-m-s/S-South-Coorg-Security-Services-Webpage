@@ -1,117 +1,358 @@
 // ============================================================
-// SSCSS — ServicesPreview Section
-// Homepage services preview grid rendered below TrustStats.
-// Content-driven: all copy from the content layer (SERVICES).
-// Responsive: 4 cols desktop, 2 cols tablet, 1 col mobile.
+// SSCSS - Homepage primary services editorial list
 // ============================================================
 
-import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { animate, stagger } from "animejs";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import ServiceCard from "@/components/sections/ServiceCard";
+import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
+import HeroSkeleton from "@/components/common/HeroSkeleton";
 import {
-  staggerContainer,
-  fadeUp,
-  viewportOptions,
-} from "@/lib/motion";
-import { ROUTES } from "@/lib/routes";
+  getPrimaryServiceCategories,
+  type ResolvedPrimaryServiceCategory,
+} from "@/content";
+import { cn } from "@/lib/utils";
+import { servicePath, ROUTES } from "@/lib/routes";
 import type { Service } from "@/types";
 
-// ─── Props ────────────────────────────────────────────────────
 interface ServicesPreviewProps {
   services: Service[];
   className?: string;
 }
 
-// ─── Content (editable heading / intro) ───────────────────────
 const SECTION_HEADING = "Our Security & Facility Services";
 const SECTION_INTRO =
   "From trained security personnel to professional housekeeping and investigative services, we offer comprehensive solutions to protect and manage your premises.";
 
-// ─── ServicesPreview ──────────────────────────────────────────
+function usePrefersReducedMotion() {
+  return useMemo(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    [],
+  );
+}
+
+function RelatedServiceLinks({
+  category,
+  onLinkFocus,
+  compact = false,
+}: {
+  category: ResolvedPrimaryServiceCategory;
+  onLinkFocus?: () => void;
+  compact?: boolean;
+}) {
+  return (
+    <div className={cn("flex flex-wrap gap-2", compact ? "mt-4" : "mt-5")}>
+      {category.services.map((service) => (
+        <Link
+          key={service.slug}
+          to={servicePath(service.slug)}
+          onFocus={onLinkFocus}
+          className={cn(
+            "inline-flex min-h-9 items-center rounded-full border border-border/80 px-3 text-xs font-medium",
+            "text-muted-foreground transition-colors duration-200 hover:border-primary/60 hover:text-primary",
+            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+          )}
+        >
+          {service.name}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 export default function ServicesPreview({
   services,
   className,
 }: ServicesPreviewProps) {
-  if (services.length === 0) return null;
+  const categories = useMemo(
+    () => getPrimaryServiceCategories(services),
+    [services],
+  );
+  const [activeId, setActiveId] = useState(categories[0]?.id ?? "");
+  const sectionRef = useRef<HTMLElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = usePrefersReducedMotion();
+
+  const activeCategory =
+    categories.find((category) => category.id === activeId) ?? categories[0];
+
+  useLayoutEffect(() => {
+    if (categories.length > 0 && !activeId) {
+      setActiveId(categories[0].id);
+    }
+  }, [activeId, categories]);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    if (!section || reduceMotion) return;
+
+    const revealTargets = Array.from(
+      section.querySelectorAll("[data-services-reveal]"),
+    );
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        animate(revealTargets, {
+          opacity: [0, 1],
+          translateY: [18, 0],
+          delay: stagger(55),
+          duration: 460,
+          ease: "out(4)",
+        });
+        observer.disconnect();
+      },
+      { threshold: 0.2 },
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, [reduceMotion]);
+
+  useLayoutEffect(() => {
+    if (reduceMotion) return;
+
+    const animations = [
+      imageRef.current
+        ? animate(imageRef.current, {
+            opacity: [0.72, 1],
+            scale: [1.025, 1],
+            duration: 460,
+            ease: "out(4)",
+          })
+        : null,
+      contentRef.current
+        ? animate(contentRef.current, {
+            opacity: [0, 1],
+            translateY: [10, 0],
+            duration: 360,
+            ease: "out(4)",
+          })
+        : null,
+    ].filter((animation): animation is NonNullable<typeof animation> =>
+      Boolean(animation),
+    );
+
+    return () => {
+      animations.forEach((animation) => {
+        animation.revert();
+      });
+    };
+  }, [activeCategory?.id, reduceMotion]);
+
+  if (!activeCategory) return null;
 
   return (
     <section
-      className={cn(
-        "relative bg-background",
-        className,
-      )}
-      aria-label="Our Services"
+      ref={sectionRef}
+      className={cn("relative overflow-hidden bg-background", className)}
+      aria-labelledby="home-services-title"
     >
       <div className="section-container section-padding">
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportOptions}
+        <div
+          data-services-reveal
+          className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between"
         >
-          {/* Section Heading */}
-          <motion.h2
-            variants={fadeUp}
-            className={cn(
-              "font-heading text-3xl font-semibold leading-tight tracking-tight",
-              "sm:text-4xl",
-              "text-ink text-center",
-            )}
-          >
-            {SECTION_HEADING}
-          </motion.h2>
-
-          {/* Section Intro */}
-          <motion.p
-            variants={fadeUp}
-            className={cn(
-              "mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed",
-              "sm:text-lg",
-              "text-muted-foreground",
-            )}
-          >
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+              Services
+            </p>
+            <h2
+              id="home-services-title"
+              className="mt-3 font-heading text-3xl font-semibold leading-tight tracking-tight text-ink sm:text-4xl lg:text-5xl"
+            >
+              {SECTION_HEADING}
+            </h2>
+          </div>
+          <p className="max-w-md text-sm leading-6 text-muted-foreground sm:text-base">
             {SECTION_INTRO}
-          </motion.p>
+          </p>
+        </div>
 
-          {/* Services Grid — responsive: 4/2/1 columns */}
-          <motion.div
-            variants={fadeUp}
-            className="mt-12"
-          >
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {services.map((service) => (
-                <ServiceCard key={service.slug} service={service} />
-              ))}
-            </div>
-          </motion.div>
+        <div className="mt-12 hidden gap-10 lg:grid lg:grid-cols-[minmax(0,1fr)_24rem] xl:grid-cols-[minmax(0,1fr)_28rem]">
+          <div className="border-y border-border">
+            {categories.map((category, index) => {
+              const active = category.id === activeCategory.id;
 
-          {/* View All Services CTA */}
-          <motion.div
-            variants={fadeUp}
-            className="mt-12 flex justify-center"
+              return (
+                <Link
+                  key={category.id}
+                  to={servicePath(category.primarySlug)}
+                  data-services-reveal
+                  onMouseEnter={() => setActiveId(category.id)}
+                  onFocus={() => setActiveId(category.id)}
+                  className={cn(
+                    "group relative flex min-h-[5.75rem] items-center gap-6 border-b border-border py-5 pr-2",
+                    "transition-[opacity,color,transform] duration-300 ease-premium-out last:border-b-0",
+                    "focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-primary",
+                    active
+                      ? "text-ink opacity-100"
+                      : "text-muted-foreground opacity-55 hover:text-ink hover:opacity-100",
+                  )}
+                  aria-describedby={`home-service-${category.id}-summary`}
+                >
+                  <span
+                    className={cn(
+                      "w-10 text-sm font-semibold tabular-nums transition-colors duration-300",
+                      active ? "text-accent" : "text-muted-foreground/70",
+                    )}
+                    aria-hidden="true"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span
+                      className={cn(
+                        "block font-heading text-3xl font-semibold leading-tight tracking-tight transition-transform duration-300 ease-premium-out xl:text-4xl",
+                        active && "translate-x-2",
+                      )}
+                    >
+                      {category.name}
+                    </span>
+                    <span
+                      id={`home-service-${category.id}-summary`}
+                      className={cn(
+                        "mt-2 block max-w-2xl text-sm leading-6 text-muted-foreground transition-opacity duration-300",
+                        active ? "opacity-100" : "opacity-70",
+                      )}
+                    >
+                      {category.primaryService.shortTagline}
+                    </span>
+                  </span>
+                  <ArrowRight
+                    className={cn(
+                      "size-5 shrink-0 transition-transform duration-300 ease-premium-out",
+                      active && "translate-x-1 text-accent",
+                    )}
+                    aria-hidden="true"
+                  />
+                  <span
+                    className={cn(
+                      "absolute bottom-[-1px] left-0 h-px bg-accent transition-all duration-300 ease-premium-out",
+                      active ? "w-full" : "w-0 group-hover:w-24",
+                    )}
+                    aria-hidden="true"
+                  />
+                </Link>
+              );
+            })}
+          </div>
+
+          <aside
+            data-services-reveal
+            className="sticky top-[calc(var(--header-height)+2rem)] h-fit"
+            aria-label={`${activeCategory.name} preview`}
           >
-            <Link to={ROUTES.services}>
-              <Button
-                variant="outline"
-                size="lg"
-                className="group/cta"
-              >
-                View All Services
-                <ArrowRight
-                  size={16}
-                  strokeWidth={2}
-                  className="ml-1.5 transition-transform duration-300 ease-premium-out group-hover/cta:translate-x-0.5"
-                  aria-hidden="true"
+            <div className="overflow-hidden rounded-xl border border-border bg-card shadow-lg">
+              <div ref={imageRef} className="aspect-[4/5] overflow-hidden bg-muted">
+                <ImageWithSkeleton
+                  key={activeCategory.id}
+                  src={activeCategory.image.src}
+                  alt={activeCategory.image.alt}
+                  skeleton={<HeroSkeleton className="size-full rounded-none" />}
+                  containerClassName="size-full"
+                  className="size-full object-cover transition-transform duration-700 ease-premium-out"
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
                 />
-              </Button>
-            </Link>
-          </motion.div>
-        </motion.div>
+              </div>
+              <div ref={contentRef} className="border-t border-border p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+                  Includes
+                </p>
+                <RelatedServiceLinks
+                  category={activeCategory}
+                  onLinkFocus={() => setActiveId(activeCategory.id)}
+                />
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <div className="mt-10 border-y border-border lg:hidden">
+          {categories.map((category, index) => {
+            const active = category.id === activeCategory.id;
+
+            return (
+              <article
+                key={category.id}
+                data-services-reveal
+                className="border-b border-border last:border-b-0"
+              >
+                <button
+                  type="button"
+                  className="group flex min-h-20 w-full items-center gap-4 py-4 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-primary"
+                  aria-expanded={active}
+                  aria-controls={`home-mobile-service-${category.id}`}
+                  onClick={() => setActiveId(category.id)}
+                >
+                  <span
+                    className={cn(
+                      "w-8 text-sm font-semibold tabular-nums transition-colors",
+                      active ? "text-accent" : "text-muted-foreground/70",
+                    )}
+                    aria-hidden="true"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="min-w-0 flex-1 font-heading text-2xl font-semibold leading-tight tracking-tight text-ink">
+                    {category.name}
+                  </span>
+                  <ArrowRight
+                    className={cn(
+                      "size-5 shrink-0 transition-transform duration-300",
+                      active
+                        ? "translate-x-1 text-accent"
+                        : "text-muted-foreground group-hover:text-primary",
+                    )}
+                    aria-hidden="true"
+                  />
+                </button>
+                {active && (
+                  <div id={`home-mobile-service-${category.id}`} className="pb-5">
+                    <div className="aspect-[16/9] overflow-hidden rounded-lg bg-muted">
+                      <ImageWithSkeleton
+                        src={category.image.src}
+                        alt={category.image.alt}
+                        skeleton={<HeroSkeleton className="size-full rounded-none" />}
+                        containerClassName="size-full"
+                        className="size-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                        fetchPriority="low"
+                      />
+                    </div>
+                    <p className="mt-4 text-sm leading-6 text-muted-foreground">
+                      {category.primaryService.shortTagline}
+                    </p>
+                    <RelatedServiceLinks category={category} compact />
+                  </div>
+                )}
+              </article>
+            );
+          })}
+        </div>
+
+        <div data-services-reveal className="mt-10 flex justify-start">
+          <Link
+            to={ROUTES.services}
+            className={cn(
+              "inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-4 text-sm font-semibold",
+              "text-ink transition-colors duration-200 hover:border-primary/60 hover:text-primary",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+            )}
+          >
+            View all services
+            <ArrowUpRight className="size-4" aria-hidden="true" />
+          </Link>
+        </div>
       </div>
     </section>
   );
 }
-

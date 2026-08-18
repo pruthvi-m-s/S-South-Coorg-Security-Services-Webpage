@@ -5,11 +5,13 @@
 // Content-driven: all data from the content layer.
 // ============================================================
 
-import { useState, useMemo, useCallback, lazy } from "react";
+import { useState, useMemo, useCallback, lazy, Suspense } from "react";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Maximize2 } from "lucide-react";
+import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
+import Skeleton from "@/components/common/Skeleton";
 import type { LightboxMedia } from "@/components/sections/MediaLightbox";
 import { trackGalleryInteraction, getSourcePage } from "@/lib/analytics";
 import {
@@ -18,8 +20,11 @@ import {
   viewportOptions,
 } from "@/lib/motion";
 import type { GalleryImage, GalleryVideo, GalleryCategory } from "@/content/gallery";
+import { entranceOfficeGuards, gateSecurity, soloGuard, techPark, techParkGuards } from "@/lib/site-images";
 
 const MediaLightbox = lazy(() => import("@/components/sections/MediaLightbox"));
+
+const galleryAssets = [entranceOfficeGuards, gateSecurity, soloGuard, techParkGuards, techPark];
 
 // ─── Props ────────────────────────────────────────────────────
 interface GalleryGridProps {
@@ -45,12 +50,25 @@ export default function GalleryGrid({
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const availableImages = useMemo(
+    () => images.map((image, index) => image.isPlaceholder ? { ...image, src: galleryAssets[index % galleryAssets.length], isPlaceholder: false } : image),
+    [images],
+  );
+  const availableCategories = useMemo(
+    () =>
+      categories.filter(
+        (category) =>
+          category.slug === "all" ||
+          availableImages.some((image) => image.category === category.slug),
+      ),
+    [availableImages, categories],
+  );
 
-  // Filter images by active category
+  // Only approved imagery is published; incomplete legacy gallery slots stay hidden.
   const filteredImages = useMemo(() => {
-    if (activeCategory === "all") return images;
-    return images.filter((img) => img.category === activeCategory);
-  }, [images, activeCategory]);
+    if (activeCategory === "all") return availableImages;
+    return availableImages.filter((img) => img.category === activeCategory);
+  }, [availableImages, activeCategory]);
 
   // Build lightbox media items from filtered images
   const lightboxItems: LightboxMedia[] = useMemo(
@@ -137,18 +155,16 @@ export default function GalleryGrid({
             viewport={viewportOptions}
             className="mt-10"
           >
-            <motion.div
+<motion.div
               variants={fadeUp}
               className="flex flex-wrap justify-center gap-2"
-              role="tablist"
               aria-label="Filter gallery by category"
             >
-              {categories.map((category) => (
+              {availableCategories.map((category) => (
                 <button
                   key={category.slug}
                   type="button"
-                  role="tab"
-                  aria-selected={activeCategory === category.slug}
+                  aria-pressed={activeCategory === category.slug}
                   aria-label={
                     category.description
                       ? `Show ${category.description}`
@@ -165,7 +181,8 @@ onClick={() => {
                   className={cn(
                     "inline-flex items-center justify-center rounded-full px-4 py-2.5 text-sm font-medium min-h-[44px]",
                     "transition-all duration-300 ease-premium-out",
-                    "focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2",
+                    "focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 focus-visible:shadow-[0_0_0_4px_rgba(139,30,30,0.12)]",
+                    "active:translate-y-[1px]",
                     activeCategory === category.slug
                       ? "bg-primary text-primary-foreground shadow-xs"
                       : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-ink",
@@ -192,11 +209,10 @@ onClick={() => {
               <motion.div variants={fadeUp}>
                 <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
                   {filteredImages.map((image, index) => (
-                    <motion.button
+<motion.button
                       key={image.id}
                       variants={fadeUp}
-                      layout
-onClick={() => {
+                      onClick={() => {
                         trackGalleryInteraction({
                           source_page: sourcePage,
                           action: "open",
@@ -209,7 +225,8 @@ onClick={() => {
                         "group relative mb-4 block w-full overflow-hidden rounded-lg",
                         "border border-border",
                         "transition-all duration-300 ease-premium-out",
-                        "hover:shadow-md focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2",
+                        "hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 focus-visible:shadow-[0_0_0_4px_rgba(139,30,30,0.12)]",
+                        "active:translate-y-[1px]",
                         "text-left",
                       )}
                       aria-haspopup="dialog"
@@ -238,14 +255,18 @@ onClick={() => {
                           </span>
                         </div>
 
-                        {/* Actual image (hidden/transparent until real src loads) */}
+{/* Actual image (hidden/transparent until real src loads) */}
                         {!image.isPlaceholder && (
-                          <img
+                          <ImageWithSkeleton
                             src={image.src}
                             alt={image.alt}
                             loading="lazy"
                             decoding="async"
                             fetchPriority="low"
+                            skeleton={
+                              <Skeleton className="h-full w-full rounded-none" />
+                            }
+                            containerClassName="absolute inset-0"
                             className={cn(
                               "absolute inset-0 h-full w-full object-cover",
                               "transition-all duration-500 ease-premium-out",
@@ -286,13 +307,13 @@ onClick={() => {
                               {image.title}
                             </h3>
                           )}
-                          {image.description && (
+{image.description && (
                             <p className="mt-0.5 text-xs text-white/70 line-clamp-1">
                               {image.description}
                             </p>
                           )}
                         </div>
-                      </div>
+</div>
                     </motion.button>
                   ))}
                 </div>
@@ -407,14 +428,16 @@ onClick={() => {
         </section>
       )}
 
-      {/* Lightbox */}
-      <MediaLightbox
-        items={lightboxItems}
-        currentIndex={lightboxIndex}
-        open={lightboxOpen}
-        onClose={closeLightbox}
-        onNavigate={navigateLightbox}
-      />
+{/* Lightbox — lazy-loaded with a lightweight fallback */}
+      <Suspense fallback={null}>
+        <MediaLightbox
+          items={lightboxItems}
+          currentIndex={lightboxIndex}
+          open={lightboxOpen}
+          onClose={closeLightbox}
+          onNavigate={navigateLightbox}
+        />
+      </Suspense>
     </>
   );
 }

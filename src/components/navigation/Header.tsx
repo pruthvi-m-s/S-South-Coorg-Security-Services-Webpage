@@ -45,11 +45,9 @@ export default function Header() {
       role="banner"
       className={cn(
         "fixed inset-x-0 top-0 z-navbar",
-        "bg-background transition-shadow duration-300 ease-premium-out",
-        "border-b border-border",
-        scrolled && "shadow-md",
+        "h-14 border-b border-border/70 bg-background/92 transition-[height,background-color,border-color,box-shadow] duration-300 ease-premium-out md:h-16",
+        scrolled && "border-border/90 bg-background/80 shadow-sm backdrop-blur-xl md:h-14",
       )}
-      style={{ height: "var(--header-height)" }}
     >
       <div
         className={cn(
@@ -75,7 +73,7 @@ export default function Header() {
             "bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-xs",
             "hover:bg-primary-700 transition-colors duration-200",
             "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
-            "md:inline-flex",
+            "lg:inline-flex",
           )}
         >
           {ctaLabel}

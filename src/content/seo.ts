@@ -7,7 +7,7 @@ import type { SeoMeta } from "@/types";
 
 export const SEO_DEFAULTS = {
   author: "S South Coorg Security Services",
-themeColor: "#080806",
+themeColor: "#2A2828",
   keywords: ["security services Bengaluru", "security guards Bengaluru", "manpower services Bengaluru", "South Bengaluru security agency"],
   ogImage: "/og/sscss-default.png",
 } as const;

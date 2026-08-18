@@ -6,7 +6,7 @@
 
 import type { HeroContent } from "../types";
 import { ROUTES } from "@/lib/routes";
-import heroPlaceholder from "@/assets/placeholder/hero.svg";
+import { entranceOfficeGuards } from "@/lib/site-images";
 
 export const HERO: HeroContent = {
   eyebrow: "S South Coorg Security Services",
@@ -22,9 +22,9 @@ export const HERO: HeroContent = {
     href: ROUTES.services,
   },
   heroImage: {
-    src: heroPlaceholder,
-    alt: "Security and manpower personnel at work in Bengaluru — SSCSS service illustration",
-    isPlaceholder: true,
+    src: entranceOfficeGuards,
+    alt: "SSCSS security personnel at a modern corporate entrance",
+    isPlaceholder: false,
   },
   // Reserved for future enhancements
   trustElements: undefined,
@@ -32,4 +32,3 @@ export const HERO: HeroContent = {
     type: "none",
   },
 };
-

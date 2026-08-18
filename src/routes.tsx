@@ -4,12 +4,11 @@
 // Layout wrapper wraps all page-level routes.
 // ============================================================
 
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import { ROUTES } from "@/lib/routes";
 import Layout from "@/components/layout/Layout";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
-import RouteLoadingFallback from "@/components/common/RouteLoadingFallback";
 
 // Eagerly loaded route (critical path)
 import HomePage from "@/pages/Home";
@@ -31,9 +30,7 @@ export const router = createBrowserRouter([
   {
     element: (
       <ErrorBoundary>
-        <Suspense fallback={<RouteLoadingFallback />}>
-          <Layout />
-        </Suspense>
+        <Layout />
       </ErrorBoundary>
     ),
     children: [

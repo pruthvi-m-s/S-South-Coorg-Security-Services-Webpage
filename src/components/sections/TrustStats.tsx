@@ -10,7 +10,6 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import TrustStrip from "@/components/sections/TrustStrip";
-import StatsGrid from "@/components/sections/StatsGrid";
 import {
   staggerContainer,
   fadeUp,
@@ -74,15 +73,6 @@ export default function TrustStats({
             </motion.div>
           )}
 
-          {/* 2. Statistics grid — company stats */}
-          {stats.length > 0 && (
-            <motion.div
-              variants={fadeUp}
-              className="w-full"
-            >
-              <StatsGrid stats={stats} />
-            </motion.div>
-          )}
         </motion.div>
       </div>
     </section>

@@ -4,10 +4,20 @@
 
 **Legend:** ⬜ Not started · 🟡 In progress · ✅ Done · ⛔ Blocked
 
-**Current phase:** ✅ Production Ready
-**Last updated:** 2026-08-01 (Final production audit fixes applied)
+**Current phase:** ✅ Final Homepage Cleanup (2026-08-10)
+**Last updated:** 2026-08-11 (Final homepage implementation pass: removed the homepage founder/legacy CTA tail, retained the meaningful global FAQ route and SEO structure, and completed the Home testimonial and contact-CTA architecture. Testimonials remain intentionally unpublished until approved client quotes are supplied.)
+>
+> Earlier entry below — Image Wheel Visual Showcase (PHASE 05): added ONE premium cinematic ImageWheel visual section to the Home page.
+>
+> Earlier entry below — Home Trust Visual Refinement (PHASE 03): refined ONLY the Home `Why Choose SSCSS` / `HomeProofSection` experience.
+>
+> Earlier entry below — Security Operations Visual System: created a reusable, responsive `SecurityOperations` console for the Home page (later removed in the Final Homepage Cleanup).
 
 > Final audit fixes applied: fixed invalid related service slug, wired unused analytics events (trackFaqInteraction, trackServicePageView, trackFormSubmitSuccess, trackFormSubmitError), added response-time expectation sentence to Thank You page, confirmed all 13 services have valid icon identifiers, and corrected tracker.md documentation accuracy.
+>
+> 2026-08-05: Completed the Loading Experience milestone — reusable skeleton primitives, page-content-only route suspense (Header/Footer never unmount), skeleton + fade-in for all section images via `ImageWithSkeleton`, lazy `MediaLightbox` wrapped in `Suspense` with per-image crossfade, and removed dead `RouteLoadingFallback.tsx`.
+>
+> 2026-08-05: Completed the Performance Optimization milestone — see "Milestone — Performance Optimization" implementation note below. Audit found the codebase already had strong image loading (eager LCP/lazy below-fold), route-level code splitting, skeleton architecture, and non-blocking analytics. Applied safe, low-complexity optimizations: hoisted Layout's footer derived data to module scope, memoized the contact form's service-options derivation, and verified `ServiceCard` remains memoized. No redesign, no new dependencies, no state-management libraries, no overuse of React.memo.
 
 ---
 
@@ -840,6 +850,79 @@ GalleryPage
 
 **Remaining cleanup opportunities (not blocking):**
 
+### Milestone — Loading Experience (Skeletons & Route Suspense)
+
+**Status:** ✅ Done
+**Date:** 2026-08-05
+
+**Goal:** This milestone focuses exclusively on the loading experience — no redesign. Perceived performance, no layout shift (CLS), continuous route transitions, smooth image loading, accessibility, and code reuse. Header/Footer must never disappear during navigation.
+
+**Skeleton primitives created (`src/components/common/`):**
+- `Skeleton.tsx` — base animated block (`animate-pulse`, `bg-muted`, reduced-motion safe via global CSS). Single low-level shimmer used everywhere — no per-component shimmer blocks.
+- `TextBlockSkeleton.tsx` — paragraph line placeholder.
+- `HeroSkeleton.tsx` — hero / featured image frame.
+- `CardSkeleton.tsx` — card placeholder matching the shared card anatomy (icon circle + title + body lines).
+- `GallerySkeleton.tsx` — masonry grid + filter-chip placeholder.
+- `RouteContentSkeleton.tsx` — page-content-only route loader rendered inside `<main>` so Header/Footer stay visible.
+- `ImageWithSkeleton.tsx` — reusable wrapper: reserves layout, shows a skeleton behind the image, fades the image in on `onLoad` (no flash, no CLS). `aria-hidden` skeleton; real `<img>` keeps `alt` semantics.
+
+**Route suspense strategy:**
+- `routes.tsx` — removed the `<Suspense>` wrapper around `<Layout/>` (kept `ErrorBoundary`).
+- `Layout.tsx` — wrapped `<Outlet/>` in `<Suspense fallback={<RouteContentSkeleton/>}/>`. Now only the changing page content is skeletonized; the global Header and Footer remain mounted during navigation, giving continuous premium transitions.
+
+**Image loading (reserve layout → skeleton → fade-in) via `ImageWithSkeleton` + `HeroSkeleton`:**
+- `Hero.tsx` — home hero image (LCP `eager`, `fetchPriority="high"`).
+- `AboutHero.tsx` — about hero image (`lazy`).
+- `ServiceDetailHero.tsx` — service hero image (`lazy`).
+- `FounderSection.tsx` — founder portrait (`lazy`, `aspect-[4/5]`).
+- `ComplianceSection.tsx` — certification document image (`lazy`).
+- `GalleryGrid.tsx` — real gallery images now use `ImageWithSkeleton` (skeleton + fade-in); removed the duplicated `onLoad` opacity handler. Lazy `MediaLightbox` wrapped in `<Suspense fallback={null}>`.
+- `MediaLightbox.tsx` — image now uses `ImageWithSkeleton` (skeleton behind, crossfade on load), keyed by `item.id` so navigating images shows a fresh skeleton. Video branch unchanged.
+
+**Contact form (requirement 4):**
+- No skeleton needed — already has a spinner (`Loader2`), disabled controls during submit, inline error banner, inline success state, and a screen-reader live region. Verified disabled controls + inline progress + no double submit.
+
+**Documentation updated:** `tracker.md` (this entry), `techspec.md` (§12 Loading experience), `implementationplan.md` (milestone added), `TODO.md` (all items checked).
+
+**Cleanup:**
+- Removed dead `src/components/common/RouteLoadingFallback.tsx` — superseded by `RouteContentSkeleton` (no references remain).
+
+**Verification:** `npm run build` passes (exit 0, ~1.7s). No new npm dependencies added.
+
+---
+
+### Milestone — Performance Optimization
+
+**Status:** ✅ Done
+**Date:** 2026-08-05
+
+**Goal:** Audit and implement *only safe* performance optimizations — no redesign, no new state-management libraries, no overuse of `React.memo`, no unnecessary complexity. Maintain Lighthouse performance.
+
+**Audit findings (what was already done well):**
+- **Image loading** — Home hero LCP is `loading="eager"`/`fetchPriority="high"`/`decoding="sync"`; all below-fold images are `loading="lazy"`/`decoding="async"`/`fetchPriority="low"`; explicit `width`/`height` on hero images. `ImageWithSkeleton` reserves layout (no CLS) and fades in on load.
+- **Code splitting / lazy loading** — Route-level `React.lazy()` + `Suspense` for all non-home routes; `MediaLightbox` lazy-loaded inside `GalleryGrid`; skeletons keep Header/Footer mounted. `HomePage` is the only eagerly loaded route (critical path).
+- **Repeated calculations** — `GalleryGrid` already memoizes filtered images & lightbox items with `useMemo`; `FaqsPage` already memoizes categories, filtered FAQs, and accordion items.
+- **Browser/static caching** — Vite emits content-hashed asset filenames (immutable caching friendly); `index.html` is the only entry point. Font assets are self-hosted with `font-display` handled by `@fontsource-variable/geist`.
+- **Analytics** — Non-blocking `requestIdleCallback` loader, never on the critical path, fully disabled when no IDs configured.
+- **Memoization** — `ServiceCard` is already `memo()`ized; `TextEffect`'s inner `AnimationComponent` is memoized.
+
+**Optimizations applied (safe, low-complexity):**
+1. **`src/components/layout/Layout.tsx`** — Hoisted the footer's derived data (`footerServices` mapping `SERVICES` and the `PSARA` certification lookup) from the render body to module scope. This removes per-render array-mapping and `Array.find` work, and the props are now referentially stable across re-renders (helps `Footer`/`PSARABadge` bail out of needless re-renders).
+2. **`src/components/forms/ContactForm.tsx`** — Wrapped the `services.map(...)` service-option derivation in `useMemo` keyed on `services`, so the options array is rebuilt only when the services list changes (it is static content), avoiding unnecessary array allocation on every form keystroke re-render.
+3. **Verified memoization** — Confirmed `ServiceCard` remains `memo()`ized and no unnecessary `React.memo` was added elsewhere (per task guidance to not overuse it).
+
+**Deliberately NOT changed (avoided unnecessary complexity):**
+- No new state-management library (none needed — static content layer).
+- No overuse of `React.memo` — only the already-memoized `ServiceCard` and the motion primitive's `AnimationComponent` remain memoized.
+- Did not micro-optimize `cn()`/`twMerge` calls (negligible cost, would add complexity).
+- Did not add manual route prefetching (routes load on demand; prefetching would add complexity without benefit for a lead-gen SPA).
+
+**Verification:**
+- `npm run build` → passes (exit 0, ~1–2s). No new npm dependencies added.
+- `npm run lint` → 0 errors (16 pre-existing warnings only).
+
+---
+
 ### Milestone 7.7 — Enterprise Trust & Compliance Pass (2026-08-01)
 
 **Status:** Complete
@@ -854,3 +937,300 @@ GalleryPage
 - Consider removing `react-hook-form`, `@hookform/resolvers`, and `zod` from package.json in a future milestone if the hand-rolled validation remains the chosen approach
 - `public/og/sscss-default.svg` is unused at runtime (PNG is referenced by `SEO_DEFAULTS.ogImage`) — candidate for future removal
 - `src/assets/real/` is empty — intentional placeholder directory per schema.md asset convention, keep
+
+---
+
+### Milestone — Enterprise Motion Enhancement Pass (Motion Primitives)
+
+**Status:** ✅ Done
+**Date:** 2026-08-05
+
+**Goal:** Raise perceived premium quality to Apple/Stripe/Linear/Notion grade using tasteful, enterprise-grade motion. This was a motion-only pass — no redesign, no layout/color/type changes, no new animation system. It reuses the installed Motion Primitives and the existing Framer Motion vocabulary in `src/lib/motion.ts`.
+
+**Motion Primitives installed (official CLI, `motion/react` based) under `components/motion-primitives/`:**
+- `disclosure.tsx` — controlled expand/collapse with ARIA + keyboard support.
+- `in-view.tsx` — once-per-viewport reveal wrapper.
+- `border-trail.tsx` — subtle animated border sweep.
+- `text-effect.tsx` — per-line text reveal (used by `HeadlineReveal`).
+- `animated-background.tsx` — installed but intentionally unused (no section needed it; left available for future).
+
+**Files created:**
+- `src/components/common/HeadlineReveal.tsx` — Apple-style mask reveal (per-line, 450–600ms, premium easing, no overshoot) built on `TextEffect`. Keeps the real semantic `h1`/`h2`; subtitle + CTA keep existing `fadeUp`.
+- `src/components/common/SectionBackground.tsx` — reusable low-opacity decorative SVG background. `aria-hidden="true"`, `pointer-events-none`, rendered behind content (`z-10` on content).
+- `public/images/low-poly-grid-haikei.svg` — brand-aligned blue grid texture copied from repo root for runtime serving.
+
+**Files modified (motion integration):**
+- Hero headings → `HeadlineReveal`: `Hero.tsx`, `AboutHero.tsx`, `ServicesHero.tsx`, `IndustriesHero.tsx`, `ClientsHero.tsx`, `GalleryHero.tsx`, `ServiceDetailHero.tsx`, `Contact.tsx`, `ThankYou.tsx`, `NotFound.tsx`, `Compliance.tsx`.
+- `WhyChooseCard.tsx` → `Disclosure` (icon + title + label shown; click expands/closes remaining description; `aria-expanded`, `aria-controls`, keyboard Enter/Space, focus-visible ring).
+- `ProcessStepCard.tsx` → `InView` (once-per-viewport reveal with margin trigger `0px 0px -10% 0px`, slight up + fade, no continuous animation).
+- Hover lift (`hover:-translate-y-1` + `hover:shadow-lg`, retaining existing border + icon transitions) applied only to: `ServiceCard`, `IndustryCard`, `ClientCategoryCard`, `KeyFeatures`, `RelatedServices`, `TrustHighlights`. No scale/rotate/tilt.
+- `BorderTrail` (subtle, `bg-primary/50`) applied only to hero/featured/gallery imagery: `Hero`, `AboutHero`, `ServiceDetailHero`, `GalleryGrid`. Not applied site-wide.
+- `SectionBackground` (low-poly grid at ~5% opacity) added to `ProcessSection` and `CoverageSection` only — the blue texture genuinely improves depth there; red/purple SVGs were rejected (clash with theme / too saturated).
+- `ThankYou.tsx` — fixed pre-existing `SuccessIcon` static-component lint error (now uses `createElement`).
+- `eslint.config.js` — added `.history` to `globalIgnores` so stale editor backups no longer pollute lint output.
+
+**Where integrated & why (task 10 documentation):**
+- HeadlineReveal: used on every hero to give the primary value proposition a cinematic, per-line masked reveal — the single most-read element on each page, matching the reference brands' hero treatment. Subtitle/CTA untouched to preserve hierarchy.
+- Disclosure (Why Choose Us): the six feature cards now reveal their full copy progressively, keeping the grid compact while preserving content layer data (nothing hardcoded). Chosen over every-card-expanded because progressive disclosure improves scan-ability and perceived refinement.
+- InView (Process timeline): each step reveals once as it enters the viewport, drawing attention down the timeline without looping or continuous motion.
+- Hover lift: applied only to interactive card grids where a gentle lift communicates affordance; intentionally NOT applied to stat cards, trust ribbons, testimonial cards, or the final CTA band to avoid noise.
+- BorderTrail: reserved for the hero/featured/gallery imagery only, where a slow, subtle primary-colored sweep adds premium depth without distraction.
+- SectionBackground: only on Process and Coverage (both `bg-muted`), where the subtle grid texture adds depth without harming readability.
+
+**Left intentionally static (and why):**
+- `FinalCtaSection`, `TestimonialCard`, `StatCard`, `StatsGrid`, `TrustStrip`, `TrustRibbon`, `Footer` — these already have restrained existing motion; adding more would distract from conversion/trust messaging.
+- Red (`layered-peaks-haikei.svg`, `stacked-steps-haikei.svg`) and saturated purple (`layered-steps-haikei.svg`) SVGs were rejected to preserve the deep-navy/periwinkle brand palette and readability.
+- `AnimatedBackground` primitive — no existing section needed it, so it was left unused rather than forcing it in.
+
+**Accessibility considerations:**
+- All motion respects `prefers-reduced-motion` via the global `MotionConfig reducedMotion="user"` (main.tsx) and the `index.css` reduce block.
+- `HeadlineReveal` keeps a real semantic heading for screen readers; the mask is purely visual.
+- `Disclosure` provides `role="button"`, `aria-expanded`, `aria-controls`, keyboard Enter/Space toggle, and focus-visible ring.
+- `SectionBackground` is `aria-hidden` and `pointer-events-none`.
+- `BorderTrail` is decorative and hidden from assistive tech; it is a non-interactive overlay.
+- No focus loss, no new traps, no new live regions required.
+
+**Performance considerations:**
+- No new npm dependencies added — reuses installed Motion Primitives and existing `motion/react`.
+- `ServiceCard` remains `memo`ized; no new expensive render work.
+- `SectionBackground` uses a lazy-loaded, `decoding="async"` image.
+- BorderTrail/InView/Disclosure are lightweight primitives; no layout thrashing introduced.
+- Bundle size impact minimal (motion primitives are small, tree-shaken).
+
+**Verification:**
+- `npm run build` → passes (exit 0, ~1–2s).
+- `npm run lint` → **0 errors** (16 pre-existing warnings only: react-refresh `only-export-components` on route/primitive exports, unused eslint-disable directives, one exhaustive-deps warning in Contact.tsx).
+- Motion primitives compile cleanly under the app's strict `verbatimModuleSyntax` tsconfig (type-only imports fixed during integration).
+
+---
+
+### Milestone — Global Experience Foundation (2026-08-09)
+
+**Status:** Complete — manual verification pending by request.
+
+**Implemented:** A stable fixed header now uses a subtle translucent dark/blurred scroll state, compact desktop height, active-route indicator, and preserved quote CTA. Desktop Services is a keyboard-accessible categorized mega-menu with image crossfades and direct service routes. The mobile navigation provides a tap-expanded services list. `RouteExperience` uses the installed Anime.js package for a reduced-motion-safe page-content entrance, resets new route navigations to the top, supports hash targets, and preserves POP/back-forward restoration. No page content or route/Suspense architecture was redesigned.
+
+---
+
+### Milestone — Services Experience Upgrade (2026-08-09)
+
+**Status:** Complete — manual verification pending by request.
+
+**Implemented:** Replaced only the `/services` hub's repeated service-card grid with `ServiceShowcase`: a desktop selector paired with one featured visual, concise service copy, direct detail-route CTA, Anime.js indicator/entrance/crossfade/scale motion, and reduced-motion handling. The showcase reads unchanged `Service[]` data and uses `ImageWithSkeleton`; unavailable service image references render a clearly marked placeholder. Mobile uses a touch-friendly single-open accordion with the same routes. Home, global navigation, Industries, Clients, and service detail pages were left unchanged.
+
+---
+
+### Milestone — Services Visual Upgrade (PHASE 02) (2026-08-09)
+
+**Status:** ✅ Done — TypeScript check passes (`npx tsc --noEmit -p tsconfig.app.json` clean). No tests/builds run per instructions.
+
+**Scope:** Elevated only the existing `/services` `ServiceShowcase` selector into a large, premium Apple-product-selection + Linear-case-study + Raycast-card presentation. No redesign of the site, no new routes, no business-logic/content-data changes, no new dependencies, no autoplay/infinite motion.
+
+**What changed (`src/components/sections/ServiceShowcase.tsx` only):**
+1. **Selected service is now visually dominant** — the feature image fills a taller `rounded-2xl` stage (`min-h-[34rem]`, `shadow-lg`) with a restrained bottom gradient scrim, and the service’s icon chip + title + concise tagline + Explore CTA are overlaid directly on the image. This removes the separate text bar below the image, reducing page text density.
+2. **Grid rebalanced toward the visual** — `lg:grid-cols-[minmax(18rem,0.72fr)_minmax(0,1.35fr)]` (selector slightly narrower, stage wider).
+3. **Subtle metadata / stage index** — a top-right counter shows `01 / 13` and animates to the selected service’s index on change (Anime.js, reduced-motion safe); numeric indices (`01`…`13`) added to each selector item and the mobile accordion for a Raycast-style scannable list.
+4. **Restrained hover/click transitions (Anime.js, existing setup)** — selector hover shows a subtle primary index + dot tint; the active item keeps the sliding primary indicator bar; on selection the image crossfades/scales (existing) and the overlay title/content reveal with a 420ms opacity + `translateY` sweep. All wrapped in `prefers-reduced-motion` guards.
+5. **Real-image/placeholder decision untouched** — `ServiceVisual` still renders the real SSCSS photos for the five personnel services (`security-guards`, `residential-security`, `housekeeping`, `ex-army-security-guards`, `event-security`) and the honest “Image placeholder” treatment for the eight environment/other services. No weak real photo was forced into a service where it doesn’t fit.
+6. **Mobile stays clean** — the single-open accordion is retained, now using the same overlay treatment (image + gradient + overlaid title/tagline/icon) and the numeric index, with the same route CTAs.
+
+**Refactor (quality):** `ServiceVisual` previously reset its placeholder state via a synchronous `setState`-in-`useEffect` (flagged by the React lint). It now relies on `key={service.slug}` remounts at both call sites, so `src` changes reset state without an effect. The stage counter uses a typed Anime.js `update` callback on a plain object instead of an `innerText` modifier (which the library’s TS types reject).
+
+**Reduced motion:** all four Anime.js effects (indicator, image crossfade, counter, overlay reveal) and the entrance check `matchMedia("(prefers-reduced-motion: reduce)")` and set final static state directly — no animation.
+
+**Files changed:** `src/components/sections/ServiceShowcase.tsx`, `tracker.md` (this entry), `implementationplan.md` (milestone note), `TODO.md` (PHASE 02 checklist).
+
+---
+
+### Milestone — Home Visual Storytelling Upgrade (2026-08-09)
+
+**Status:** Complete — manual verification pending by request.
+
+**Implemented:** Replaced only Home's use of the generic Why Choose and Process layouts with `HomeProofSection` and `HomeProcessTimeline`; the shared components used by other routes remain unchanged. Added `SecurityIntelligence`, a calm dark illustrative operations interface placed after the existing Home services preview. The proof canvas uses six compact CSS/SVG representations of existing business claims, the timeline advances an Anime.js progress line on viewport progression, and the security panel runs a one-time scan/route reveal. All additions honor reduced motion and introduce no generated images, dependencies, route changes, or changes to Services, Industries, Clients, or navigation.
+
+---
+
+### Milestone — Industries & Clients Experience Upgrade (2026-08-09)
+
+**Status:** Complete — manual verification pending by request.
+
+**Implemented:** Replaced the Industries card grid with `IndustryExplorer`, an interactive Anime.js radial environment selector and a non-dashboard CSS/SVG environment brief. Replaced Clients' repeated category/process grids with `ClientTrustExperience`: a calm sector marquee, visual sector panels, animated existing statistics, and an approval-only testimonial/proof surface. No client names, logos, or testimonials were invented; existing data, routes, Home, Services, and navigation remain unchanged.
+
+---
+
+### Milestone — About Storytelling Upgrade (2026-08-09)
+
+**Status:** Complete — manual verification pending by request.
+
+**Implemented:** Replaced the About text-only story and separate history with a media-capable `CompanyStory` surface: optional real-video support, the existing lazy skeleton/image fallback, restrained overlay, condensed lead story, and Anime.js timeline/media reveal. Added the About-only `AboutFounderPortrait` to preserve the MD image source while avoiding changes to Home. Replaced About's certification strip with `AboutEvidenceSection`, which displays supplied documents through the existing skeleton wrapper or an explicit request-only document preview. No documents, video, or claims were fabricated.
+
+---
+
+### Milestone — Real Company Image Integration (2026-08-09)
+
+**Status:** ✅ Done
+
+**Goal:** Wire the approved real SSCSS photography into the existing image slots in the content layer, replacing the reusable/synthetic placeholders on personnel/team surfaces (per `docs/IMAGE_AUDIT_FINAL.md` REPLACE decisions and `TODO.md`). No AI images were added, no business claims changed, and no tests were run.
+
+**Assets copied (`Images/` → `public/images/real/`, kebab-case SEO names):**
+- `Guards 1.jpg` → `sscss-guards-team-1.jpg`
+- `Guards 2.jpg` → `sscss-guards-team-2.jpg`
+- `Guards 3.jpg` → `sscss-guards-team-3.jpg`
+- `Security at entrance.png` → `sscss-security-at-entrance.png`
+- `Security rear.png` → `sscss-security-rear.png`
+- `HouseKeeping 1.jpg` → `sscss-housekeeping-1.jpg`
+- `bodyguards 1.jpg` → `sscss-bodyguard-1.jpg`
+- `bodyguards 3.jpg` → `sscss-bodyguard-3.jpg`
+- `CFEE1924.JPG` → `sscss-event-cfee1924.jpg`
+- `EMMR4893.JPG` → `sscss-event-emmr4893.jpg`
+
+**Content-layer wiring (all real assets set `isPlaceholder: false`):**
+- `about.ts` — About hero + CompanyStory fallback → `sscss-guards-team-1.jpg` (already wired; confirmed).
+- `services.ts` — Five personnel service heroes wired: `security-guards` (`sscss-guards-team-2.jpg`), `residential-security` (`sscss-security-at-entrance.png`), `housekeeping` (`sscss-housekeeping-1.jpg`), `ex-army-security-guards` (`sscss-bodyguard-3.jpg`), `event-security` (`sscss-bodyguard-1.jpg`).
+- `gallery.ts` — Team tiles (4) → guards team 1/2/3 + bodyguard-3; Deployments (2) → security-at-entrance + security-rear; Events (3) → event-cfee1924 + event-emmr4893 + bodyguard-1.
+
+**Deliberately left as placeholders (environment/other surfaces, per audit rules):**
+- Home hero (`src/assets/placeholder/hero.svg`), founder portrait, certification documents (request-only), and environment service heroes (corporate, industrial, front-office, skilled/unskilled labour, corporate-staffing, background-verification, private-detective, facility-management). No real assets exist for these categories; the audit forbids mixing synthetic personnel into real-personnel compositions.
+
+**Files modified:**
+- `src/content/gallery.ts`
+- `tracker.md` (this entry)
+
+*(`about.ts` and `services.ts` were wired in the same phase session; `public/images/real/` assets confirmed present via `ls -la`.)*
+
+**Verification:** `npx tsc --noEmit -p tsconfig.app.json` runs clean for the content-layer changes. Full project build (`npm run build`) passes; the only reported TS errors prior — in `HomeProcessTimeline`, `HomeProofSection`, `IndustryExplorer`, `ServiceShowcase` — are the pre-existing Anime.js effect-cleanup type issues already resolved in the Final Experience Polish pass and unrelated to image wiring.
+
+**Documentation cleanup (complete):** The integrated real assets are now documented in `techspec.md` §19 "Real Company Image Assets" (source→public mapping, usage, and alignment with `docs/IMAGE_AUDIT_FINAL.md` KEEP/EDIT/REPLACE/REMOVE decisions). `TODO.md` step "Update techspec.md §11" marked complete. No source code, layout, route, animation, or content-data changes were made in this documentation pass.
+
+---
+
+### Milestone — Final Experience Polish (2026-08-09)
+
+**Status:** ✅ Done
+
+**Goal:** Consistency and refinement only — remove anything excessive, gimmicky, repetitive, or visually noisy from the prior visual-upgrade phases while preserving the coherent premium motion system. No new layouts, no routes, no dependencies, no tests, no business-claim changes.
+
+**Motion hierarchy enforced (design.md §7 aligned):**
+- MICRO 100–250ms — buttons, icons, hover feedback (existing `duration-200`/`duration-300`).
+- SMALL 300–500ms — cards, image transitions, menus.
+- MEDIUM 500–900ms — section reveals, timelines.
+- CINEMATIC 900–1500ms — reserved for hero/story transitions only.
+- No animation on every element; important information stays immediately readable; the site remains premium with animations disabled.
+
+**What was removed (excessive/repetitive motion):**
+- `GalleryGrid.tsx` — removed the per-gallery-tile `BorderTrail` infinite loop (`repeat: Infinity, duration: 10`). Per design.md §7 "Never: constant looping animations", this was the most repetitive application of the effect. The three hero/featured films (Home, About-help, ServiceDetail) keep their single slow BorderTrail per the techspec §11 carve-out.
+- `ClientTrustExperience.tsx` — replaced the 30s linear-infinite duplicated-category marquee (inline `<style>` keyframes + `[animation:...infinite]`) with a calm, static, wrapping centered chip strip. No auto-motion, no duplicated categories, no inline `<style>`.
+
+**Accessibility / stability fixes:**
+- `GalleryGrid.tsx` — removed the Framer `layout` prop from gallery buttons (unstable inside CSS `columns` masonry; caused reflow risk).
+- `GalleryGrid.tsx` — corrected filter-chip semantics from an invalid `role="tablist"`/`role="tab"`/`aria-selected` group to a proper `aria-pressed` toggle-button group (no tab-panel contract existed).
+
+**Unchanged (coherent system preserved):**
+- Reduced-motion honoring (global `MotionConfig reducedMotion="user"` + `index.css` reduce block).
+- Shared `src/lib/motion.ts` vocabulary (premiumEasing, stagger, fadeUp) and the per-component Anime.js ease `"out(4)"` — both engines left intact.
+- Consistent hover lifts, skeleton/fade image loading, route transitions, navigation, and all 15 audit axes (motion consistency, timing, hover, mobile, tablet, reduced-motion, image loading, layout stability, route transitions, navigation, CTA visibility, text density, repeated patterns, accessibility, performance).
+
+**Files modified:**
+- `src/components/sections/GalleryGrid.tsx`
+- `src/components/sections/ClientTrustExperience.tsx`
+- `src/components/sections/HomeProcessTimeline.tsx`
+- `src/components/sections/HomeProofSection.tsx`
+- `src/components/sections/IndustryExplorer.tsx`
+- `src/components/sections/ServiceShowcase.tsx`
+- `TODO.md` (task tracking)
+- `tracker.md` (this entry)
+- `implementationplan.md`, `techspec.md` §11 (see milestone notes)
+
+**TypeScript compile fix (build-blocking, pre-existing):** The Anime.js visual-upgrade components returned `animation.revert()` directly from their effect cleanups, which TypeScript flagged as `TS2345` (`JSAnimation` not assignable to `void | Destructor`). The cleanups were wrapped in a block `() => { animation.revert(); }` to return `void`, and an unused `useEffect` import was removed from `IndustryExplorer`. This is purely a type-correctness fix — no timing, easing, design, or behavior changed. `npm run build` now passes (`tsc -b` clean; Vite build ✓ ~2.2s).
+
+**Verification:** No tests run (per instructions). No new npm dependencies added. Business claims, routes, and routing architecture unchanged.
+
+---
+
+### Milestone — Security Operations Visual System (2026-08-09)
+
+**Status:** Complete — manual verification pending by request.
+
+**Implemented:** Built ONLY the Security Operations visual system for the Home page. Created `SecurityOperations.tsx` (a reusable, responsive security-operations console in the dark, restrained Linear/Vercel/Raycast visual language) and inserted `<SecurityOperations />` on the Home page after `HomeProcessTimeline`, before Testimonials. All other Home sections, routes, navigation, Services, Industries, Clients, and content data remain unchanged.
+
+**Console composition:**
+- Header bar: "Security Operations" + an "Operational" status pill (static dot, no infinite ping).
+- Three compact metrics: Active sites / Personnel / Coverage — all clearly illustrative UI values.
+- Stylized SVG site map: subtle district blocks, muted blue coverage rings, a patrol route that draws once, and site points that appear sequentially.
+- Site status list: Main gate, North perimeter, Control room, Patrol route — each with a green status indicator.
+- Footer: "All operations normal" + a prominent "Illustrative view" caption attached directly to the console.
+
+**Content honesty:** No real-company statistics were used or invented. The dashboard is framed as a *conceptual view of how organized security operations can be managed*; the three metric values (24 / 128 / 96%) are decorative UI figures and are explicitly labelled "Illustrative view" directly on the console so they can never be read as factual SSCSS claims.
+
+**Animation (existing Anime.js setup):** Entrance runs once when the section enters the viewport — patrol route stroke draws once, site points stagger in sequentially, status rows reveal in sequence, and metric numbers count up once. No infinite looping. `prefers-reduced-motion` is honored: the reduced-motion path renders the complete final static state.
+
+**Responsive:** The console is a two-column composition on desktop (copy + console) that stacks vertically on mobile; within the console, the metrics row wraps and the map + status list stack vertically on mobile and sit side-by-side on `sm+`.
+
+**Files changed:**
+- `src/components/sections/SecurityOperations.tsx` (new)
+- `src/pages/Home.tsx` (import + `<SecurityOperations />` placement)
+- `implementationplan.md` (milestone note)
+- `tracker.md` (this entry)
+
+**Verification:** `npx tsc --noEmit -p tsconfig.app.json` runs clean. No tests or builds run (per instructions). No new npm dependencies added.
+
+---
+
+### Milestone — Home Trust Visual Refinement (PHASE 03) (2026-08-09)
+
+**Status:** ✅ Done — TypeScript check passes (`npx tsc --noEmit -p tsconfig.app.json` clean). No tests/builds run per instructions.
+
+**Scope:** Refined ONLY the Home `Why Choose SSCSS` / `HomeProofSection` experience. No redesign of the page, no new routes, no business-logic/content-data changes, no new dependencies, no infinite/carousel/bounce animation, no fake statistics/clients/testimonials/certifications. The technical/dashboard visual remains owned by `SecurityOperations`; this section now communicates the **human / operational trust** side.
+
+**What changed (`src/components/sections/HomeProofSection.tsx` only):**
+1. **One dominant visual/proof area** — the previous generic 3-column card grid was replaced with a two-column editorial layout led by ONE real SSCSS photograph (`sscss-guards-team-2.jpg`, `isPlaceholder: false`) in a `rounded-2xl` stage with a bottom gradient scrim and an overlaid "Trained & vetted personnel" badge. Uses the existing `ImageWithSkeleton` + `HeroSkeleton` (reserve layout → skeleton → fade-in, `lazy`/`async`/`low`) — no CLS, same image loading behavior.
+2. **Compact supporting proof points** — the six existing approved claims (15+ years / Structured / Verified / Scalable / Dedicated / Integrated) moved into a tight, grouped list of compact cards (icon chip + short title + uppercase label + the existing compact CSS/SVG visual). Text density reduced; none of the factual claims were changed.
+3. **Visual hierarchy** — descriptive copy cut to a short two-line intro; the section now reads as a premium editorial proof surface rather than a generic icon-card grid.
+4. **Restrained Anime.js motion (existing setup)** — the dominant photo enters once when it reaches the viewport (opacity + slight rise, 520ms, `out(4)`); proof rows reveal sequentially on a stagger (70ms, 420ms). Hovering/focusing a row subtly highlights its visual (icon chip fills primary + proof visual opacity shift) — no scale/bounce. All wrapped in `prefers-reduced-motion` guards that render the complete static state.
+5. **Responsive** — stacks on mobile (photo first for a natural read), proof rows become a 2-col grid on `sm+`, no cramped tablet columns, no horizontal overflow, and the rows are non-interactive informational list items (touch-safe, no hover-dependent interaction).
+
+**Files changed:** `src/components/sections/HomeProofSection.tsx`, `tracker.md` (this entry), `implementationplan.md` (milestone note), `TODO.md` (PHASE 03 checklist).
+
+---
+
+### Milestone — Home Engagement Process Timeline (PHASE 04) (2026-08-09)
+
+**Status:** ✅ Done — TypeScript check passes (`npx tsc --noEmit -p tsconfig.app.json` clean). No tests/builds run per instructions.
+
+**Scope:** Refined ONLY the Home `Our Engagement Process` / `HomeProcessTimeline` experience. No redesign of the page, no new routes, no business-logic/content-data changes, no new dependencies, no new imagery, no infinite/carousel/bounce animation, no fake statistics/clients/testimonials/certifications. The technical/dashboard visual stays owned by `SecurityOperations`; this section is a restrained, progressive process journey.
+
+**What changed (`src/components/sections/HomeProcessTimeline.tsx` only):**
+1. **Scroll-progressive timeline (desktop)** — the previous static six-column interactive grid (tappable cards with a fixed 6-col layout) is replaced with a single horizontal rail (`lg+`) with six step nodes. A restrained `h-px` `bg-border` rail carries a `bg-primary` progress line that fills as the user scrolls through the section, reading as a journey from enquiry → assessment → deployment → ongoing support. The progress fill is computed from the section's bounding-rect scroll position and set directly (no lag, no tween fighting scroll); it does not imply the user must scroll through each step to continue.
+2. **Clean vertical process (mobile/tablet)** — a vertical rail with the same nodes and content, each step naturally revealing as it enters the viewport. No horizontal overflow.
+3. **Strong visual identity per step (existing system)** — each step keeps its exact existing one-sentence description and its existing Lucide icon (from the existing `STEP_ICONS` set) as its visual identity. Visible text is reduced to step number + title + the one-sentence description.
+4. **Sequential Anime.js reveal** — on section viewport entry, the heading and then each step reveal sequentially (stagger 70ms, 420–520ms, `out(4)` ease). One-time, no looping.
+5. **Subtle active-step emphasis** — the step nearest the viewport center receives a primary fill + ring (color shift only; no scale, no bounce).
+6. **Reduced motion** — `prefers-reduced-motion` renders the complete static state: all steps visible at full opacity, progress line set directly via scroll, no entrance animation.
+7. **Accessibility** — semantic `<ol>`/`<li>` list, real `<h3>` step titles, section `aria-labelledby`, rail/nodes `aria-hidden` (decorative), no keyboard-only interaction required, no focus trap.
+
+**Files changed:** `src/components/sections/HomeProcessTimeline.tsx`, `tracker.md` (this entry), `implementationplan.md` (milestone note), `TODO.md` (PHASE 04 checklist).
+
+**Verification:** `npx tsc --noEmit -p tsconfig.app.json` clean. No tests/builds run (per instructions).
+
+---
+
+### Milestone — Image Wheel Visual Showcase (PHASE 05) (2026-08-09)
+
+**Status:** ✅ Done — TypeScript check passes (`npx tsc --noEmit -p tsconfig.app.json` clean). No tests/builds run per instructions.
+
+**Scope:** Added ONE premium cinematic ImageWheel visual section to the Home page — a single visual storytelling moment, NOT a gallery page and NOT another card grid. No redesign of the page, no new routes, no business-logic/content-data changes, no new dependencies, no generated/images invented, no infinite/carousel/bounce/auto-rotate animation, no fake statistics/clients/testimonials/claims. All other sections, Services, Industries, Clients, About, navigation, footer, and content data remain unchanged.
+
+**What was built (`src/components/sections/ImageWheel.tsx` — new reusable component; `src/pages/Home.tsx` — wired after `HomeProcessTimeline`):**
+1. **Minimal copy** — eyebrow *"THE PEOPLE BEHIND THE PRESENCE"* + large heading *"Security is built around people."* + one short support line ("The teams, discipline, and presence behind every deployment."). Very little text; the wheel is the dominant visual.
+2. **Composed radial image installation (desktop `sm+`)** — a central dominant real tile (`sscss-guards-team-2.jpg`) with seven overlapping satellite real tiles at varied size/rotation/position/z-index (`bodyguard-1`, `guards-team-1`, `security-at-entrance`, `event-cfee1924`, `guards-team-3`, `security-rear`, `housekeeping-1`). All are approved SSCSS real photos chosen for composition; no unsuitable image was forced in. A subtle radial primary glow behind the composition adds depth. Each tile uses the existing `ImageWithSkeleton` + `HeroSkeleton` (reserve layout → skeleton → fade-in, `lazy`/`async`/`low`).
+3. **One clearly-marked future-AI placeholder slot** — a dashed-border `primary` tile with a Lucide `ImagePlus` icon and an "Image placeholder" label. No AI image is generated or invented in this phase.
+4. **Restrained hover interaction (desktop)** — hovering a tile brings it slightly forward (`scale` + `-translate-y-1` + raised shadow + `hover:z-40`), brightens the image (`hover:brightness-110`), and reveals its small category label (bottom gradient scrim, `opacity-0 → group-hover:opacity-100`). The wheel stays visually stable until the user interacts — no auto-rotation, no autoplay, no endless float, no bounce, no looping, no excessive parallax.
+5. **Anime.js one-time entrance** — on viewport entry, the heading + all tiles stagger once into their final positions (`opacity` + `translateY` + `scale`, 70ms stagger, 520ms, `out(4)`). No looping. `prefers-reduced-motion` renders the complete final static state (no entrance animation).
+6. **Responsive** — full composed wheel on desktop; a smaller overlap on tablet (`sm+`); on mobile a clean stacked/offset two-column arrangement (`grid-cols-2`, alternating `translate-y-6`) with no horizontal overflow, every image visible, and labels always shown (touch-safe — interaction never depends on hover).
+7. **Accessibility** — semantic `<h2>` with `aria-labelledby`, `aria-hidden` on decorative glow and labels, descriptive `alt` text on every real image, `role="img"` + `aria-label` on the placeholder slot, keyboard focus ring via global CSS, and reduced-motion honored globally.
+
+**Content honesty:** No fake statistics, testimonials, clients, or security claims were added. The future-AI slot is explicitly labelled "Image placeholder" so it can never be mistaken for a real SSCSS asset.
+
+**Files changed:** `src/components/sections/ImageWheel.tsx` (new), `src/pages/Home.tsx` (placement), `tracker.md` (this entry), `implementationplan.md` (milestone note), `TODO.md` (PHASE 05 checklist).
+
+**Verification:** `npx tsc --noEmit -p tsconfig.app.json` clean. No tests/builds run (per instructions).

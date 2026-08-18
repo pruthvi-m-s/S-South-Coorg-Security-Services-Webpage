@@ -1,6 +1,7 @@
 import { useMemo, useState, useCallback, useEffect } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
+import HeadlineReveal from "@/components/common/HeadlineReveal";
 import { MapPin, Clock, Phone } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import WhatsAppIcon from "@/components/common/WhatsAppIcon";
@@ -82,8 +83,8 @@ export default function ContactPage() {
   }, []);
 
   const initialService = useMemo(() => {
-    const fromQuery = searchParams.get("service");
-    if (!fromQuery) return "";
+    const fromQuery = searchParams.get("service")?.trim().toLowerCase();
+    if (!fromQuery || !/^[a-z0-9-]{1,80}$/.test(fromQuery)) return "";
     return serviceOptions.some((s) => s.slug === fromQuery) ? fromQuery : "";
   }, [searchParams, serviceOptions]);
 
@@ -153,10 +154,28 @@ export default function ContactPage() {
     return sorted.slice(0, CONTACT_PAGE.faqPreview.count);
   }, []);
 
+  const sanitizeInput = useCallback((field: keyof ContactFormData, value: string): string => {
+    const trimmed = value.trim();
+    if (field === "email") {
+      return trimmed.toLowerCase();
+    }
+    if (field === "phone") {
+      return trimmed.replace(/\s+/g, " ");
+    }
+    if (field === "message") {
+      return trimmed.replace(/\s+/g, " ");
+    }
+    return trimmed.replace(/\s+/g, " ");
+  }, []);
+
   const handleFieldChange = useCallback(
     (field: keyof ContactFormData, value: string) => {
-      setFormData((prev) => ({ ...prev, [field]: value }));
-      if (field === "name" || field === "phone" || field === "email" || field === "message") {
+      const normalizedValue = sanitizeInput(field, value);
+      setFormData((prev) => ({ ...prev, [field]: normalizedValue }));
+      if (submissionState.status !== "idle") {
+        setSubmissionState({ status: "idle" });
+      }
+      if (field === "name" || field === "phone" || field === "email" || field === "service" || field === "message") {
         setErrors((prev) => {
           const current = prev[field];
           if (current === undefined) return prev;
@@ -166,28 +185,52 @@ export default function ContactPage() {
         });
       }
     },
-    [errors],
+    [sanitizeInput, submissionState.status],
   );
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
 
-      const validationErrors = validateContactForm(formData);
+      const sanitizedFormData: ContactFormData = {
+        ...formData,
+        name: formData.name.trim().replace(/\s+/g, " "),
+        company: formData.company.trim().replace(/\s+/g, " "),
+        phone: formData.phone.trim().replace(/\s+/g, " "),
+        email: formData.email.trim().toLowerCase(),
+        service: formData.service.trim().replace(/\s+/g, " "),
+        message: formData.message.trim().replace(/\s+/g, " "),
+      };
+
+      const validationErrors = validateContactForm(sanitizedFormData);
       setErrors(validationErrors);
 
       if (hasErrors(validationErrors)) {
+        const firstField = (["name", "phone", "email", "service", "message"] as const).find(
+          (field) => Boolean(validationErrors[field]),
+        );
+
+        if (firstField) {
+          const fieldId = firstField === "service" ? "field-service" : `field-${firstField}`;
+          requestAnimationFrame(() => {
+            const element = document.getElementById(fieldId);
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth", block: "center" });
+              (element as HTMLElement).focus({ preventScroll: true });
+            }
+          });
+        }
         return;
       }
 
       setSubmissionState({ status: "submitting" });
 
-try {
-        const result = await submitContactForm(formData);
+      try {
+        const result = await submitContactForm(sanitizedFormData);
         if (result.success) {
           trackFormSubmitSuccess({
             source_page: getSourcePage(),
-            service_interested: formData.service || "not-sure",
+            service_interested: sanitizedFormData.service || "not-sure",
           });
           setSubmissionState({ status: "success", message: result.message });
         } else {
@@ -243,12 +286,13 @@ const ctaContent = useMemo(() => {
             viewport={viewportOptions}
             className="mx-auto max-w-4xl text-center"
           >
-            <motion.h1
-              variants={fadeUp}
+<HeadlineReveal
+              as="h1"
+              delay={0.1}
               className="font-heading text-4xl font-semibold leading-tight tracking-tight sm:text-5xl text-ink"
             >
               {CONTACT_PAGE.hero.title}
-            </motion.h1>
+            </HeadlineReveal>
             <motion.p
               variants={fadeUp}
               className="mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg text-muted-foreground"
@@ -313,7 +357,7 @@ const ctaContent = useMemo(() => {
 
 {/* Parallel contact channels — visitors who prefer calling/messaging */}
               {(CONTACT.phone || WA_NUMBER) && (
-                <div className="mt-6 flex flex-col items-center justify-center gap-3 rounded-xl border border-border bg-card p-5 sm:flex-row sm:gap-6">
+                <div className="mt-6 flex flex-col items-center justify-center gap-3 rounded-xl border border-border bg-card p-5 shadow-sm sm:flex-row sm:gap-6">
                   {CONTACT.phone && (
                     <a
                       href={`tel:${CONTACT.phone}`}

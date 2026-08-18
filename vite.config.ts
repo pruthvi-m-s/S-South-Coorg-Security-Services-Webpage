@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => {
   const siteUrl = env.VITE_SITE_URL;
   const googleSiteVerification = env.VITE_GOOGLE_SITE_VERIFICATION;
   const bingSiteVerification = env.VITE_BING_SITE_VERIFICATION;
+  const optionalEnvValue = (value: string | undefined) => value?.trim() || undefined;
   const seoFilesPlugin = {
     name: "sscss-seo-files",
     buildStart() {
@@ -19,7 +20,12 @@ export default defineConfig(({ mode }) => {
       if (sitemapEntryCount !== getIndexableRoutes().length) throw new Error("Generated sitemap entry count does not match the indexable route count.");
       writeFileSync(path.resolve(__dirname, "public/sitemap.xml"), sitemap);
       writeFileSync(path.resolve(__dirname, "public/robots.txt"), generateRobotsTxt(siteUrl));
-      writeFileSync(path.resolve(__dirname, "public/llms.txt"), generateLlmsTxt());
+      writeFileSync(path.resolve(__dirname, "public/llms.txt"), generateLlmsTxt({
+        name: optionalEnvValue(env.VITE_SITE_NAME),
+        shortName: optionalEnvValue(env.VITE_SITE_SHORT_NAME),
+        primaryServiceArea: optionalEnvValue(env.VITE_PRIMARY_SERVICE_AREA),
+        secondaryServiceArea: optionalEnvValue(env.VITE_SECONDARY_SERVICE_AREA),
+      }));
     },
     transformIndexHtml(html: string) {
       // Inject webmaster verification meta tags ONLY when the
@@ -42,11 +48,39 @@ export default defineConfig(({ mode }) => {
     },
   };
 
-  return {
+return {
   plugins: [react(), tailwindcss(), seoFilesPlugin],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    target: "esnext",
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 900,
+    rollupOptions: {
+      output: {
+        // Stable vendor chunk groups. Keeping third-party dependencies in
+        // dedicated, separate chunks means a dependency bump only invalidates
+        // that one chunk's cache — the rest survive for returning visitors.
+        manualChunks(id: string) {
+          if (!id.includes("node_modules")) return undefined;
+          if (id.includes("react") || id.includes("react-dom") || id.includes("react-router") || id.includes("scheduler") || id.includes("tw-animate-css")) {
+            return "vendor-react";
+          }
+          if (id.includes("framer-motion") || id.includes("motion/react") || id.includes("motion-dom") || id.includes("motion-utils")) {
+            return "vendor-motion";
+          }
+          if (id.includes("lucide-react")) {
+            return "vendor-icons";
+          }
+          if (id.includes("clsx") || id.includes("tailwind-merge") || id.includes("class-variance-authority")) {
+            return "vendor-utils";
+          }
+          return "vendor-other";
+        },
+      },
     },
   },
   };

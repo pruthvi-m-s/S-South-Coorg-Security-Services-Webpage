@@ -2,11 +2,10 @@
 // SSCSS — Services Content
 // All 14 services. Each is a full landing page's worth of data.
 // Placeholder status is indicated by isPlaceholder in ImageRef.
+import { gateSecurity, soloGuard, techPark, techParkGuards } from "@/lib/site-images";
 // ============================================================
 
 import type { Service } from "../types";
-
-const placeholderImage = (name: string): string => `/images/services/${name}.jpg`;
 
 export const SERVICES: Service[] = [
   {
@@ -15,10 +14,10 @@ export const SERVICES: Service[] = [
     shortTagline:
       "Trained, disciplined security personnel for your premises.",
     icon: "Shield",
-    heroImage: {
-      src: placeholderImage("security-guards"),
-      alt: "SSCSS security guard on duty",
-      isPlaceholder: true,
+heroImage: {
+      src: gateSecurity,
+      alt: "Security officer monitoring a modern property entrance",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS provides highly trained, verified, and disciplined security guards for commercial, residential, and industrial properties. Our guards undergo rigorous background checks, physical fitness tests, and ongoing training to ensure they meet the highest standards of professionalism and reliability. Whether you need a single guard for a small office or a full team for a large facility, we tailor our deployment to your specific security requirements.",
@@ -160,9 +159,9 @@ export const SERVICES: Service[] = [
       "Professional security management for corporate offices and IT parks.",
     icon: "Building2",
     heroImage: {
-      src: placeholderImage("corporate-security"),
-      alt: "Corporate security team at work",
-      isPlaceholder: true,
+      src: techParkGuards,
+      alt: "Security personnel deployed at a corporate entrance",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS offers comprehensive corporate security solutions for IT companies, corporate offices, and business parks. Our corporate security personnel are trained in access control, visitor management, emergency response, and professional reception duties. We understand the unique security challenges of modern corporate environments and provide guards who present a professional image while maintaining vigilant security.",
@@ -285,9 +284,9 @@ export const SERVICES: Service[] = [
       "Robust security solutions for factories, warehouses, and industrial facilities.",
     icon: "Factory",
     heroImage: {
-      src: placeholderImage("industrial-security"),
-      alt: "Industrial security personnel",
-      isPlaceholder: true,
+      src: techPark,
+      alt: "Industrial, warehouse and commercial environments",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS provides specialized industrial security services for factories, warehouses, manufacturing plants, and logistics hubs. Our industrial security personnel are trained in perimeter control, material movement monitoring, fire safety, and handling large-scale access management. We understand the critical nature of industrial assets and provide round-the-clock vigilance.",
@@ -409,10 +408,10 @@ relatedServices: [
     shortTagline:
       "Trusted security for apartments, gated communities, and residential complexes.",
     icon: "Home",
-    heroImage: {
-      src: placeholderImage("residential-security"),
-      alt: "Residential security guard at apartment gate",
-      isPlaceholder: true,
+heroImage: {
+      src: soloGuard,
+      alt: "Security officer stationed at a corporate property",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS provides dedicated residential security solutions for apartment associations, gated communities, and residential complexes. Our guards are trained in visitor management, package handling, resident assistance, and community safety protocols. We help create a safe, welcoming environment for residents while maintaining professional security standards.",
@@ -532,10 +531,10 @@ relatedServices: [
     shortTagline:
       "Professional housekeeping and cleaning services for commercial and residential spaces.",
     icon: "Sparkles",
-    heroImage: {
-      src: placeholderImage("housekeeping"),
-      alt: "Professional housekeeping staff",
-      isPlaceholder: true,
+heroImage: {
+      src: "/images/real/sscss-housekeeping-1.jpg",
+      alt: "SSCSS professional housekeeping staff at work",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS provides comprehensive housekeeping and cleaning services for offices, apartments, commercial buildings, and industrial facilities. Our housekeeping staff is trained in modern cleaning techniques, hygiene standards, and eco-friendly practices. We ensure clean, healthy, and well-maintained premises that create a positive impression.",
@@ -659,9 +658,9 @@ relatedServices: [
       "Professional front desk and reception management for your business.",
     icon: "UserCheck",
     heroImage: {
-      src: placeholderImage("front-office-management"),
-      alt: "Front office management personnel",
-      isPlaceholder: true,
+      src: "/images/services/reception-front.png",
+      alt: "Professional corporate reception and visitor-management environment",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS provides trained front office and reception management personnel for corporate offices, hospitals, hotels, and commercial establishments. Our staff is trained in professional etiquette, communication skills, visitor management, and administrative support. We ensure your front desk represents your brand with professionalism and warmth.",
@@ -784,9 +783,9 @@ relatedServices: [
       "Qualified skilled workers for your operational and project needs.",
     icon: "Wrench",
     heroImage: {
-      src: placeholderImage("skilled-labour"),
-      alt: "Skilled labour personnel",
-      isPlaceholder: true,
+      src: "/images/services/warehouse.png",
+      alt: "Warehouse environment supporting skilled labour operations",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS provides verified skilled labour personnel for various industries including construction, manufacturing, facilities management, and events. Our skilled workers are trained, experienced, and ready to contribute to your projects. We handle recruitment, verification, and deployment so you can focus on your core operations.",
@@ -909,9 +908,9 @@ relatedServices: [
       "Reliable general labour support for your operations and projects.",
     icon: "Ham",
     heroImage: {
-      src: placeholderImage("unskilled-labour"),
-      alt: "General labour personnel",
-      isPlaceholder: true,
+      src: "/images/services/warehouse.png",
+      alt: "Warehouse and logistics environment for general labour support",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS provides reliable unskilled and semi-skilled labour for general duties across industries. Our workers are physically fit, verified, and ready for tasks such as loading/unloading, cleaning, site maintenance, and general assistance. We ensure timely deployment and consistent workforce availability.",
@@ -1034,9 +1033,9 @@ relatedServices: [
       "End-to-end staffing solutions for corporate and administrative roles.",
     icon: "UserPlus",
     heroImage: {
-      src: placeholderImage("corporate-staffing"),
-      alt: "Corporate staffing professionals",
-      isPlaceholder: true,
+      src: "/images/services/office-front.png",
+      alt: "Professional office environment for corporate staffing",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS provides comprehensive corporate staffing solutions including administrative staff, data entry operators, office assistants, and support personnel. We handle the entire recruitment lifecycle from sourcing and screening to deployment and payroll management. Our staffing solutions help businesses focus on core operations while we manage their workforce needs.",
@@ -1157,10 +1156,10 @@ relatedServices: [
     shortTagline:
       "Disciplined, experienced ex-servicemen for premium security needs.",
     icon: "Medal",
-    heroImage: {
-      src: placeholderImage("ex-army-security-guards"),
-      alt: "Ex-army security guard",
-      isPlaceholder: true,
+heroImage: {
+      src: soloGuard,
+      alt: "Professional security officer stationed at a property",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS provides ex-army security guards who bring unmatched discipline, loyalty, and experience to your security operations. Our ex-servicemen have served in the Indian Armed Forces and are trained in advanced security protocols, situational awareness, and crisis management. They are ideal for high-security environments, VIP security, and premium establishments.",
@@ -1283,10 +1282,10 @@ relatedServices: [
     shortTagline:
       "Comprehensive security management for events, conferences, and gatherings.",
     icon: "CalendarCheck",
-    heroImage: {
-      src: placeholderImage("event-security"),
-      alt: "Event security personnel",
-      isPlaceholder: true,
+heroImage: {
+      src: "/images/services/corporate-event.png",
+      alt: "Corporate event environment for professional event security",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS provides specialized event security services for conferences, corporate events, weddings, concerts, and large gatherings. Our event security personnel are trained in crowd management, access control, bag checks, and emergency response. We work with event organizers to create a safe environment while ensuring a positive experience for attendees.",
@@ -1408,9 +1407,9 @@ relatedServices: [
       "Thorough background checks for individuals and organizations.",
     icon: "SearchCheck",
     heroImage: {
-      src: placeholderImage("background-verification"),
-      alt: "Background verification documentation",
-      isPlaceholder: true,
+      src: "/images/services/laptop-desk.png",
+      alt: "Professional desk for background verification and due diligence",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS provides comprehensive background verification services for employers, landlords, and organizations. Our verification process includes identity verification, address confirmation, employment history, education verification, criminal record checks, and reference checks. We help you make informed decisions with reliable, thorough background screening.",
@@ -1534,9 +1533,9 @@ relatedServices: [
       "Discreet, professional investigative services for individuals and businesses.",
     icon: "Search",
     heroImage: {
-      src: placeholderImage("private-detective-services"),
-      alt: "Private detective services",
-      isPlaceholder: true,
+      src: "/images/services/laptop-desk.png",
+      alt: "Discreet professional workspace for investigative services",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS provides professional private detective and investigative services for individuals, businesses, and legal professionals. Our services include surveillance, matrimonial investigations, corporate investigations, evidence gathering, and due diligence. All investigations are conducted with the utmost discretion, professionalism, and within legal frameworks.",
@@ -1658,9 +1657,9 @@ relatedServices: [
       "Complete facility operations management — security, housekeeping, staffing, and more.",
     icon: "Building2",
     heroImage: {
-      src: placeholderImage("facility-management"),
-      alt: "Integrated facility management team",
-      isPlaceholder: true,
+      src: "/images/services/tech-park.png",
+      alt: "Corporate campus environment for integrated facility management",
+      isPlaceholder: false,
     },
     overview:
       "SSCSS offers comprehensive Integrated Facility Management Services (IFMS) for corporate offices, commercial buildings, hospitals, hotels, IT parks, and industrial facilities. We manage complete facility operations including security services, housekeeping, skilled and unskilled labour, front office staff, pantry staff, facility supervisors, and general facility operations. Our integrated approach ensures seamless workforce coordination, single-vendor accountability, and consistent service quality across all your facility needs. By consolidating multiple service lines under one management umbrella, we reduce your administrative overhead while improving operational efficiency.",
@@ -1793,6 +1792,135 @@ relatedServices: [
     },
   },
 ];
+
+export interface PrimaryServiceCategory {
+  id: string;
+  name: string;
+  primarySlug: string;
+  serviceSlugs: string[];
+  image: Service["heroImage"];
+}
+
+export interface ResolvedPrimaryServiceCategory extends PrimaryServiceCategory {
+  primaryService: Service;
+  services: Service[];
+}
+
+export const PRIMARY_SERVICE_CATEGORIES: PrimaryServiceCategory[] = [
+  {
+    id: "security-guards",
+    name: "Security Guards",
+    primarySlug: "security-guards",
+    serviceSlugs: [
+      "security-guards",
+      "corporate-security",
+      "industrial-security",
+      "residential-security",
+      "background-verification",
+      "private-detective-services",
+    ],
+    image: {
+      src: "/images/services/gate-security.png",
+      alt: "Security professional managing controlled access at a gate",
+      isPlaceholder: false,
+    },
+  },
+  {
+    id: "housekeeping",
+    name: "Housekeeping",
+    primarySlug: "housekeeping",
+    serviceSlugs: ["housekeeping"],
+    image: {
+      src: "/images/services/reception-front.png",
+      alt: "Professional reception environment for property management services",
+      isPlaceholder: false,
+    },
+  },
+  {
+    id: "bouncers-bodyguards",
+    name: "Bouncers / Bodyguards",
+    primarySlug: "ex-army-security-guards",
+    serviceSlugs: ["ex-army-security-guards"],
+    image: {
+      src: "/images/services/entrance-dark.png",
+      alt: "Controlled VIP entrance environment for executive protection",
+      isPlaceholder: false,
+    },
+  },
+  {
+    id: "front-office-management",
+    name: "Front Office Management",
+    primarySlug: "front-office-management",
+    serviceSlugs: ["front-office-management"],
+    image: {
+      src: "/images/services/reception-front.png",
+      alt: "Professional corporate reception and visitor-management environment",
+      isPlaceholder: false,
+    },
+  },
+  {
+    id: "skilled-unskilled-labour",
+    name: "Skilled / Unskilled Labour",
+    primarySlug: "skilled-labour",
+    serviceSlugs: [
+      "skilled-labour",
+      "unskilled-labour",
+      "corporate-staffing",
+    ],
+    image: {
+      src: "/images/services/warehouse.png",
+      alt: "Warehouse and logistics environment for manpower support",
+      isPlaceholder: false,
+    },
+  },
+  {
+    id: "event-security",
+    name: "Event Security",
+    primarySlug: "event-security",
+    serviceSlugs: ["event-security"],
+    image: {
+      src: "/images/services/corporate-event.png",
+      alt: "Corporate event environment for professional event security",
+      isPlaceholder: false,
+    },
+  },
+  {
+    id: "facility-management",
+    name: "Facility Management",
+    primarySlug: "facility-management",
+    serviceSlugs: ["facility-management"],
+    image: {
+      src: "/images/services/tech-park.png",
+      alt: "Corporate campus environment for integrated facility management",
+      isPlaceholder: false,
+    },
+  },
+];
+
+export function getPrimaryServiceCategories(
+  services: Service[] = SERVICES,
+): ResolvedPrimaryServiceCategory[] {
+  const servicesBySlug = new Map(services.map((service) => [service.slug, service]));
+
+  return PRIMARY_SERVICE_CATEGORIES.map((category) => {
+    const groupedServices = category.serviceSlugs
+      .map((slug) => servicesBySlug.get(slug))
+      .filter((service): service is Service => Boolean(service));
+    const primaryService =
+      servicesBySlug.get(category.primarySlug) ?? groupedServices[0];
+
+    if (!primaryService) return null;
+
+    return {
+      ...category,
+      primaryService,
+      services: groupedServices,
+    };
+  }).filter(
+    (category): category is ResolvedPrimaryServiceCategory =>
+      Boolean(category),
+  );
+}
 
 /** Utility: get a single service by slug */
 export function getServiceBySlug(slug: string): Service | undefined {
