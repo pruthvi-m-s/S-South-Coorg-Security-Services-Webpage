@@ -1,5 +1,5 @@
-const GOOGLE_FORM_URL =
-  "https://docs.google.com/forms/d/e/1FAIpQLSf3tUEyL-bChz2JFsXUQ-Vzn7CxgnofqI7BBbiTQsAjMCcUNA/formResponse";
+const GOOGLE_APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycby5ZEpa7JtZis9PNFDqf2inuzrddOaTvIY-GcjjRNkquEFPA2DIPDRSYF_jlbdOD3Q4/exec";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -10,50 +10,22 @@ export default async function handler(req, res) {
   }
 
   try {
-    const {
-      name,
-      company,
-      phone,
-      email,
-      service,
-      message,
-    } = req.body || {};
-
-    if (!name || !phone || !email || !service || !message) {
-      return res.status(400).json({
-        ok: false,
-        message: "Required fields are missing",
-      });
-    }
-
-    const formData = new URLSearchParams();
-
-    formData.append("entry.890003161", name);
-    formData.append("entry.476556914", company || "");
-    formData.append("entry.1119866674", phone);
-    formData.append("entry.44778419", email);
-    formData.append("entry.1876012013", service);
-    formData.append("entry.1098291040", message);
-
-    const response = await fetch(GOOGLE_FORM_URL, {
+    const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
       },
-      body: formData.toString(),
-      redirect: "follow",
+      body: JSON.stringify(req.body),
     });
 
-    if (!response.ok) {
-      console.error(
-        "Google Forms returned:",
-        response.status,
-        response.statusText,
-      );
+    const result = await response.json();
+
+    if (!response.ok || !result.ok) {
+      console.error("Apps Script error:", result);
 
       return res.status(502).json({
         ok: false,
-        message: "Google Forms submission failed",
+        message: "Unable to submit inquiry",
       });
     }
 
@@ -62,7 +34,7 @@ export default async function handler(req, res) {
       message: "Inquiry received",
     });
   } catch (error) {
-    console.error("Contact submission error:", error);
+    console.error("Contact API error:", error);
 
     return res.status(500).json({
       ok: false,
