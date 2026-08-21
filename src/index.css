@@ -20,9 +20,9 @@
 
 @font-face {
   font-family: "Merriweather";
-  src: url("./assets/fonts/Merriweather-VariableFont_opsz,wdth,wght.ttf")
-    format("truetype");
-  font-weight: 300 900;
+  src: url("./assets/fonts/Merriweather-Regular.woff2")
+    format("woff2");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -38,10 +38,10 @@
   --font-sans: "Merriweather", Georgia, serif;
   --font-heading: "Bebas Neue", sans-serif;
 
-  --font-weight-normal: 300;
-  --font-weight-medium: 300;
-  --font-weight-semibold: 300;
-  --font-weight-bold: 300;
+  --font-weight-normal: 400;
+--font-weight-medium: 400;
+--font-weight-semibold: 400;
+--font-weight-bold: 400;
 
   --leading-tight: 1.15;
   --leading-display: 1.05;
