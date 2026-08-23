@@ -2,7 +2,6 @@
 // SSCSS — Services Content
 // All 14 services. Each is a full landing page's worth of data.
 // Placeholder status is indicated by isPlaceholder in ImageRef.
-import { gateSecurity, soloGuard, techPark, techParkGuards } from "@/lib/site-images";
 // ============================================================
 
 import type { Service } from "../types";
@@ -15,7 +14,7 @@ export const SERVICES: Service[] = [
       "Trained, disciplined security personnel for your premises.",
     icon: "Shield",
 heroImage: {
-      src: gateSecurity,
+      src: "/images/services/Solo-Guard.webp",
       alt: "Security officer monitoring a modern property entrance",
       isPlaceholder: false,
     },
@@ -159,7 +158,7 @@ heroImage: {
       "Professional security management for corporate offices and IT parks.",
     icon: "Building2",
     heroImage: {
-      src: techParkGuards,
+      src: "/images/services/gate-security.png",
       alt: "Security personnel deployed at a corporate entrance",
       isPlaceholder: false,
     },
@@ -284,7 +283,7 @@ heroImage: {
       "Robust security solutions for factories, warehouses, and industrial facilities.",
     icon: "Factory",
     heroImage: {
-      src: techPark,
+      src: "/images/services/warehouse.png",
       alt: "Industrial, warehouse and commercial environments",
       isPlaceholder: false,
     },
@@ -409,8 +408,8 @@ relatedServices: [
       "Trusted security for apartments, gated communities, and residential complexes.",
     icon: "Home",
 heroImage: {
-      src: soloGuard,
-      alt: "Security officer stationed at a corporate property",
+      src: "/images/services/Guards-1.webp",
+      alt: "Security officer stationed at a residential property",
       isPlaceholder: false,
     },
     overview:
@@ -658,7 +657,7 @@ heroImage: {
       "Professional front desk and reception management for your business.",
     icon: "UserCheck",
     heroImage: {
-      src: "/images/services/reception-front.png",
+      src: "/images/services/front-office-management.png",
       alt: "Professional corporate reception and visitor-management environment",
       isPlaceholder: false,
     },
@@ -783,7 +782,7 @@ heroImage: {
       "Qualified skilled workers for your operational and project needs.",
     icon: "Wrench",
     heroImage: {
-      src: "/images/services/warehouse.png",
+      src: "/images/services/skilled-labour.png",
       alt: "Warehouse environment supporting skilled labour operations",
       isPlaceholder: false,
     },
@@ -908,7 +907,7 @@ heroImage: {
       "Reliable general labour support for your operations and projects.",
     icon: "Ham",
     heroImage: {
-      src: "/images/services/warehouse.png",
+      src: "/images/services/unskilled-labour.png",
       alt: "Warehouse and logistics environment for general labour support",
       isPlaceholder: false,
     },
@@ -1033,7 +1032,7 @@ heroImage: {
       "End-to-end staffing solutions for corporate and administrative roles.",
     icon: "UserPlus",
     heroImage: {
-      src: "/images/services/office-front.png",
+      src: "/images/services/corporate-staffing.png",
       alt: "Professional office environment for corporate staffing",
       isPlaceholder: false,
     },
@@ -1157,7 +1156,7 @@ heroImage: {
       "Disciplined, experienced ex-servicemen for premium security needs.",
     icon: "Medal",
 heroImage: {
-      src: soloGuard,
+      src: "/images/services/ex-army-security-guards.png",
       alt: "Professional security officer stationed at a property",
       isPlaceholder: false,
     },
@@ -1283,7 +1282,7 @@ heroImage: {
       "Comprehensive security management for events, conferences, and gatherings.",
     icon: "CalendarCheck",
 heroImage: {
-      src: "/images/services/corporate-event.png",
+      src: "/images/services/event-security.png",
       alt: "Corporate event environment for professional event security",
       isPlaceholder: false,
     },
@@ -1407,7 +1406,7 @@ heroImage: {
       "Thorough background checks for individuals and organizations.",
     icon: "SearchCheck",
     heroImage: {
-      src: "/images/services/laptop-desk.png",
+      src: "/images/services/background-verification.png",
       alt: "Professional desk for background verification and due diligence",
       isPlaceholder: false,
     },
@@ -1533,10 +1532,10 @@ heroImage: {
       "Discreet, professional investigative services for individuals and businesses.",
     icon: "Search",
     heroImage: {
-      src: "/images/services/laptop-desk.png",
-      alt: "Discreet professional workspace for investigative services",
-      isPlaceholder: false,
-    },
+  src: "/images/services/private-detective-services.png",
+  alt: "Discreet professional workspace for investigative services",
+  isPlaceholder: false,
+},
     overview:
       "SSCSS provides professional private detective and investigative services for individuals, businesses, and legal professionals. Our services include surveillance, matrimonial investigations, corporate investigations, evidence gathering, and due diligence. All investigations are conducted with the utmost discretion, professionalism, and within legal frameworks.",
     industriesServed: [
@@ -1657,7 +1656,7 @@ heroImage: {
       "Complete facility operations management — security, housekeeping, staffing, and more.",
     icon: "Building2",
     heroImage: {
-      src: "/images/services/tech-park.png",
+      src: "/images/services/integrated-facility-management.png",
       alt: "Corporate campus environment for integrated facility management",
       isPlaceholder: false,
     },
@@ -1853,7 +1852,7 @@ export const PRIMARY_SERVICE_CATEGORIES: PrimaryServiceCategory[] = [
     primarySlug: "front-office-management",
     serviceSlugs: ["front-office-management"],
     image: {
-      src: "/images/services/reception-front.png",
+      src: "/images/services/front-office-management.png",
       alt: "Professional corporate reception and visitor-management environment",
       isPlaceholder: false,
     },
@@ -1868,7 +1867,7 @@ export const PRIMARY_SERVICE_CATEGORIES: PrimaryServiceCategory[] = [
       "corporate-staffing",
     ],
     image: {
-      src: "/images/services/warehouse.png",
+      src: "/images/services/skilled-labour.png",
       alt: "Warehouse and logistics environment for manpower support",
       isPlaceholder: false,
     },
