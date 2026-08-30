@@ -1,6 +1,6 @@
 // ============================================================
 // SSCSS — Global Site Header
-// Sticky, scroll-aware header with content-layer-driven nav.
+// Dark editorial header matching the new site-wide visual system.
 // ============================================================
 
 import { useState, useEffect, useCallback } from "react";
@@ -11,32 +11,39 @@ import Logo from "./Logo";
 import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
 
-// ─── Scroll threshold for elevated appearance ────────────────
 const SCROLL_THRESHOLD = 20;
 
-// ─── Header ──────────────────────────────────────────────────
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // ─── Scroll detection ────────────────────────────────────
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > SCROLL_THRESHOLD);
     };
 
-    // Check initial state
     handleScroll();
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    return () =>
+      window.removeEventListener(
+        "scroll",
+        handleScroll,
+      );
   }, []);
 
-  const closeMobile = useCallback(() => setMobileOpen(false), []);
-  const toggleMobile = useCallback(() => setMobileOpen((prev) => !prev), []);
+  const closeMobile = useCallback(
+    () => setMobileOpen(false),
+    [],
+  );
 
-  // ─── Header CTA — navigates to the contact form ──────────
-  const ctaLabel = "Get a Free Quote";
+  const toggleMobile = useCallback(
+    () => setMobileOpen((previous) => !previous),
+    [],
+  );
 
   const ctaHref = `${ROUTES.contact}#contact-form`;
 
@@ -45,8 +52,11 @@ export default function Header() {
       role="banner"
       className={cn(
         "fixed inset-x-0 top-0 z-navbar",
-        "h-14 border-b border-border/70 bg-background/92 transition-[height,background-color,border-color,box-shadow] duration-300 ease-premium-out md:h-16",
-        scrolled && "border-border/90 bg-background/80 shadow-sm backdrop-blur-xl md:h-14",
+        "h-14 border-b border-[#2b2927] bg-[#10100f]/96 text-[#f5f1e8]",
+        "transition-[height,background-color,border-color,box-shadow,backdrop-filter] duration-300 ease-premium-out",
+        "md:h-16",
+        scrolled &&
+          "border-[#3a3835] bg-[#10100f]/88 shadow-lg backdrop-blur-xl md:h-14",
       )}
     >
       <div
@@ -55,31 +65,28 @@ export default function Header() {
           "max-w-(--container-7xl)",
         )}
       >
-        {/* ─── Logo ────────────────────────────────────────── */}
         <Logo />
 
-        {/* ─── Spacer ──────────────────────────────────────── */}
         <div className="flex-1" />
 
-        {/* ─── Desktop Navigation ──────────────────────────── */}
         <DesktopNav />
 
-        {/* ─── Desktop CTA ─────────────────────────────────── */}
         <Link
           to={ctaHref}
           data-analytics-cta="header_cta"
           className={cn(
-            "ml-6 hidden min-h-[44px] items-center justify-center rounded-lg",
-            "bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-xs",
-            "hover:bg-primary-700 transition-colors duration-200",
-            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+            "ml-5 hidden min-h-[44px] items-center justify-center",
+            "border border-[#b52b22] bg-[#b52b22] px-5 py-2.5",
+            "text-sm font-semibold text-white",
+            "transition-all duration-200 ease-premium-out",
+            "hover:bg-[#8f1912] hover:border-[#8f1912]",
+            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c45a52]",
             "lg:inline-flex",
           )}
         >
-          {ctaLabel}
+          Get a Free Quote
         </Link>
 
-        {/* ─── Mobile Navigation ────────────────────────────── */}
         <MobileNav
           isOpen={mobileOpen}
           onToggle={toggleMobile}
@@ -89,4 +96,3 @@ export default function Header() {
     </header>
   );
 }
-

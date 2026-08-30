@@ -95,7 +95,7 @@ heroImage: {
     ],
     whyChooseUs: [
       {
-        title: "15+ Years of Experience",
+        title: "18+ Years of Company Operations",
         description:
           "We've been protecting Bengaluru properties since 2008 — we know the local security landscape.",
       },
@@ -146,7 +146,7 @@ heroImage: {
       title:
         "Security Guards in Bengaluru | SSCSS",
       description:
-        "SSCSS provides trained, verified security guards for apartments, corporates, industries & more in South Bengaluru. 15+ years of trusted service.",
+        "SSCSS provides trained, verified security guards for apartments, corporates, industries & more in South Bengaluru. 18+ years of company operations.",
       canonicalPath: "/services/security-guards",
       schemaType: "Service",
     },
@@ -1744,7 +1744,7 @@ heroImage: {
       {
         title: "Proven Track Record",
         description:
-          "15+ years of managing complex facility operations across 50+ client organizations.",
+          "18+ years of managing complex facility operations across 50+ client organizations.",
       },
       {
         title: "Integrated Management",
@@ -1785,7 +1785,7 @@ heroImage: {
       title:
         "Integrated Facility Management Services in Bengaluru | SSCSS",
       description:
-        "Comprehensive facility management services in Bengaluru — security, housekeeping, staffing & more. Single-vendor accountability, integrated operations. 15+ years experience.",
+        "Comprehensive facility management services in Bengaluru — security, housekeeping, staffing & more. Single-vendor accountability, integrated operations. 18+ years of company operations.",
       canonicalPath: "/services/facility-management",
       schemaType: "Service",
     },

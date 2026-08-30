@@ -1,16 +1,5 @@
-// ============================================================
-// SSCSS — Process Section ("How We Work")
-// Homepage section showing the company's workflow as a
-// responsive step timeline.
-// Desktop: horizontal layout.
-// Tablet/Mobile: vertical layout.
-// Content-driven: all copy from the content layer.
-// ============================================================
-
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import ProcessStepCard from "@/components/sections/ProcessStepCard";
-import SectionBackground from "@/components/common/SectionBackground";
 import {
   staggerContainer,
   fadeUp,
@@ -18,7 +7,6 @@ import {
 } from "@/lib/motion";
 import type { ProcessStep } from "@/types";
 
-// ─── Props ────────────────────────────────────────────────────
 interface ProcessSectionProps {
   title: string;
   subtitle: string;
@@ -26,7 +14,6 @@ interface ProcessSectionProps {
   className?: string;
 }
 
-// ─── ProcessSection ───────────────────────────────────────────
 export default function ProcessSection({
   title,
   subtitle,
@@ -38,55 +25,74 @@ export default function ProcessSection({
   return (
     <section
       className={cn(
-        "relative bg-muted",
+        "bg-[#f3efe6] text-[#171615]",
         className,
       )}
-      aria-label="How We Work"
+      aria-labelledby="services-process-title"
     >
-      <SectionBackground />
-      <div className="section-container section-padding relative z-10">
+      <div className="section-container section-padding">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={viewportOptions}
         >
-          {/* Section Heading */}
-          <motion.h2
-            variants={fadeUp}
-            className={cn(
-              "font-heading text-3xl font-semibold leading-tight tracking-tight",
-              "sm:text-4xl",
-              "text-ink text-center",
-            )}
-          >
-            {title}
-          </motion.h2>
+          <div className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
+            <div>
+              <motion.p
+                variants={fadeUp}
+                className="text-xs font-semibold uppercase tracking-[0.14em] text-[#ad241c]"
+              >
+                How engagement works
+              </motion.p>
 
-          {/* Section Intro */}
-          <motion.p
-            variants={fadeUp}
-            className={cn(
-              "mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed",
-              "sm:text-lg",
-              "text-muted-foreground",
-            )}
-          >
-            {subtitle}
-          </motion.p>
+              <motion.h2
+                id="services-process-title"
+                variants={fadeUp}
+                className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#171615] sm:text-5xl"
+              >
+                {title}
+              </motion.h2>
+            </div>
 
-          {/* Steps — Desktop: horizontal, Mobile: vertical */}
+            <motion.p
+              variants={fadeUp}
+              className="max-w-2xl text-sm leading-7 text-[#6a655e] sm:text-base"
+            >
+              {subtitle}
+            </motion.p>
+          </div>
+
           <motion.div
             variants={fadeUp}
-            className="mt-12"
+            className="mt-12 border-t border-[#d9d1c5]"
           >
-            <div className="flex flex-col items-center gap-0 lg:flex-row lg:gap-8">
+            <div className="grid lg:grid-cols-3">
               {steps.map((step, index) => (
-                <ProcessStepCard
+                <div
                   key={`${step.step}-${index}`}
-                  step={step}
-                  isLast={index === steps.length - 1}
-                />
+                  className={cn(
+                    "border-b border-[#d9d1c5] py-7",
+                    "lg:min-h-[14rem] lg:border-b-0 lg:px-8",
+                    "lg:border-r lg:border-[#d9d1c5]",
+                    "lg:first:pl-0",
+                    "lg:last:border-r-0 lg:last:pr-0",
+                    index >= 3 &&
+                      "lg:border-t lg:border-[#d9d1c5]",
+                  )}
+                >
+                  <p className="font-heading text-3xl font-semibold text-[#ad241c]">
+                    {String(step.step).padStart(2, "0")}
+                  </p>
+
+                  <h3 className="mt-4 font-heading text-2xl font-semibold tracking-tight text-[#171615]">
+                    {step.title}
+                  </h3>
+
+                  <p className="mt-3 max-w-sm text-sm leading-6 text-[#6a655e]">
+                    {step.description}
+                  </p>
+                </div>
               ))}
             </div>
           </motion.div>

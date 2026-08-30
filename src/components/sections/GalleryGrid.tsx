@@ -1,11 +1,10 @@
-// ============================================================
-// SSCSS — GalleryGrid Component
-// Reusable image gallery with category filtering, lazy loading,
-// responsive masonry/grid layout, and lightbox integration.
-// Content-driven: all data from the content layer.
-// ============================================================
-
-import { useState, useMemo, useCallback, lazy, Suspense } from "react";
+import {
+  useState,
+  useMemo,
+  useCallback,
+  lazy,
+  Suspense,
+} from "react";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -13,20 +12,40 @@ import { Maximize2 } from "lucide-react";
 import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
 import Skeleton from "@/components/common/Skeleton";
 import type { LightboxMedia } from "@/components/sections/MediaLightbox";
-import { trackGalleryInteraction, getSourcePage } from "@/lib/analytics";
+import {
+  trackGalleryInteraction,
+  getSourcePage,
+} from "@/lib/analytics";
 import {
   staggerContainer,
   fadeUp,
   viewportOptions,
 } from "@/lib/motion";
-import type { GalleryImage, GalleryVideo, GalleryCategory } from "@/content/gallery";
-import { entranceOfficeGuards, gateSecurity, soloGuard, techPark, techParkGuards } from "@/lib/site-images";
+import type {
+  GalleryImage,
+  GalleryVideo,
+  GalleryCategory,
+} from "@/content/gallery";
+import {
+  entranceOfficeGuards,
+  gateSecurity,
+  soloGuard,
+  techPark,
+  techParkGuards,
+} from "@/lib/site-images";
 
-const MediaLightbox = lazy(() => import("@/components/sections/MediaLightbox"));
+const MediaLightbox = lazy(
+  () => import("@/components/sections/MediaLightbox"),
+);
 
-const galleryAssets = [entranceOfficeGuards, gateSecurity, soloGuard, techParkGuards, techPark];
+const galleryAssets = [
+  entranceOfficeGuards,
+  gateSecurity,
+  soloGuard,
+  techParkGuards,
+  techPark,
+];
 
-// ─── Props ────────────────────────────────────────────────────
 interface GalleryGridProps {
   title: string;
   subtitle: string;
@@ -36,7 +55,6 @@ interface GalleryGridProps {
   className?: string;
 }
 
-// ─── GalleryGrid ──────────────────────────────────────────────
 export default function GalleryGrid({
   title,
   subtitle,
@@ -47,44 +65,70 @@ export default function GalleryGrid({
 }: GalleryGridProps) {
   const { pathname } = useLocation();
   const sourcePage = getSourcePage(pathname);
-  const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const [activeCategory, setActiveCategory] =
+    useState("all");
+
+  const [lightboxOpen, setLightboxOpen] =
+    useState(false);
+
+  const [lightboxIndex, setLightboxIndex] =
+    useState(0);
+
   const availableImages = useMemo(
-    () => images.map((image, index) => image.isPlaceholder ? { ...image, src: galleryAssets[index % galleryAssets.length], isPlaceholder: false } : image),
+    () =>
+      images.map((image, index) =>
+        image.isPlaceholder
+          ? {
+              ...image,
+              src:
+                galleryAssets[
+                  index % galleryAssets.length
+                ],
+              isPlaceholder: false,
+            }
+          : image,
+      ),
     [images],
   );
+
   const availableCategories = useMemo(
     () =>
       categories.filter(
         (category) =>
           category.slug === "all" ||
-          availableImages.some((image) => image.category === category.slug),
+          availableImages.some(
+            (image) =>
+              image.category === category.slug,
+          ),
       ),
     [availableImages, categories],
   );
 
-  // Only approved imagery is published; incomplete legacy gallery slots stay hidden.
   const filteredImages = useMemo(() => {
-    if (activeCategory === "all") return availableImages;
-    return availableImages.filter((img) => img.category === activeCategory);
+    if (activeCategory === "all") {
+      return availableImages;
+    }
+
+    return availableImages.filter(
+      (image) =>
+        image.category === activeCategory,
+    );
   }, [availableImages, activeCategory]);
 
-  // Build lightbox media items from filtered images
   const lightboxItems: LightboxMedia[] = useMemo(
     () =>
-      filteredImages.map((img) => ({
-        id: img.id,
-        src: img.src,
-        alt: img.alt,
-        title: img.title,
-        description: img.description,
-        type: "image" as const,
+      filteredImages.map((image) => ({
+        id: image.id,
+        src: image.src,
+        alt: image.alt,
+        title: image.title,
+        description: image.description,
+        type: "image",
       })),
     [filteredImages],
   );
 
-  // Open lightbox for a specific image
   const openLightbox = useCallback(
     (index: number) => {
       setLightboxIndex(index);
@@ -110,10 +154,10 @@ export default function GalleryGrid({
     <>
       <section
         className={cn(
-          "relative bg-background",
+          "bg-[#10100f] text-[#f5f1e8]",
           className,
         )}
-        aria-label="Image Gallery"
+        aria-labelledby="gallery-grid-title"
       >
         <div className="section-container section-padding">
           <motion.div
@@ -122,141 +166,124 @@ export default function GalleryGrid({
             whileInView="visible"
             viewport={viewportOptions}
           >
-            {/* Section Heading */}
-            <motion.h2
-              variants={fadeUp}
-              className={cn(
-                "font-heading text-3xl font-semibold leading-tight tracking-tight",
-                "sm:text-4xl",
-                "text-ink text-center",
-              )}
-            >
-              {title}
-            </motion.h2>
-
-            {/* Section Intro */}
-            <motion.p
-              variants={fadeUp}
-              className={cn(
-                "mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed",
-                "sm:text-lg",
-                "text-muted-foreground",
-              )}
-            >
-              {subtitle}
-            </motion.p>
-          </motion.div>
-
-          {/* Category Filters */}
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOptions}
-            className="mt-10"
-          >
-<motion.div
-              variants={fadeUp}
-              className="flex flex-wrap justify-center gap-2"
-              aria-label="Filter gallery by category"
-            >
-              {availableCategories.map((category) => (
-                <button
-                  key={category.slug}
-                  type="button"
-                  aria-pressed={activeCategory === category.slug}
-                  aria-label={
-                    category.description
-                      ? `Show ${category.description}`
-                      : `Show ${category.label}`
-                  }
-onClick={() => {
-                    trackGalleryInteraction({
-                      source_page: sourcePage,
-                      action: "filter",
-                      category: category.slug,
-                    });
-                    setActiveCategory(category.slug);
-                  }}
-                  className={cn(
-                    "inline-flex items-center justify-center rounded-full px-4 py-2.5 text-sm font-medium min-h-[44px]",
-                    "transition-all duration-300 ease-premium-out",
-                    "focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 focus-visible:shadow-[0_0_0_4px_rgba(139,30,30,0.12)]",
-                    "active:translate-y-[1px]",
-                    activeCategory === category.slug
-                      ? "bg-primary text-primary-foreground shadow-xs"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-ink",
-                  )}
+            <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+              <div>
+                <motion.p
+                  variants={fadeUp}
+                  className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
                 >
-                  {category.label}
-                </button>
-              ))}
-            </motion.div>
-            <div role="status" aria-live="polite" className="sr-only">
-              {`Showing ${filteredImages.length} images for category ${activeCategory}`}
-            </div>
-          </motion.div>
+                  Photo collection
+                </motion.p>
 
-          {/* Image Grid */}
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOptions}
-            className="mt-10"
-          >
-            {filteredImages.length > 0 ? (
-              <motion.div variants={fadeUp}>
-                <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
-                  {filteredImages.map((image, index) => (
-<motion.button
-                      key={image.id}
-                      variants={fadeUp}
-                      onClick={() => {
-                        trackGalleryInteraction({
-                          source_page: sourcePage,
-                          action: "open",
-                          category: image.category,
-                          media_id: image.id,
-                        });
-                        openLightbox(index);
-                      }}
-                      className={cn(
-                        "group relative mb-4 block w-full overflow-hidden rounded-lg",
-                        "border border-border",
-                        "transition-all duration-300 ease-premium-out",
-                        "hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 focus-visible:shadow-[0_0_0_4px_rgba(139,30,30,0.12)]",
-                        "active:translate-y-[1px]",
-                        "text-left",
-                      )}
-                      aria-haspopup="dialog"
-                      aria-label={`Open media lightbox for ${image.title ?? image.alt}`}
-                    >
-                      {/* Placeholder handling */}
-                      <div
-                        className={cn(
-                          "relative aspect-[4/3] w-full overflow-hidden",
-                          "bg-muted",
-                        )}
-                      >
-                        {/* Placeholder background with category color */}
-                        <div
+                <motion.h2
+                  id="gallery-grid-title"
+                  variants={fadeUp}
+                  className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
+                >
+                  {title}
+                </motion.h2>
+
+                <motion.p
+                  variants={fadeUp}
+                  className="mt-5 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base"
+                >
+                  {subtitle}
+                </motion.p>
+              </div>
+
+              <div>
+                <motion.div
+                  variants={fadeUp}
+                  className="flex flex-wrap gap-2"
+                  aria-label="Filter gallery by category"
+                >
+                  {availableCategories.map(
+                    (category) => {
+                      const active =
+                        activeCategory ===
+                        category.slug;
+
+                      return (
+                        <button
+                          key={category.slug}
+                          type="button"
+                          aria-pressed={active}
+                          onClick={() => {
+                            trackGalleryInteraction({
+                              source_page: sourcePage,
+                              action: "filter",
+                              category:
+                                category.slug,
+                            });
+
+                            setActiveCategory(
+                              category.slug,
+                            );
+                            setLightboxOpen(false);
+                          }}
                           className={cn(
-                            "absolute inset-0 flex flex-col items-center justify-center p-4 text-center",
-                            getPlaceholderBg(image.category),
+                            "min-h-11 rounded-full border px-4 py-2.5 text-sm font-semibold transition-all duration-200",
+                            "focus-visible:outline-2 focus-visible:outline-[#b52b22] focus-visible:outline-offset-2",
+                            active
+                              ? "border-[#b52b22] bg-[#b52b22] text-white"
+                              : "border-[#3a3835] bg-transparent text-[#99938c] hover:border-[#77716a] hover:text-[#f5f1e8]",
                           )}
-                          aria-hidden="true"
                         >
-                          <span className="text-3xl font-bold text-primary-100/60">
-                            {getCategoryInitial(image.category)}
-                          </span>
-                          <span className="mt-2 text-xs font-medium text-primary-100/40">
-                            {getPlaceholderLabel(image.category)}
-                          </span>
-                        </div>
+                          {category.label}
+                        </button>
+                      );
+                    },
+                  )}
+                </motion.div>
 
-{/* Actual image (hidden/transparent until real src loads) */}
-                        {!image.isPlaceholder && (
+                <motion.p
+                  variants={fadeUp}
+                  role="status"
+                  aria-live="polite"
+                  className="mt-5 text-xs uppercase tracking-[0.12em] text-[#77716a]"
+                >
+                  Showing {filteredImages.length}{" "}
+                  {filteredImages.length === 1
+                    ? "image"
+                    : "images"}
+                </motion.p>
+              </div>
+            </div>
+
+            <motion.div
+              variants={fadeUp}
+              className="mt-12"
+            >
+              {filteredImages.length > 0 ? (
+                <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
+                  {filteredImages.map(
+                    (image, index) => (
+                      <motion.button
+                        key={image.id}
+                        type="button"
+                        variants={fadeUp}
+                        onClick={() => {
+                          trackGalleryInteraction({
+                            source_page:
+                              sourcePage,
+                            action: "open",
+                            category:
+                              image.category,
+                            media_id: image.id,
+                          });
+
+                          openLightbox(index);
+                        }}
+                        className={cn(
+                          "group relative mb-4 block w-full overflow-hidden border border-[#2b2927] bg-[#191918] text-left",
+                          "transition-all duration-300 ease-premium-out",
+                          "hover:-translate-y-0.5 hover:border-[#3a3835] hover:shadow-lg",
+                          "focus-visible:outline-2 focus-visible:outline-[#b52b22] focus-visible:outline-offset-2",
+                        )}
+                        aria-haspopup="dialog"
+                        aria-label={`Open ${image.title ?? image.alt}`}
+                      >
+                        <div className="relative aspect-[4/3] w-full overflow-hidden">
                           <ImageWithSkeleton
                             src={image.src}
                             alt={image.alt}
@@ -264,171 +291,147 @@ onClick={() => {
                             decoding="async"
                             fetchPriority="low"
                             skeleton={
-                              <Skeleton className="h-full w-full rounded-none" />
+                              <Skeleton className="h-full w-full rounded-none bg-[#2b2927]" />
                             }
                             containerClassName="absolute inset-0"
                             className={cn(
                               "absolute inset-0 h-full w-full object-cover",
-                              "transition-all duration-500 ease-premium-out",
+                              "transition-transform duration-500 ease-premium-out",
                               "group-hover:scale-105",
                             )}
                           />
-                        )}
 
-                        {/* Overlay on hover */}
-                        <div
-                          className={cn(
-                            "absolute inset-0 flex items-center justify-center",
-                            "bg-black/0 group-hover:bg-black/30",
-                            "transition-all duration-300 ease-premium-out",
-                          )}
-                        >
-                          <div
-                            className={cn(
-                              "flex size-10 items-center justify-center rounded-full",
-                              "bg-white/90 text-ink opacity-0 group-hover:opacity-100",
-                              "transition-all duration-300 ease-premium-out",
-                            )}
-                          >
-                            <Maximize2 size={16} aria-hidden="true" />
+                          <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/30" />
+
+                          <div className="absolute right-4 top-4 flex size-9 items-center justify-center rounded-full bg-black/55 text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+                            <Maximize2
+                              size={15}
+                              aria-hidden="true"
+                            />
                           </div>
-                        </div>
 
-                        {/* Image info at bottom */}
-                        <div
-                          className={cn(
-                            "absolute bottom-0 left-0 right-0",
-                            "bg-gradient-to-t from-black/60 to-transparent",
-                            "p-4 pt-8",
-                          )}
-                        >
-                          {image.title && (
-                            <h3 className="text-sm font-semibold text-white">
-                              {image.title}
-                            </h3>
-                          )}
-{image.description && (
-                            <p className="mt-0.5 text-xs text-white/70 line-clamp-1">
-                              {image.description}
-                            </p>
+                          {(image.title ||
+                            image.description) && (
+                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent p-4 pt-12">
+                              {image.title && (
+                                <h3 className="text-sm font-semibold text-white">
+                                  {image.title}
+                                </h3>
+                              )}
+
+                              {image.description && (
+                                <p className="mt-1 line-clamp-2 text-xs leading-5 text-white/70">
+                                  {
+                                    image.description
+                                  }
+                                </p>
+                              )}
+                            </div>
                           )}
                         </div>
-</div>
-                    </motion.button>
-                  ))}
+                      </motion.button>
+                    ),
+                  )}
                 </div>
-              </motion.div>
-            ) : (
-              <motion.p
-                variants={fadeUp}
-                className="text-center text-muted-foreground"
-              >
-                No images found in this category.
-              </motion.p>
-            )}
+              ) : (
+                <div className="border border-[#2b2927] bg-[#191918] px-6 py-14 text-center">
+                  <p className="text-sm text-[#77716a]">
+                    No images found in this
+                    category.
+                  </p>
+                </div>
+              )}
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Video Section — conditionally rendered */}
       {hasVideos && (
         <section
-          className="relative bg-muted"
+          className="bg-[#f3efe6] text-[#171615]"
           aria-label="Video Gallery"
         >
           <div className="section-container section-padding">
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewportOptions}
-            >
-              <motion.h2
-                variants={fadeUp}
-                className={cn(
-                  "font-heading text-3xl font-semibold leading-tight tracking-tight",
-                  "sm:text-4xl",
-                  "text-ink text-center",
-                )}
-              >
-                Videos
-              </motion.h2>
-              <motion.div
-                variants={fadeUp}
-                className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-              >
-                {videos.map((video) => (
-                  <div
-                    key={video.id}
-                    className={cn(
-                      "overflow-hidden rounded-lg border border-border bg-card",
-                      "transition-all duration-300 ease-premium-out",
-                      "hover:shadow-md",
-                    )}
-                  >
-                    <div className="aspect-video w-full bg-muted">
-                      {video.isPlaceholder ? (
-                        <div className="flex h-full items-center justify-center">
-                          <div className="text-center">
-                            <div
-                              className={cn(
-                                "mx-auto flex size-12 items-center justify-center rounded-full",
-                                "bg-primary-50 text-primary",
-                              )}
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#ad241c]">
+                Video gallery
+              </p>
+
+              <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
+                Watch SSCSS in action.
+              </h2>
+            </div>
+
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {videos.map((video) => (
+                <article
+                  key={video.id}
+                  className="overflow-hidden border border-[#d9d1c5] bg-[#ebe5da]"
+                >
+                  <div className="aspect-video bg-[#ded8cf]">
+                    {video.isPlaceholder ? (
+                      <div className="flex h-full items-center justify-center text-center">
+                        <div>
+                          <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-[#f3efe6] text-[#ad241c]">
+                            <svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               aria-hidden="true"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                <polygon points="5 3 19 12 5 21 5 3" />
-                              </svg>
-                            </div>
-                            <p className="mt-2 text-xs text-muted-foreground">
-                              {video.duration ?? "Video"}
-                            </p>
+                              <polygon points="5 3 19 12 5 21 5 3" />
+                            </svg>
                           </div>
-                        </div>
-                      ) : (
-                        <video
-                          src={video.src}
-                          poster={video.poster}
-                          controls
-                          className="h-full w-full object-cover"
-                          aria-label={video.title ?? video.description ?? "Video"}
-                        />
-                      )}
-                    </div>
-                    {(video.title || video.description) && (
-                      <div className="p-4">
-                        {video.title && (
-                          <h3 className="text-sm font-semibold text-ink">
-                            {video.title}
-                          </h3>
-                        )}
-                        {video.description && (
-                          <p className="mt-1 text-xs text-muted-foreground">
-                            {video.description}
+
+                          <p className="mt-2 text-xs text-[#77716a]">
+                            {video.duration ??
+                              "Video"}
                           </p>
-                        )}
+                        </div>
                       </div>
+                    ) : (
+                      <video
+                        src={video.src}
+                        poster={video.poster}
+                        controls
+                        className="h-full w-full object-cover"
+                        aria-label={
+                          video.title ??
+                          video.description ??
+                          "Video"
+                        }
+                      />
                     )}
                   </div>
-                ))}
-              </motion.div>
-            </motion.div>
+
+                  {(video.title ||
+                    video.description) && (
+                    <div className="p-5">
+                      {video.title && (
+                        <h3 className="font-heading text-lg font-semibold text-[#171615]">
+                          {video.title}
+                        </h3>
+                      )}
+
+                      {video.description && (
+                        <p className="mt-2 text-sm leading-6 text-[#6a655e]">
+                          {video.description}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </article>
+              ))}
+            </div>
           </div>
         </section>
       )}
 
-{/* Lightbox — lazy-loaded with a lightweight fallback */}
       <Suspense fallback={null}>
         <MediaLightbox
           items={lightboxItems}
@@ -441,42 +444,3 @@ onClick={() => {
     </>
   );
 }
-
-// ─── Helper Functions ─────────────────────────────────────────
-
-/** Get placeholder background color class based on category */
-function getPlaceholderBg(category: string): string {
-  const backgrounds: Record<string, string> = {
-    team: "bg-gradient-to-br from-primary-100/30 to-primary-50/20",
-    deployments: "bg-gradient-to-br from-primary-50/30 to-muted",
-    training: "bg-gradient-to-br from-primary-100/20 to-primary-50/30",
-    equipment: "bg-gradient-to-br from-muted to-primary-50/20",
-    events: "bg-gradient-to-br from-primary-50/30 to-muted",
-  };
-  return backgrounds[category] ?? "bg-muted";
-}
-
-/** Get first letter of category for placeholder display */
-function getCategoryInitial(category: string): string {
-  const initials: Record<string, string> = {
-    team: "T",
-    deployments: "D",
-    training: "Tr",
-    equipment: "E",
-    events: "Ev",
-  };
-  return initials[category] ?? "P";
-}
-
-/** Get placeholder label for category */
-function getPlaceholderLabel(category: string): string {
-  const labels: Record<string, string> = {
-    team: "Team Photo",
-    deployments: "Deployment",
-    training: "Training",
-    equipment: "Equipment",
-    events: "Event",
-  };
-  return labels[category] ?? "Photo";
-}
-

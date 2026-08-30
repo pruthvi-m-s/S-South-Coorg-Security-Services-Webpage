@@ -1,96 +1,59 @@
-// ============================================================
-// SSCSS — Gallery Page
-// 7 sections in order:
-//   1. Gallery Hero
-//   2. Introduction (A Glimpse Into SSCSS)
-//   3. Gallery Categories + Image Grid (with lightbox)
-//   4. Video Gallery (conditionally rendered if videos exist)
-//   5. Trust / Company Highlights
-//   6. Final CTA
-// Content-driven: all copy from content layer. No hardcoded text.
-// ============================================================
-
-import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 import GalleryHero from "@/components/sections/GalleryHero";
 import GalleryGrid from "@/components/sections/GalleryGrid";
 import TrustHighlights from "@/components/sections/TrustHighlights";
 import FinalCtaSection from "@/components/sections/FinalCtaSection";
-import {
-  staggerContainer,
-  fadeUp,
-  viewportOptions,
-} from "@/lib/motion";
-import {
-  GALLERY,
-  FINAL_CTA,
-} from "@/content";
+import { GALLERY, FINAL_CTA } from "@/content";
 
 export default function GalleryPage() {
   return (
-    <>
-      {/* 1. Gallery Hero */}
+    <div className="bg-[#10100f] text-[#f5f1e8]">
       <GalleryHero
         title={GALLERY.hero.title}
         subtitle={GALLERY.hero.subtitle}
       />
 
-      {/* 2. Introduction */}
       <section
-        className="relative bg-background"
-        aria-label="Gallery Introduction"
+        className="bg-[#f3efe6] text-[#171615]"
+        aria-labelledby="gallery-intro-title"
       >
         <div className="section-container section-padding">
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOptions}
-            className="mx-auto max-w-4xl text-center"
-          >
-            <motion.h2
-              variants={fadeUp}
-              className={cn(
-                "font-heading text-3xl font-semibold leading-tight tracking-tight",
-                "sm:text-4xl",
-                "text-ink",
-              )}
-            >
-              {GALLERY.intro.title}
-            </motion.h2>
-            <motion.p
-              variants={fadeUp}
-              className={cn(
-                "mt-4 text-base leading-relaxed",
-                "sm:text-lg",
-                "text-muted-foreground",
-              )}
-            >
+          <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#ad241c]">
+                Inside SSCSS
+              </p>
+
+              <h2
+                id="gallery-intro-title"
+                className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#171615] sm:text-5xl"
+              >
+                {GALLERY.intro.title}
+              </h2>
+            </div>
+
+            <p className="max-w-2xl border-t border-[#d9d1c5] pt-6 text-base leading-7 text-[#6a655e] sm:text-lg">
               {GALLERY.intro.subtitle}
-            </motion.p>
-          </motion.div>
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* 3. Gallery Categories + Image Grid with Lightbox */}
       <GalleryGrid
         title="Our Photo Collection"
-        subtitle="Browse through images organized by category."
+        subtitle="Browse through images of SSCSS people, deployments, training, equipment, and events."
         categories={GALLERY.categories}
         images={GALLERY.images}
         videos={GALLERY.videos}
       />
 
-      {/* 5. Trust / Company Highlights */}
       <TrustHighlights
         title={GALLERY.trustHighlights.title}
         subtitle={GALLERY.trustHighlights.subtitle}
         items={GALLERY.trustHighlights.items}
+        className="bg-[#191918] text-[#f5f1e8]"
       />
 
-      {/* 6. Final CTA */}
       <FinalCtaSection content={FINAL_CTA} />
-    </>
+    </div>
   );
 }
-

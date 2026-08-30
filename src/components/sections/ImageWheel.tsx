@@ -63,7 +63,11 @@ export default function ImageWheel() {
     if (!section) return;
 
     const context = gsap.context(() => {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (
+        window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches
+      ) {
         return;
       }
 
@@ -87,52 +91,77 @@ export default function ImageWheel() {
   return (
     <section
       ref={sectionRef}
-      className="overflow-hidden bg-muted/35"
+      className="overflow-hidden bg-[#10100f] text-[#f5f1e8]"
       aria-labelledby="people-title"
     >
       <div className="section-container section-padding">
-        <div
-          data-people-reveal
-          className="grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]"
-        >
-          <div className="max-w-xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
-              Real SSCSS people
+        <div className="grid items-center gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:gap-20">
+          <div
+            data-people-reveal
+            className="max-w-xl"
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]">
+              Real people. Real presence.
             </p>
 
             <h2
               id="people-title"
-              className="mt-3 font-heading text-4xl font-semibold tracking-tight text-ink sm:text-5xl"
+              className="mt-3 max-w-lg font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-6xl"
             >
-              REAL PEOPLE.
-              <br />
-              REAL PRESENCE.
+              Security is ultimately about people.
             </h2>
 
-            <p className="mt-5 text-sm leading-6 text-muted-foreground">
-              The teams, discipline, and presence behind every deployment.
+            <p className="mt-6 max-w-lg text-base leading-7 text-[#b4aea5]">
+              The uniforms, briefings, access points, reception desks and
+              working environments behind a deployment are part of the service.
             </p>
+
+            <div className="mt-8 grid gap-4 border-t border-[#2b2927] pt-6 sm:grid-cols-2">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                  Presence
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[#ded8cf]">
+                  Visible personnel where the property needs them.
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                  Professionalism
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[#ded8cf]">
+                  The standard of conduct matters as much as the uniform.
+                </p>
+              </div>
+            </div>
           </div>
 
           <div
             data-people-reveal
-            className="relative h-[460px] overflow-hidden"
+            className="relative h-[520px] overflow-hidden"
           >
-            <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-20 bg-gradient-to-b from-muted/35 to-transparent" />
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 z-20 h-24 bg-gradient-to-b from-[#10100f] to-transparent"
+              aria-hidden="true"
+            />
 
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-20 bg-gradient-to-t from-muted/35 to-transparent" />
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-24 bg-gradient-to-t from-[#10100f] to-transparent"
+              aria-hidden="true"
+            />
 
-            <div className="grid h-full grid-cols-2 gap-5">
+            <div className="grid h-full grid-cols-2 gap-4 sm:gap-5">
               <MarqueeColumn
-  images={COLUMN_ONE}
-  duration={18}
-/>
+                images={COLUMN_ONE}
+                duration={20}
+              />
 
-<MarqueeColumn
-  images={COLUMN_TWO}
-  duration={22}
-  reverse
-/>
+              <MarqueeColumn
+                images={COLUMN_TWO}
+                duration={24}
+                reverse
+              />
             </div>
           </div>
         </div>
@@ -167,13 +196,22 @@ function MarqueeColumn({
       >
         <div className="people-marquee-group">
           {images.map((image, index) => (
-            <Photo key={`first-${index}`} image={image} />
+            <Photo
+              key={`first-${index}`}
+              image={image}
+            />
           ))}
         </div>
 
-        <div className="people-marquee-group" aria-hidden="true">
+        <div
+          className="people-marquee-group"
+          aria-hidden="true"
+        >
           {images.map((image, index) => (
-            <Photo key={`second-${index}`} image={image} />
+            <Photo
+              key={`second-${index}`}
+              image={image}
+            />
           ))}
         </div>
       </div>
@@ -190,11 +228,13 @@ function Photo({
   };
 }) {
   return (
-    <div className="relative h-[140px] w-full shrink-0 overflow-hidden rounded-xl bg-card">
+    <div className="relative h-[150px] w-full shrink-0 overflow-hidden bg-[#191918] sm:h-[165px]">
       <ImageWithSkeleton
         src={image.src}
         alt={image.alt}
-        skeleton={<HeroSkeleton className="size-full rounded-none" />}
+        skeleton={
+          <HeroSkeleton className="size-full rounded-none" />
+        }
         containerClassName="size-full"
         className="size-full object-cover"
         loading="lazy"

@@ -1,12 +1,3 @@
-// ============================================================
-// SSCSS — RelatedServices Component
-// Displays 3–4 related service cards for a service detail page.
-// Content-driven: uses getRelatedServices() from the content layer.
-// Excludes the current service automatically.
-// Responsive grid: 3 cols desktop, 2 cols tablet, 1 col mobile.
-// Uses staggerContainer, fadeUp animations.
-// ============================================================
-
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import ServiceCard from "@/components/sections/ServiceCard";
@@ -17,15 +8,16 @@ import {
 } from "@/lib/motion";
 import type { Service } from "@/types";
 
-// ─── Props ────────────────────────────────────────────────────
 interface RelatedServicesProps {
   title?: string;
   subtitle?: string;
-  services: Pick<Service, "slug" | "name" | "shortTagline" | "icon">[];
+  services: Pick<
+    Service,
+    "slug" | "name" | "shortTagline" | "icon"
+  >[];
   className?: string;
 }
 
-// ─── RelatedServices ──────────────────────────────────────────
 export default function RelatedServices({
   title,
   subtitle,
@@ -37,10 +29,10 @@ export default function RelatedServices({
   return (
     <section
       className={cn(
-        "relative bg-muted",
+        "bg-[#191918] text-[#f5f1e8]",
         className,
       )}
-      aria-label="Related Services"
+      aria-labelledby="related-services-title"
     >
       <div className="section-container section-padding">
         <motion.div
@@ -49,51 +41,42 @@ export default function RelatedServices({
           whileInView="visible"
           viewport={viewportOptions}
         >
-          {/* Section Heading */}
-          {title && (
-            <motion.h2
-              variants={fadeUp}
-              className={cn(
-                "font-heading text-3xl font-semibold leading-tight tracking-tight",
-                "sm:text-4xl",
-                "text-ink text-center",
+          <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <div>
+              {title && (
+                <motion.h2
+                  id="related-services-title"
+                  variants={fadeUp}
+                  className="max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
+                >
+                  {title}
+                </motion.h2>
               )}
-            >
-              {title}
-            </motion.h2>
-          )}
 
-          {/* Section Subtitle */}
-          {subtitle && (
-            <motion.p
-              variants={fadeUp}
-              className={cn(
-                "mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed",
-                "sm:text-lg",
-                "text-muted-foreground",
+              {subtitle && (
+                <motion.p
+                  variants={fadeUp}
+                  className="mt-5 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base"
+                >
+                  {subtitle}
+                </motion.p>
               )}
-            >
-              {subtitle}
-            </motion.p>
-          )}
+            </div>
 
-          {/* Related Services Grid */}
-          <motion.div
-            variants={fadeUp}
-            className="mt-12"
-          >
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {services.map((service) => (
+            <motion.div
+              variants={fadeUp}
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+            >
+              {services.slice(0, 4).map((service) => (
                 <ServiceCard
                   key={service.slug}
                   service={service}
                 />
               ))}
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>
   );
 }
-

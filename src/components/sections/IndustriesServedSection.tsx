@@ -1,19 +1,8 @@
-// ============================================================
-// SSCSS — IndustriesServedSection Component
-// Displays the industries relevant to a specific service.
-// Resolves industry slugs from the content layer to full
-// Industry objects and renders them as styled cards.
-// Content-driven: all data from content layer.
-// Responsive grid: 3 cols desktop, 2 cols tablet, 1 col mobile.
-// Uses staggerContainer, fadeUp animations.
-// ============================================================
-
 import { createElement } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/routes";
-import { Card } from "@/components/ui/card";
 import { getIcon } from "@/lib/icons";
 import {
   staggerContainer,
@@ -22,7 +11,6 @@ import {
 } from "@/lib/motion";
 import type { Industry } from "@/types";
 
-// ─── Props ────────────────────────────────────────────────────
 interface IndustriesServedSectionProps {
   title?: string;
   subtitle?: string;
@@ -30,7 +18,6 @@ interface IndustriesServedSectionProps {
   className?: string;
 }
 
-// ─── IndustriesServedSection ──────────────────────────────────
 export default function IndustriesServedSection({
   title,
   subtitle,
@@ -42,10 +29,10 @@ export default function IndustriesServedSection({
   return (
     <section
       className={cn(
-        "relative bg-background",
+        "bg-[#10100f] text-[#f5f1e8]",
         className,
       )}
-      aria-label="Industries Served"
+      aria-labelledby="service-industries-title"
     >
       <div className="section-container section-padding">
         <motion.div
@@ -54,92 +41,78 @@ export default function IndustriesServedSection({
           whileInView="visible"
           viewport={viewportOptions}
         >
-          {/* Section Heading */}
-          {title && (
-            <motion.h2
-              variants={fadeUp}
-              className={cn(
-                "font-heading text-3xl font-semibold leading-tight tracking-tight",
-                "sm:text-4xl",
-                "text-ink text-center",
-              )}
-            >
-              {title}
-            </motion.h2>
-          )}
+          <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <div>
+              <motion.p
+                variants={fadeUp}
+                className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
+              >
+                Where it fits
+              </motion.p>
 
-          {/* Section Subtitle */}
-          {subtitle && (
-            <motion.p
-              variants={fadeUp}
-              className={cn(
-                "mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed",
-                "sm:text-lg",
-                "text-muted-foreground",
-              )}
-            >
-              {subtitle}
-            </motion.p>
-          )}
-
-          {/* Industries Grid */}
-          <motion.div
-            variants={fadeUp}
-            className="mt-12"
-          >
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {industries.map((industry) => (
-                <Card
-                  key={industry.slug}
-                  className={cn(
-                    "flex flex-col p-6",
-                    "border border-border bg-card",
-                    "transition-all duration-300 ease-premium-out",
-                    "hover:border-primary/20 hover:shadow-md",
-                  )}
+              {title && (
+                <motion.h2
+                  id="service-industries-title"
+                  variants={fadeUp}
+                  className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
                 >
-                  {/* Industry Icon */}
-                  <div
-                    className={cn(
-                      "mb-3 flex size-10 items-center justify-center rounded-full",
-                      "bg-primary-50 text-primary",
-                    )}
-                    aria-hidden="true"
-                  >
-                    {createElement(getIcon(industry.icon), {
-                      size: 20,
-                      strokeWidth: 1.5,
-                    })}
+                  {title}
+                </motion.h2>
+              )}
+
+              {subtitle && (
+                <motion.p
+                  variants={fadeUp}
+                  className="mt-5 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base"
+                >
+                  {subtitle}
+                </motion.p>
+              )}
+            </div>
+
+            <motion.div
+              variants={fadeUp}
+              className="grid gap-px border border-[#2b2927] bg-[#2b2927] sm:grid-cols-2"
+            >
+              {industries.map((industry) => (
+                <article
+                  key={industry.slug}
+                  className="bg-[#191918] p-6 transition-colors duration-300 hover:bg-[#211f1d]"
+                >
+                  <div className="flex items-start gap-4">
+                    <span
+                      className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[#3a3835] bg-[#10100f] text-[#c45a52]"
+                      aria-hidden="true"
+                    >
+                      {createElement(getIcon(industry.icon), {
+                        size: 18,
+                        strokeWidth: 1.5,
+                      })}
+                    </span>
+
+                    <div>
+                      <h3 className="font-heading text-xl font-semibold tracking-tight text-[#f5f1e8]">
+                        {industry.name}
+                      </h3>
+
+                      <p className="mt-2 text-sm leading-6 text-[#99938c]">
+                        {industry.description}
+                      </p>
+                    </div>
                   </div>
 
-                  {/* Industry Name */}
-                  <h3
-                    className={cn(
-                      "font-heading text-base font-semibold leading-snug tracking-tight",
-                      "text-ink",
-                    )}
+                  <Link
+                    to={ROUTES.industries}
+                    className="mt-5 inline-flex text-xs font-semibold uppercase tracking-[0.12em] text-[#c45a52] transition-colors hover:text-white"
                   >
-                    <Link to={ROUTES.industries} className="transition-colors hover:text-primary">
-                      {industry.name}
-                    </Link>
-                  </h3>
-
-                  {/* Industry Description */}
-                  <p
-                    className={cn(
-                      "mt-1.5 text-sm leading-relaxed",
-                      "text-muted-foreground",
-                    )}
-                  >
-                    {industry.description}
-                  </p>
-                </Card>
+                    Explore industries
+                  </Link>
+                </article>
               ))}
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>
   );
 }
-

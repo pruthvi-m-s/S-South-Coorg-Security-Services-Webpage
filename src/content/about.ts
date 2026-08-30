@@ -83,7 +83,7 @@ heroSubtitle:
       "What sets us apart from other security and manpower providers.",
     items: [
       {
-        title: "15+ Years of Experience",
+        title: "18+ Years of Company Operations",
         description:
           "We've been protecting Bengaluru properties since 2008 — we understand the local security landscape and challenges.",
         icon: "Calendar",

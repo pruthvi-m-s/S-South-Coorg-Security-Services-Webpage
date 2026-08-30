@@ -1,5 +1,5 @@
 // ============================================================
-// SSCSS - Homepage primary services editorial list
+// SSCSS — Homepage primary services editorial list
 // ============================================================
 
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
@@ -22,6 +22,7 @@ interface ServicesPreviewProps {
 }
 
 const SECTION_HEADING = "Our Security & Facility Services";
+
 const SECTION_INTRO =
   "From trained security personnel to professional housekeeping and investigative services, we offer comprehensive solutions to protect and manage your premises.";
 
@@ -71,32 +72,30 @@ export default function ServicesPreview({
     () => getPrimaryServiceCategories(services),
     [services],
   );
-  const [activeId, setActiveId] = useState(categories[0]?.id ?? "");
+
+  const [activeId, setActiveId] = useState(() => categories[0]?.id ?? "");
+
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+
   const reduceMotion = usePrefersReducedMotion();
 
   const activeCategory =
     categories.find((category) => category.id === activeId) ?? categories[0];
 
   useLayoutEffect(() => {
-    if (categories.length > 0 && !activeId) {
-      setActiveId(categories[0].id);
-    }
-  }, [activeId, categories]);
-
-  useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section || reduceMotion) return;
 
     const revealTargets = Array.from(
-      section.querySelectorAll("[data-services-reveal]"),
+      section.querySelectorAll<HTMLElement>("[data-services-reveal]"),
     );
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry?.isIntersecting) return;
+
         animate(revealTargets, {
           opacity: [0, 1],
           translateY: [18, 0],
@@ -104,6 +103,7 @@ export default function ServicesPreview({
           duration: 460,
           ease: "out(4)",
         });
+
         observer.disconnect();
       },
       { threshold: 0.2 },
@@ -115,7 +115,7 @@ export default function ServicesPreview({
   }, [reduceMotion]);
 
   useLayoutEffect(() => {
-    if (reduceMotion) return;
+    if (reduceMotion || !activeCategory) return;
 
     const animations = [
       imageRef.current
@@ -126,6 +126,7 @@ export default function ServicesPreview({
             ease: "out(4)",
           })
         : null,
+
       contentRef.current
         ? animate(contentRef.current, {
             opacity: [0, 1],
@@ -134,8 +135,9 @@ export default function ServicesPreview({
             ease: "out(4)",
           })
         : null,
-    ].filter((animation): animation is NonNullable<typeof animation> =>
-      Boolean(animation),
+    ].filter(
+      (animation): animation is NonNullable<typeof animation> =>
+        Boolean(animation),
     );
 
     return () => {
@@ -150,7 +152,10 @@ export default function ServicesPreview({
   return (
     <section
       ref={sectionRef}
-      className={cn("relative overflow-hidden bg-background", className)}
+      className={cn(
+        "relative overflow-hidden bg-background",
+        className,
+      )}
       aria-labelledby="home-services-title"
     >
       <div className="section-container section-padding">
@@ -162,6 +167,7 @@ export default function ServicesPreview({
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
               Services
             </p>
+
             <h2
               id="home-services-title"
               className="mt-3 font-heading text-3xl font-semibold leading-tight tracking-tight text-ink sm:text-4xl lg:text-5xl"
@@ -169,6 +175,7 @@ export default function ServicesPreview({
               {SECTION_HEADING}
             </h2>
           </div>
+
           <p className="max-w-md text-sm leading-6 text-muted-foreground sm:text-base">
             {SECTION_INTRO}
           </p>
@@ -205,6 +212,7 @@ export default function ServicesPreview({
                   >
                     {String(index + 1).padStart(2, "0")}
                   </span>
+
                   <span className="min-w-0 flex-1">
                     <span
                       className={cn(
@@ -214,6 +222,7 @@ export default function ServicesPreview({
                     >
                       {category.name}
                     </span>
+
                     <span
                       id={`home-service-${category.id}-summary`}
                       className={cn(
@@ -224,6 +233,7 @@ export default function ServicesPreview({
                       {category.primaryService.shortTagline}
                     </span>
                   </span>
+
                   <ArrowRight
                     className={cn(
                       "size-5 shrink-0 transition-transform duration-300 ease-premium-out",
@@ -231,6 +241,7 @@ export default function ServicesPreview({
                     )}
                     aria-hidden="true"
                   />
+
                   <span
                     className={cn(
                       "absolute bottom-[-1px] left-0 h-px bg-accent transition-all duration-300 ease-premium-out",
@@ -249,12 +260,17 @@ export default function ServicesPreview({
             aria-label={`${activeCategory.name} preview`}
           >
             <div className="overflow-hidden rounded-xl border border-border bg-card shadow-lg">
-              <div ref={imageRef} className="aspect-[4/5] overflow-hidden bg-muted">
+              <div
+                ref={imageRef}
+                className="aspect-[4/5] overflow-hidden bg-muted"
+              >
                 <ImageWithSkeleton
                   key={activeCategory.id}
                   src={activeCategory.image.src}
                   alt={activeCategory.image.alt}
-                  skeleton={<HeroSkeleton className="size-full rounded-none" />}
+                  skeleton={
+                    <HeroSkeleton className="size-full rounded-none" />
+                  }
                   containerClassName="size-full"
                   className="size-full object-cover transition-transform duration-700 ease-premium-out"
                   loading="lazy"
@@ -262,10 +278,15 @@ export default function ServicesPreview({
                   fetchPriority="low"
                 />
               </div>
-              <div ref={contentRef} className="border-t border-border p-5">
+
+              <div
+                ref={contentRef}
+                className="border-t border-border p-5"
+              >
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
                   Includes
                 </p>
+
                 <RelatedServiceLinks
                   category={activeCategory}
                   onLinkFocus={() => setActiveId(activeCategory.id)}
@@ -295,15 +316,19 @@ export default function ServicesPreview({
                   <span
                     className={cn(
                       "w-8 text-sm font-semibold tabular-nums transition-colors",
-                      active ? "text-accent" : "text-muted-foreground/70",
+                      active
+                        ? "text-accent"
+                        : "text-muted-foreground/70",
                     )}
                     aria-hidden="true"
                   >
                     {String(index + 1).padStart(2, "0")}
                   </span>
+
                   <span className="min-w-0 flex-1 font-heading text-2xl font-semibold leading-tight tracking-tight text-ink">
                     {category.name}
                   </span>
+
                   <ArrowRight
                     className={cn(
                       "size-5 shrink-0 transition-transform duration-300",
@@ -314,13 +339,19 @@ export default function ServicesPreview({
                     aria-hidden="true"
                   />
                 </button>
+
                 {active && (
-                  <div id={`home-mobile-service-${category.id}`} className="pb-5">
+                  <div
+                    id={`home-mobile-service-${category.id}`}
+                    className="pb-5"
+                  >
                     <div className="aspect-[16/9] overflow-hidden rounded-lg bg-muted">
                       <ImageWithSkeleton
                         src={category.image.src}
                         alt={category.image.alt}
-                        skeleton={<HeroSkeleton className="size-full rounded-none" />}
+                        skeleton={
+                          <HeroSkeleton className="size-full rounded-none" />
+                        }
                         containerClassName="size-full"
                         className="size-full object-cover"
                         loading="lazy"
@@ -328,10 +359,15 @@ export default function ServicesPreview({
                         fetchPriority="low"
                       />
                     </div>
+
                     <p className="mt-4 text-sm leading-6 text-muted-foreground">
                       {category.primaryService.shortTagline}
                     </p>
-                    <RelatedServiceLinks category={category} compact />
+
+                    <RelatedServiceLinks
+                      category={category}
+                      compact
+                    />
                   </div>
                 )}
               </article>

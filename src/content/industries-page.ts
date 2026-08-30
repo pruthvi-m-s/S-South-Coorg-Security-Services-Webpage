@@ -50,7 +50,7 @@ export const INDUSTRIES_PAGE: IndustriesPageContent = {
   intro: {
     title: "Tailored Solutions for Every Sector",
     description:
-      "Every industry has unique security and manpower needs. At SSCSS, we understand the specific challenges of each sector we serve. Our 15+ years of experience across Bengaluru's diverse industries means we bring proven expertise and industry-specific best practices to every engagement.",
+      "Every industry has unique security and manpower needs. At SSCSS, we understand the specific challenges of each sector we serve. Our 18+ years of company operations across Bengaluru's diverse industries means we bring proven expertise and industry-specific best practices to every engagement.",
   },
   whyChooseUs: {
     title: "Why Industries Choose SSCSS",
@@ -78,7 +78,7 @@ export const INDUSTRIES_PAGE: IndustriesPageContent = {
       {
         title: "Local Knowledge",
         description:
-          "Based in South Bengaluru with 15+ years of local operations, we understand the security landscape, regulations, and challenges specific to the region.",
+          "Based in South Bengaluru with 18+ years of local operations, we understand the security landscape, regulations, and challenges specific to the region.",
         icon: "MapPin",
       },
       {

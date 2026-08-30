@@ -1,6 +1,5 @@
 // ============================================================
-// SSCSS — Final CTA Section Content (Homepage)
-// Single source of truth for the bottom-of-homepage CTA band.
+// SSCSS — Final CTA Content
 // ============================================================
 
 import type { HeroCTA } from "../types";
@@ -14,11 +13,11 @@ export interface CtaContent {
 }
 
 export const FINAL_CTA: CtaContent = {
-  heading: "Ready to Secure Your Premises?",
+  heading: "Tell us what your property needs.",
   supportingText:
-    "Get in touch with our team today for a free consultation and customized security or manpower solution for your organization.",
+    "Whether you need security personnel, facility support, manpower or verification services, start with the requirement and we’ll help you identify the right next step.",
   primaryCta: {
-    label: "Get a Free Quote",
+    label: "Discuss Your Requirement",
     href: `${ROUTES.contact}#contact-form`,
   },
   secondaryCta: {
@@ -26,4 +25,3 @@ export const FINAL_CTA: CtaContent = {
     href: ROUTES.services,
   },
 };
-

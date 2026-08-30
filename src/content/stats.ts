@@ -1,6 +1,6 @@
 // ============================================================
 // SSCSS — Statistics (Home Page Counters)
-// Source: prd.md — 15+ Years, 100+ Guards, 50+ Clients
+// Source: prd.md — 18+ Years of Company Operations, 100+ Guards, 50+ Clients
 // ============================================================
 
 import type { Stat } from "../types";

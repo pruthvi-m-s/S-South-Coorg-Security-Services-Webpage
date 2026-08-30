@@ -1,26 +1,12 @@
-// ============================================================
-// SSCSS — Generic Reusable Accordion Component
-//
-// Fully compliant with WAI-ARIA Authoring Practices.
-// Single open item at a time.
-// Keyboard navigation: Enter/Space toggle, Arrow Up/Down,
-// Home/End.
-//
-// NOT FAQ-aware — purely presentational.
-// Deep-link logic is owned by the consuming page.
-// ============================================================
-
 import {
   useCallback,
   useRef,
   type KeyboardEvent,
   type ReactNode,
 } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-// ─── Types ──────────────────────────────────────────────────
 
 export interface AccordionItem {
   id: string;
@@ -29,17 +15,11 @@ export interface AccordionItem {
 }
 
 interface AccordionProps {
-  /** Array of accordion items to render */
   items: AccordionItem[];
-  /** Currently open item ID, or null for none open */
   openItem: string | null;
-  /** Callback when the open item changes */
   onOpenChange: (id: string | null) => void;
-  /** Optional CSS class name */
   className?: string;
 }
-
-// ─── Accordion Component ────────────────────────────────────
 
 export default function Accordion({
   items,
@@ -47,14 +27,12 @@ export default function Accordion({
   onOpenChange,
   className,
 }: AccordionProps) {
-  // Refs for managing focus among accordion buttons
   const buttonRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
 
-  // Set a ref for a button
   const setButtonRef = useCallback(
-    (id: string, el: HTMLButtonElement | null) => {
-      if (el) {
-        buttonRefs.current.set(id, el);
+    (id: string, element: HTMLButtonElement | null) => {
+      if (element) {
+        buttonRefs.current.set(id, element);
       } else {
         buttonRefs.current.delete(id);
       }
@@ -62,13 +40,6 @@ export default function Accordion({
     [],
   );
 
-  // Get the index of an item by its id
-  const getItemIndex = useCallback(
-    (id: string) => items.findIndex((item) => item.id === id),
-    [items],
-  );
-
-  // Toggle open state for an item
   const toggleItem = useCallback(
     (id: string) => {
       onOpenChange(openItem === id ? null : id);
@@ -76,94 +47,105 @@ export default function Accordion({
     [openItem, onOpenChange],
   );
 
-  // ─── Keyboard Navigation ─────────────────────────────────
   const handleKeyDown = useCallback(
-    (e: KeyboardEvent<HTMLButtonElement>, currentId: string) => {
-      const currentIndex = getItemIndex(currentId);
+    (
+      event: KeyboardEvent<HTMLButtonElement>,
+      currentId: string,
+    ) => {
+      if (items.length === 0) return;
+
+      const currentIndex = items.findIndex(
+        (item) => item.id === currentId,
+      );
+
       if (currentIndex === -1) return;
 
-      const getNextIndex = (): number | null => {
-        switch (e.key) {
+      const nextIndex = (() => {
+        switch (event.key) {
           case "ArrowDown":
             return (currentIndex + 1) % items.length;
+
           case "ArrowUp":
             return (currentIndex - 1 + items.length) % items.length;
+
           case "Home":
             return 0;
+
           case "End":
             return items.length - 1;
+
           default:
             return null;
         }
-      };
+      })();
 
-      const nextIndex = getNextIndex();
       if (nextIndex === null) return;
 
-      e.preventDefault();
+      event.preventDefault();
 
-      // Focus the next button
-      const nextId = items[nextIndex]?.id;
-      if (nextId) {
-        const nextButton = buttonRefs.current.get(nextId);
-        nextButton?.focus();
-      }
+      const nextItem = items[nextIndex];
+
+      if (!nextItem) return;
+
+      buttonRefs.current.get(nextItem.id)?.focus();
     },
-    [items, getItemIndex],
+    [items],
   );
 
   if (items.length === 0) return null;
 
   return (
     <div
-      className={cn("divide-y divide-border", className)}
+      className={cn(className)}
       role="region"
-      aria-label="Accordion"
+      aria-label="Frequently Asked Questions"
     >
-      {items.map((item) => {
+      {items.map((item, index) => {
         const isOpen = openItem === item.id;
         const buttonId = `accordion-trigger-${item.id}`;
         const panelId = `accordion-panel-${item.id}`;
 
         return (
-          <div key={item.id}>
-            {/* Trigger Button */}
+          <div
+            key={item.id}
+            className="border-b border-[#2b2927]"
+          >
             <h3 className="mb-0">
               <button
-                ref={(el) => setButtonRef(item.id, el)}
+                ref={(element) => setButtonRef(item.id, element)}
                 id={buttonId}
                 type="button"
                 className={cn(
-                  "group flex w-full items-center justify-between gap-4 px-0 py-5 text-left",
-                  "font-heading text-base font-medium leading-snug tracking-tight",
-                  "sm:text-lg",
-                  "text-ink",
-                  "transition-all duration-300 ease-premium-out",
-                  "rounded-md hover:bg-muted/70 hover:text-primary active:translate-y-[1px]",
-                  "focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2",
+                  "group flex w-full items-start gap-5 px-0 py-6 text-left sm:py-7",
+                  "focus-visible:outline-2 focus-visible:outline-[#b52b22] focus-visible:outline-offset-4",
                 )}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => toggleItem(item.id)}
-                onKeyDown={(e) => handleKeyDown(e, item.id)}
+                onKeyDown={(event) =>
+                  handleKeyDown(event, item.id)
+                }
               >
-                <span>{item.trigger}</span>
+                <span className="pt-1 text-xs font-semibold tracking-[0.14em] text-[#c45a52]">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
 
-                {/* Chevron Icon */}
+                <span className="min-w-0 flex-1 font-heading text-lg font-semibold leading-snug tracking-tight text-[#f5f1e8] transition-colors group-hover:text-white sm:text-xl">
+                  {item.trigger}
+                </span>
+
                 <ChevronDown
-                  size={18}
-                  strokeWidth={2}
+                  size={19}
+                  strokeWidth={1.8}
                   className={cn(
-                    "shrink-0 text-muted-foreground transition-transform duration-300 ease-premium-out",
-                    "group-hover:text-primary",
-                    isOpen && "rotate-180",
+                    "mt-0.5 shrink-0 text-[#77716a] transition-transform duration-300",
+                    isOpen && "rotate-180 text-[#c45a52]",
                   )}
                   aria-hidden="true"
                 />
               </button>
             </h3>
 
-            {/* Content Panel */}
             <AnimatePresence initial={false}>
               {isOpen && (
                 <motion.div
@@ -174,17 +156,17 @@ export default function Accordion({
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{
-                    height: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
-                    opacity: { duration: 0.25, ease: [0, 0, 0.2, 1] },
+                    height: {
+                      duration: 0.3,
+                      ease: [0.16, 1, 0.3, 1],
+                    },
+                    opacity: {
+                      duration: 0.2,
+                    },
                   }}
                   className="overflow-hidden"
                 >
-                  <div
-                    className={cn(
-                      "pb-6 text-base leading-relaxed",
-                      "text-muted-foreground",
-                    )}
-                  >
+                  <div className="pb-7 pl-[2.1rem] text-sm leading-7 text-[#8f8981] sm:pl-[2.35rem] sm:text-base">
                     {item.content}
                   </div>
                 </motion.div>

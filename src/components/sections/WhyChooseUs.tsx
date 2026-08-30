@@ -1,10 +1,3 @@
-// ============================================================
-// SSCSS — WhyChooseUs Section
-// Homepage "Why Choose SSCSS" section.
-// Content-driven: all copy from the content layer (ABOUT).
-// Responsive: 2 cols desktop, 2 cols tablet, 1 col mobile.
-// ============================================================
-
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import WhyChooseCard from "@/components/sections/WhyChooseCard";
@@ -15,7 +8,6 @@ import {
 } from "@/lib/motion";
 import type { WhyChooseUsItem } from "@/types";
 
-// ─── Props ────────────────────────────────────────────────────
 interface WhyChooseUsProps {
   title: string;
   subtitle: string;
@@ -23,7 +15,6 @@ interface WhyChooseUsProps {
   className?: string;
 }
 
-// ─── WhyChooseUs ──────────────────────────────────────────────
 export default function WhyChooseUs({
   title,
   subtitle,
@@ -35,10 +26,10 @@ export default function WhyChooseUs({
   return (
     <section
       className={cn(
-        "relative bg-background",
+        "bg-[#191918] text-[#f5f1e8]",
         className,
       )}
-      aria-label="Why Choose Us"
+      aria-labelledby="why-choose-title"
     >
       <div className="section-container section-padding">
         <motion.div
@@ -47,47 +38,51 @@ export default function WhyChooseUs({
           whileInView="visible"
           viewport={viewportOptions}
         >
-          {/* Section Heading */}
-          <motion.h2
-            variants={fadeUp}
-            className={cn(
-              "font-heading text-3xl font-semibold leading-tight tracking-tight",
-              "sm:text-4xl",
-              "text-ink text-center",
-            )}
-          >
-            {title}
-          </motion.h2>
+          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+            <div>
+              <motion.p
+                variants={fadeUp}
+                className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
+              >
+                Why SSCSS
+              </motion.p>
 
-          {/* Section Intro */}
-          <motion.p
-            variants={fadeUp}
-            className={cn(
-              "mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed",
-              "sm:text-lg",
-              "text-muted-foreground",
-            )}
-          >
-            {subtitle}
-          </motion.p>
+              <motion.h2
+                id="why-choose-title"
+                variants={fadeUp}
+                className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
+              >
+                {title}
+              </motion.h2>
 
-          {/* Features Grid — responsive: 2/2/1 columns */}
-          <motion.div
-            variants={fadeUp}
-            className="mt-12"
-          >
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              {items.map((item, index) => (
-                <WhyChooseCard
-                  key={`${item.title}-${index}`}
-                  item={item}
-                />
-              ))}
+              <motion.p
+                variants={fadeUp}
+                className="mt-5 max-w-lg text-sm leading-7 text-[#b4aea5] sm:text-base"
+              >
+                {subtitle}
+              </motion.p>
             </div>
-          </motion.div>
+
+            <motion.div
+              variants={fadeUp}
+              className="grid gap-px border border-[#2b2927] bg-[#2b2927] sm:grid-cols-2"
+            >
+              {items.map((item, index) => (
+                <motion.div
+                  key={`${item.title}-${index}`}
+                  variants={fadeUp}
+                  className="bg-[#191918] p-6 sm:p-7"
+                >
+                  <WhyChooseCard
+                    item={item}
+                    className="border-0 bg-transparent p-0 shadow-none hover:translate-y-0 hover:border-0 hover:shadow-none"
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>
   );
 }
-

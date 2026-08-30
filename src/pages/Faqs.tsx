@@ -1,29 +1,8 @@
-// ============================================================
-// SSCSS — FAQs Page
-// 7 sections in order:
-//   1. FAQ Hero (h1 title + subtitle)
-//   2. Introduction (h2 heading + description)
-//   3. Category Filter (FilterChips)
-//   4. Search Bar
-//   5. FAQ List (Accordion with filtering + empty state)
-//   6. Contact CTA
-//   7. Final CTA
-//
-// Features:
-//   - Category filtering
-//   - Keyword search (question, answer, category)
-//   - Combined filters
-//   - Accordion (single open, keyboard nav)
-//   - Deep-link support via URL hash
-//   - Empty state from content layer
-// Content-driven: all copy from content layer. No hardcoded text.
-// ============================================================
-
-import { useEffect, useState, useCallback, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Search, X } from "lucide-react";
+import HeadlineReveal from "@/components/common/HeadlineReveal";
 import ReusableAccordion from "@/components/ui/ReusableAccordion";
 import type { AccordionItem } from "@/components/ui/ReusableAccordion";
 import FilterChips from "@/components/sections/FilterChips";
@@ -45,66 +24,74 @@ import {
   trackFaqInteraction,
   getSourcePage,
 } from "@/lib/analytics";
+import { ROUTES } from "@/lib/routes";
 
 export default function FaqsPage() {
   const location = useLocation();
 
-  // ─── State ────────────────────────────────────────────────
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<string | null>(null);
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [openItemId, setOpenItemId] = useState<string | null>(null);
 
-  // Refs for scrolling to result after opening
+  const [openItemId, setOpenItemId] = useState<
+    string | null
+  >(null);
+
   const accordionRef = useRef<HTMLDivElement>(null);
-
-  // Track if hash has been processed to prevent re-runs
   const hashProcessedRef = useRef(false);
 
-  // ─── Deep-link support on mount ──────────────────────────
   useEffect(() => {
-    const hash = location.hash.replace("#", "");
-    if (hash && !hashProcessedRef.current) {
-      hashProcessedRef.current = true;
+    const hash = location.hash.replace(/^#/, "");
 
-      const matchedFaq = FAQS.find(
-        (faq) =>
-          faq.id === hash ||
-          faq.id.replace("faq-", "") === hash ||
-          faq.question.toLowerCase().includes(hash.toLowerCase()),
-      );
-      if (matchedFaq) {
-        // Use microtask to avoid cascading setState in effect
-        Promise.resolve().then(() => {
-          setOpenItemId(matchedFaq.id);
+    if (!hash || hashProcessedRef.current) return;
 
-          accordionRef.current?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
+    hashProcessedRef.current = true;
+
+    const matchedFaq = FAQS.find(
+      (faq) =>
+        faq.id === hash ||
+        faq.id.replace(/^faq-/, "") === hash ||
+        faq.question
+          .toLowerCase()
+          .includes(hash.toLowerCase()),
+    );
+
+    if (!matchedFaq) return;
+
+    Promise.resolve().then(() => {
+      setOpenItemId(matchedFaq.id);
+
+      requestAnimationFrame(() => {
+        accordionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
         });
-      }
-    }
+      });
+    });
   }, [location.hash]);
 
-  // ─── Category chips ──────────────────────────────────────
-  const categoryChips = useMemo<ChipItem<string>[]>(() => {
-    const categories = getFaqCategories();
-    return categories.map((cat) => ({
-      value: cat,
-      label: cat,
-    }));
-  }, []);
+  const categoryChips = useMemo<ChipItem<string>[]>(
+    () =>
+      getFaqCategories().map((category) => ({
+        value: category,
+        label: category,
+      })),
+    [],
+  );
 
-  // ─── Filtered FAQs ───────────────────────────────────────
   const filteredFaqs = useMemo(() => {
     let result = [...FAQS];
 
     if (selectedCategory) {
-      result = result.filter((faq) => faq.category === selectedCategory);
+      result = result.filter(
+        (faq) => faq.category === selectedCategory,
+      );
     }
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.trim().toLowerCase();
+    const query = searchQuery.trim().toLowerCase();
+
+    if (query) {
       result = result.filter(
         (faq) =>
           faq.question.toLowerCase().includes(query) ||
@@ -116,86 +103,129 @@ export default function FaqsPage() {
     return result;
   }, [selectedCategory, searchQuery]);
 
-  // ─── Map to Accordion items ──────────────────────────────
-  const accordionItems = useMemo<AccordionItem[]>(() => {
-    return filteredFaqs.map((faq) => ({
-      id: faq.id,
-      trigger: faq.question,
-      content: <p>{faq.answer}</p>,
-    }));
-  }, [filteredFaqs]);
+  const accordionItems = useMemo<AccordionItem[]>(
+    () =>
+      filteredFaqs.map((faq) => ({
+        id: faq.id,
+        trigger: (
+          <span className="block pr-4">
+            {faq.question}
+          </span>
+        ),
+        content: (
+          <p className="max-w-3xl text-sm leading-7 text-[#8f8981] sm:text-base">
+            {faq.answer}
+          </p>
+        ),
+      })),
+    [filteredFaqs],
+  );
 
-  // ─── Handle category change ──────────────────────────────
-  const handleCategoryChange = useCallback((value: string | null) => {
-    setSelectedCategory(value);
-    setOpenItemId(null);
-  }, []);
-
-  // ─── Handle search change ────────────────────────────────
-  const handleSearchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchQuery(e.target.value);
+  const handleCategoryChange = useCallback(
+    (value: string | null) => {
+      setSelectedCategory(value);
       setOpenItemId(null);
     },
     [],
   );
 
-// ─── Handle accordion open change ────────────────────────
-  const handleAccordionChange = useCallback((id: string | null) => {
-    setOpenItemId(id);
+  const handleSearchChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(event.target.value);
+      setOpenItemId(null);
+    },
+    [],
+  );
 
-    if (id) {
-      const searchFaq = FAQS.find((faq) => faq.id === id);
-      const hash = searchFaq?.id.replace("faq-", "") ?? "";
-      window.history.replaceState(null, "", `/faqs#${hash}`);
-
-trackFaqInteraction({
-        source_page: getSourcePage(),
-        faq_id: id,
-        faq_category: searchFaq?.category ?? "",
-        action: "expand",
-      });
-    } else {
-      window.history.replaceState(null, "", "/faqs");
-    }
+  const clearSearch = useCallback(() => {
+    setSearchQuery("");
+    setOpenItemId(null);
   }, []);
 
-  // ─── Has active filters ──────────────────────────────────
-  const hasActiveFilters = selectedCategory !== null || searchQuery.trim() !== "";
-  const noResults = filteredFaqs.length === 0 && hasActiveFilters;
+  const handleAccordionChange = useCallback(
+    (id: string | null) => {
+      setOpenItemId(id);
+
+      if (!id) {
+        window.history.replaceState(
+          null,
+          "",
+          ROUTES.faqs,
+        );
+        return;
+      }
+
+      const faq = FAQS.find(
+        (item) => item.id === id,
+      );
+
+      const hash = faq?.id.replace(/^faq-/, "");
+
+      if (hash) {
+        window.history.replaceState(
+          null,
+          "",
+          `${ROUTES.faqs}#${hash}`,
+        );
+      }
+
+      trackFaqInteraction({
+        source_page: getSourcePage(),
+        faq_id: id,
+        faq_category: faq?.category ?? "",
+        action: "expand",
+      });
+    },
+    [],
+  );
+
+  const hasActiveFilters =
+    selectedCategory !== null ||
+    searchQuery.trim() !== "";
+
+  const noResults =
+    filteredFaqs.length === 0 && hasActiveFilters;
 
   return (
-    <>
-      {/* 1. FAQ Hero */}
+    <div className="bg-[#10100f] text-[#f5f1e8]">
+      {/* ============================================================
+          HERO
+          ============================================================ */}
       <section
-        className="relative bg-muted"
-        aria-label="FAQ Hero"
+        className="overflow-hidden bg-[#10100f]"
+        aria-labelledby="faq-hero-title"
       >
-        <div className="section-container section-padding">
+        <div className="section-container py-20 sm:py-24 lg:py-28">
           <motion.div
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOptions}
-            className="mx-auto max-w-4xl text-center"
+            className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-end lg:gap-20"
           >
-            <motion.h1
-              variants={fadeUp}
-              className={cn(
-                "font-heading text-4xl font-semibold leading-tight tracking-tight",
-                "sm:text-5xl",
-                "text-ink",
-              )}
-            >
-              {FAQ_PAGE.hero.title}
-            </motion.h1>
+            <div>
+              <motion.p
+                variants={fadeUp}
+                className="text-xs font-semibold uppercase tracking-[0.16em] text-[#c45a52]"
+              >
+                Frequently asked
+              </motion.p>
+
+              <div className="mt-4">
+                <HeadlineReveal
+                  as="h1"
+                  delay={0.1}
+                  className="max-w-3xl font-heading text-5xl font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f1e8] sm:text-6xl lg:text-[4.5rem]"
+                >
+                  {FAQ_PAGE.hero.title}
+                </HeadlineReveal>
+              </div>
+            </div>
+
             <motion.p
+              id="faq-hero-title"
               variants={fadeUp}
-              className={cn(
-                "mx-auto mt-4 max-w-2xl text-base leading-relaxed",
-                "sm:text-lg",
-                "text-muted-foreground",
-              )}
+              className="max-w-2xl border-l-2 border-[#b52b22] pl-6 text-base leading-7 text-[#b4aea5] sm:text-lg"
             >
               {FAQ_PAGE.hero.subtitle}
             </motion.p>
@@ -203,49 +233,43 @@ trackFaqInteraction({
         </div>
       </section>
 
-      {/* 2. Introduction */}
+      {/* ============================================================
+          INTRO — CREAM HIGHLIGHT
+          ============================================================ */}
       <section
-        className="relative bg-background"
-        aria-label="FAQ Introduction"
+        className="bg-[#f3efe6] text-[#171615]"
+        aria-labelledby="faq-intro-title"
       >
         <div className="section-container section-padding">
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOptions}
-            className="mx-auto max-w-4xl text-center"
-          >
-            <motion.h2
-              variants={fadeUp}
-              className={cn(
-                "font-heading text-3xl font-semibold leading-tight tracking-tight",
-                "sm:text-4xl",
-                "text-ink",
-              )}
-            >
-              {FAQ_PAGE.intro.title}
-            </motion.h2>
-            <motion.p
-              variants={fadeUp}
-              className={cn(
-                "mt-4 text-base leading-relaxed",
-                "sm:text-lg",
-                "text-muted-foreground",
-              )}
-            >
+          <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#ad241c]">
+                Need an answer?
+              </p>
+
+              <h2
+                id="faq-intro-title"
+                className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#171615] sm:text-5xl"
+              >
+                {FAQ_PAGE.intro.title}
+              </h2>
+            </div>
+
+            <p className="max-w-2xl border-t border-[#d9d1c5] pt-6 text-base leading-7 text-[#6a655e] sm:text-lg">
               {FAQ_PAGE.intro.description}
-            </motion.p>
-          </motion.div>
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* 3. Category Filter + 4. Search Bar */}
+      {/* ============================================================
+          SEARCH + FILTERS
+          ============================================================ */}
       <section
-        className="relative bg-muted"
+        className="bg-[#191918] text-[#f5f1e8]"
         aria-label="FAQ Search and Filters"
       >
-        <div className="section-container section-padding">
+        <div className="section-container py-10 sm:py-12">
           <motion.div
             variants={staggerContainer}
             initial="hidden"
@@ -257,21 +281,21 @@ trackFaqInteraction({
                 items={categoryChips}
                 selected={selectedCategory}
                 onChange={handleCategoryChange}
-                className="mb-6"
               />
             </motion.div>
 
             <motion.div
               variants={fadeUp}
-              className="mx-auto max-w-xl"
+              className="mx-auto mt-8 max-w-2xl"
             >
               <div className="relative">
                 <Search
                   size={18}
-                  strokeWidth={2}
-                  className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  strokeWidth={1.8}
+                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#77716a]"
                   aria-hidden="true"
                 />
+
                 <input
                   type="search"
                   value={searchQuery}
@@ -279,27 +303,42 @@ trackFaqInteraction({
                   placeholder={FAQ_PAGE.search.placeholder}
                   autoComplete="off"
                   inputMode="search"
-                  className={cn(
-                    "w-full min-h-[44px] rounded-xl border border-border bg-background py-3 pl-11 pr-4",
-                    "text-base leading-relaxed text-ink",
-                    "placeholder:text-muted-foreground",
-                    "transition-colors duration-300 ease-premium-out",
-                    "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20",
-                  )}
-                  aria-label={FAQ_PAGE.search.placeholder}
+                  aria-label={
+                    FAQ_PAGE.search.placeholder
+                  }
+                  className="min-h-[52px] w-full rounded-none border border-[#3a3835] bg-[#10100f] py-3 pl-11 pr-12 text-sm text-[#f5f1e8] outline-none transition-colors placeholder:text-[#77716a] focus:border-[#b52b22] focus:ring-1 focus:ring-[#b52b22]"
                 />
+
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={clearSearch}
+                    className="absolute right-3 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center text-[#77716a] transition-colors hover:text-[#f5f1e8]"
+                    aria-label="Clear FAQ search"
+                  >
+                    <X
+                      size={17}
+                      aria-hidden="true"
+                    />
+                  </button>
+                )}
               </div>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* 5. FAQ List (Accordion) */}
+      {/* ============================================================
+          FAQ LIST
+          ============================================================ */}
       <section
-        className="relative bg-background"
+        className="bg-[#10100f]"
         aria-label="Frequently Asked Questions List"
       >
-        <div className="section-container section-padding" ref={accordionRef}>
+        <div
+          ref={accordionRef}
+          className="section-container section-padding scroll-mt-[var(--header-height)]"
+        >
           <motion.div
             variants={staggerContainer}
             initial="hidden"
@@ -312,25 +351,50 @@ trackFaqInteraction({
                 variants={fadeUp}
                 role="status"
                 aria-live="polite"
-                className="text-center py-12"
+                className="border border-[#2b2927] bg-[#191918] px-6 py-14 text-center sm:px-10"
               >
-                <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-muted">
+                <div className="mx-auto flex size-12 items-center justify-center rounded-full border border-[#3a3835] bg-[#10100f] text-[#c45a52]">
                   <Search
-                    size={24}
+                    size={21}
                     strokeWidth={1.5}
-                    className="text-muted-foreground"
                     aria-hidden="true"
                   />
                 </div>
-                <h3 className="font-heading text-xl font-semibold text-ink">
+
+                <h3 className="mt-5 font-heading text-2xl font-semibold tracking-tight text-[#f5f1e8]">
                   {FAQ_PAGE.search.emptyStateTitle}
                 </h3>
-                <p className="mt-2 mx-auto max-w-lg text-base leading-relaxed text-muted-foreground">
-                  {FAQ_PAGE.search.emptyStateDescription}
+
+                <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-[#8f8981] sm:text-base">
+                  {
+                    FAQ_PAGE.search
+                      .emptyStateDescription
+                  }
                 </p>
+
+                <div className="mt-6 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedCategory(null);
+                      setSearchQuery("");
+                      setOpenItemId(null);
+                    }}
+                    className="inline-flex min-h-11 items-center gap-2 border border-[#3a3835] px-4 text-sm font-semibold text-[#ded8cf] transition-colors hover:border-[#b52b22] hover:text-white"
+                  >
+                    Clear filters
+                    <X
+                      className="size-4"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </div>
               </motion.div>
             ) : (
-              <motion.div variants={fadeUp}>
+              <motion.div
+                variants={fadeUp}
+                className="border-t border-[#2b2927]"
+              >
                 <ReusableAccordion
                   items={accordionItems}
                   openItem={openItemId}
@@ -344,26 +408,34 @@ trackFaqInteraction({
                 variants={fadeUp}
                 role="status"
                 aria-live="polite"
-                className={cn(
-                  "mt-6 text-center text-sm",
-                  "text-muted-foreground",
-                )}
+                className="mt-6 text-center text-xs uppercase tracking-[0.12em] text-[#77716a]"
               >
                 Showing {filteredFaqs.length}{" "}
-                {filteredFaqs.length === 1 ? "FAQ" : "FAQs"}
-                {selectedCategory && ` in ${selectedCategory}`}
-                {searchQuery.trim() && ` matching "${searchQuery.trim()}"`}
+                {filteredFaqs.length === 1
+                  ? "FAQ"
+                  : "FAQs"}
+                {selectedCategory &&
+                  ` · ${selectedCategory}`}
+                {searchQuery.trim() &&
+                  ` · "${searchQuery.trim()}"`}
               </motion.p>
             )}
           </motion.div>
         </div>
       </section>
 
-      {/* 6. Contact CTA */}
-      <ContactCtaSection content={FAQ_PAGE.contactCta} />
+      {/* ============================================================
+          CONTACT CTA
+          ============================================================ */}
+      <ContactCtaSection
+        content={FAQ_PAGE.contactCta}
+        className="bg-[#191918] text-[#f5f1e8]"
+      />
 
-      {/* 7. Final CTA */}
+      {/* ============================================================
+          FINAL CTA
+          ============================================================ */}
       <FinalCtaSection content={FINAL_CTA} />
-    </>
+    </div>
   );
 }

@@ -22,28 +22,38 @@ export async function submitContactForm(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: data.name,
-        company: data.company,
-        phone: data.phone,
-        email: data.email,
+        name: data.name.trim(),
+        company: data.company.trim(),
+        phone: data.phone.trim(),
+        email: data.email.trim(),
         service: data.service,
-        message: data.message,
+        message: data.message.trim(),
       }),
     });
 
-    const result = await response.json();
+    let result: {
+      ok?: boolean;
+      message?: string;
+    } | null = null;
 
-    if (!response.ok || !result.ok) {
+    try {
+      result = await response.json();
+    } catch {
+      result = null;
+    }
+
+    if (!response.ok || result?.ok !== true) {
       return {
         success: false,
         message:
-          result.message || SUBMISSION_MESSAGES.error,
+          result?.message || SUBMISSION_MESSAGES.error,
       };
     }
 
     return {
       success: true,
-      message: SUBMISSION_MESSAGES.success,
+      message:
+        result.message || SUBMISSION_MESSAGES.success,
     };
   } catch (error) {
     console.error("Contact submission failed:", error);

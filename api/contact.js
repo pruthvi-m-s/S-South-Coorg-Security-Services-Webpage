@@ -20,62 +20,136 @@ const SERVICE_LABELS = {
   "not-sure-yet": "Not sure yet — discuss with team",
 };
 
+function jsonResponse(res, status, body) {
+  return res.status(status).json(body);
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({
+    return jsonResponse(res, 405, {
       ok: false,
       message: "Method not allowed",
     });
   }
 
   try {
-    const payload = req.body ?? {};
+    const payload =
+      typeof req.body === "string"
+        ? JSON.parse(req.body)
+        : req.body ?? {};
 
     const serviceValue = String(payload.service ?? "").trim();
 
-    const serviceLabel =
-      SERVICE_LABELS[serviceValue] ?? serviceValue;
-
     const formPayload = {
-      ...payload,
-      service: serviceLabel,
+      name: String(payload.name ?? "").trim(),
+      company: String(payload.company ?? "").trim(),
+      phone: String(payload.phone ?? "").trim(),
+      email: String(payload.email ?? "").trim(),
+      service:
+        SERVICE_LABELS[serviceValue] ??
+        serviceValue ??
+        "Not specified",
+      message: String(payload.message ?? "").trim(),
     };
 
-    console.log("Submitting contact inquiry:", {
-      ...formPayload,
-      email: "[redacted]",
-      phone: "[redacted]",
-    });
-
-    const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formPayload),
-    });
-
-    const result = await response.json();
-
-    if (!response.ok || !result.ok) {
-      console.error("Apps Script error:", result);
-
-      return res.status(502).json({
+    if (
+      !formPayload.name ||
+      !formPayload.phone ||
+      !formPayload.email ||
+      !formPayload.service
+    ) {
+      return jsonResponse(res, 400, {
         ok: false,
-        message: result.message || "Unable to submit inquiry",
+        message: "Please complete all required fields.",
       });
     }
 
-    return res.status(200).json({
+    console.log("Submitting contact inquiry:", {
+      name: formPayload.name,
+      company: formPayload.company,
+      phone: "[redacted]",
+      email: "[redacted]",
+      service: formPayload.service,
+      messageLength: formPayload.message.length,
+    });
+
+    const controller = new AbortController();
+
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, 10000);
+
+    let response;
+
+    try {
+      response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formPayload),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    const rawResponse = await response.text();
+
+    let result = null;
+
+    try {
+      result = JSON.parse(rawResponse);
+    } catch {
+      console.error("Apps Script returned non-JSON response:", {
+        status: response.status,
+        body: rawResponse.slice(0, 500),
+      });
+    }
+
+    if (!response.ok) {
+      console.error("Apps Script HTTP error:", {
+        status: response.status,
+        result,
+      });
+
+      return jsonResponse(res, 502, {
+        ok: false,
+        message:
+          "We could not send your inquiry right now. Please try again or contact us directly.",
+      });
+    }
+
+    if (!result || result.ok !== true) {
+      console.error("Apps Script reported lead failure:", result);
+
+      return jsonResponse(res, 502, {
+        ok: false,
+        message:
+          result?.message ||
+          "We could not confirm delivery of your inquiry.",
+      });
+    }
+
+    return jsonResponse(res, 200, {
       ok: true,
-      message: "Inquiry received",
+      message: "Inquiry received successfully.",
     });
   } catch (error) {
     console.error("Contact API error:", error);
 
-    return res.status(500).json({
+    if (error?.name === "AbortError") {
+      return jsonResponse(res, 504, {
+        ok: false,
+        message:
+          "The inquiry service took too long to respond. Please try again or contact us directly.",
+      });
+    }
+
+    return jsonResponse(res, 500, {
       ok: false,
-      message: "Unable to submit inquiry",
+      message:
+        "We could not send your inquiry right now. Please try again or contact us directly.",
     });
   }
 }

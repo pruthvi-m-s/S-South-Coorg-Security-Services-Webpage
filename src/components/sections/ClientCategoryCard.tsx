@@ -1,104 +1,98 @@
-// ============================================================
-// SSCSS — ClientCategoryCard Component
-// Displays a client category with icon, description, and
-// service badges resolved from the content layer.
-// Content-driven: all data from content layer.
-// Hover: subtle border color transition, elevation, icon color.
-// No scaling.
-// ============================================================
-
 import { createElement, useMemo } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { getIcon } from "@/lib/icons";
-import { fadeUp } from "@/lib/motion";
 import { getServiceBySlug } from "@/content/services";
 import type { ClientCategory } from "@/content/clients-page";
 
-// ─── Props ────────────────────────────────────────────────────
 interface ClientCategoryCardProps {
   category: ClientCategory;
   className?: string;
 }
 
-// ─── ClientCategoryCard ───────────────────────────────────────
 export default function ClientCategoryCard({
   category,
   className,
 }: ClientCategoryCardProps) {
-  const { icon, title, description, services } = category;
-
-  // Resolve service names from slugs
   const resolvedServices = useMemo(() => {
-    return services
-      .map((s) => getServiceBySlug(s))
-      .filter((s): s is NonNullable<ReturnType<typeof getServiceBySlug>> => s !== undefined)
-      .slice(0, 4); // Max 4 badges to keep card tidy
-  }, [services]);
+    return category.services
+      .map((slug) => getServiceBySlug(slug))
+      .filter(
+        (
+          service,
+        ): service is NonNullable<
+          ReturnType<typeof getServiceBySlug>
+        > => Boolean(service),
+      )
+      .slice(0, 4);
+  }, [category.services]);
 
   return (
-    <motion.div variants={fadeUp}>
-      <Card
-        className={cn(
-"group/card flex flex-col p-6 sm:p-8",
-          "border border-border bg-card",
-          "transition-all duration-300 ease-premium-out",
-          "hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg",
-          "h-full",
-          className,
-        )}
-      >
-        {/* Icon */}
-        <div
-          className={cn(
-            "mb-4 flex size-12 items-center justify-center rounded-full",
-            "bg-primary-50 text-muted-foreground",
-            "transition-colors duration-300 ease-premium-out",
-            "group-hover/card:text-primary",
-          )}
-          aria-hidden="true"
-        >
-          {createElement(getIcon(icon), { size: 22, strokeWidth: 1.5 })}
+    <motion.article
+      variants={{
+        hidden: {
+          opacity: 0,
+          y: 18,
+        },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: {
+            duration: 0.5,
+          },
+        },
+      }}
+      className={cn(
+        "group flex h-full flex-col border border-[#2b2927] bg-[#10100f] p-6 transition-colors duration-300 sm:p-7",
+        "hover:bg-[#151514] hover:border-[#3a3835]",
+        className,
+      )}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex size-11 items-center justify-center rounded-full border border-[#b52b22]/25 bg-[#3a211f] text-[#c45a52]">
+          {createElement(getIcon(category.icon), {
+            size: 20,
+            strokeWidth: 1.5,
+            "aria-hidden": true,
+          })}
         </div>
 
-        {/* Category Title */}
-        <h3
-          className={cn(
-            "font-heading text-lg font-semibold leading-snug tracking-tight",
-            "text-ink",
-          )}
-        >
-          {title}
-        </h3>
+        <span className="text-xs font-semibold tracking-[0.14em] text-[#77716a]">
+          {category.services.length
+            .toString()
+            .padStart(2, "0")}
+        </span>
+      </div>
 
-        {/* Description */}
-        <p
-          className={cn(
-            "mt-2 flex-1 text-sm leading-relaxed",
-            "text-muted-foreground",
-          )}
-        >
-          {description}
-        </p>
+      <h3 className="mt-7 font-heading text-2xl font-semibold tracking-tight text-[#f5f1e8]">
+        {category.title}
+      </h3>
 
-        {/* Service Badges */}
-        {resolvedServices.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2" aria-label="Commonly used services">
+      <p className="mt-3 flex-1 text-sm leading-7 text-[#8f8981]">
+        {category.description}
+      </p>
+
+      {resolvedServices.length > 0 && (
+        <div
+          className="mt-6 border-t border-[#2b2927] pt-5"
+          aria-label="Commonly used services"
+        >
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+            Common support
+          </p>
+
+          <div className="mt-3 flex flex-wrap gap-2">
             {resolvedServices.map((service) => (
-              <Badge
+              <span
                 key={service.slug}
-                variant="secondary"
-                className="text-xs font-normal"
+                className="border border-[#3a3835] px-2.5 py-1.5 text-xs text-[#a7a19a]"
               >
                 {service.name}
-              </Badge>
+              </span>
             ))}
           </div>
-        )}
-      </Card>
-    </motion.div>
+        </div>
+      )}
+    </motion.article>
   );
 }
-

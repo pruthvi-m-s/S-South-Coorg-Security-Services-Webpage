@@ -64,7 +64,7 @@ export const FOUNDER: FounderContent = {
       icon: "HeartHandshake",
     },
     {
-      title: "Serving Bengaluru for 27+ Years",
+      title: "SSCSS Serving Bengaluru Since 2008",
       icon: "MapPin",
     },
   ],

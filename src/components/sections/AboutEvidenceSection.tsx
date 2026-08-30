@@ -1,78 +1,105 @@
-import { createElement } from "react";
-import { ArrowUpRight, FileText } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, FileCheck, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
-import { getIcon } from "@/lib/icons";
-import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
-import Skeleton from "@/components/common/Skeleton";
+import { cn } from "@/lib/utils";
 import type { Certification } from "@/types";
 
-export default function AboutEvidenceSection({ certifications, href }: { certifications: Certification[]; href: string }) {
+interface AboutEvidenceSectionProps {
+  certifications: Certification[];
+  href: string;
+  className?: string;
+}
+
+export default function AboutEvidenceSection({
+  certifications,
+  href,
+  className,
+}: AboutEvidenceSectionProps) {
+  if (certifications.length === 0) return null;
+
   return (
-    <section className="bg-background" aria-labelledby="evidence-title">
+    <section
+      className={cn(
+        "bg-[#191918] text-[#f5f1e8]",
+        className,
+      )}
+      aria-labelledby="about-evidence-title"
+    >
       <div className="section-container section-padding">
-        <div className="flex flex-wrap items-end justify-between gap-5">
+        <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
-              Evidence &amp; compliance
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]">
+              Registrations & compliance
             </p>
+
             <h2
-              id="evidence-title"
-              className="mt-3 font-heading text-3xl font-semibold tracking-tight text-ink sm:text-4xl"
+              id="about-evidence-title"
+              className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
             >
-              Documentation, clearly presented.
+              Documentation should be clear before procurement begins.
             </h2>
-          </div>
-          <Link
-            to={href}
-            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-primary-700 focus-visible:outline-2 focus-visible:outline-primary"
-          >
-            View compliance details
-            <ArrowUpRight className="size-4" />
-          </Link>
-        </div>
 
-        <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {certifications.map((certification) => (
-            <article
-              key={certification.id}
-              className="group rounded-[1.35rem] border border-border bg-card p-3.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-28px_rgba(10,10,10,0.35)]"
+            <p className="mt-5 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base">
+              SSCSS keeps the published compliance information limited to
+              documentation available for review rather than inventing
+              certificate numbers or credentials.
+            </p>
+
+            <Link
+              to={href}
+              className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#c45a52] transition-colors hover:text-white"
             >
-              <div className="rounded-2xl border border-border bg-muted/70 p-2 shadow-inner shadow-black/2">
-                <div className="aspect-4/3 overflow-hidden rounded-[0.7rem] border border-border bg-white">
-                  {certification.documentImage ? (
-                    <ImageWithSkeleton
-                      src={certification.documentImage.src}
-                      alt={certification.documentImage.alt}
-                      skeleton={<Skeleton className="h-full w-full rounded-none" />}
-                      containerClassName="size-full"
-                      className="size-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <div className="flex size-full flex-col items-center justify-center bg-muted text-muted-foreground">
-                      <FileText className="size-8" />
-                      <span className="mt-3 text-[10px] font-semibold uppercase tracking-[0.12em]">
-                        Preview on request
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
+              Review compliance details
+              <ArrowRight
+                className="size-4"
+                aria-hidden="true"
+              />
+            </Link>
+          </div>
 
-              <div className="mt-4 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-primary">
-                    {createElement(getIcon(certification.icon), { size: 16, strokeWidth: 1.5 })}
-                  </span>
-                  <h3 className="text-sm font-semibold text-ink">{certification.label}</h3>
-                </div>
-                <span className="rounded-full border border-primary/15 bg-primary/5 px-2 py-1 text-[9px] font-medium uppercase tracking-[0.12em] text-primary">
-                  {certification.status === "verified" ? "Verified" : "Pending"}
-                </span>
-              </div>
-            </article>
-          ))}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.55 }}
+            className="grid gap-px border border-[#2b2927] bg-[#2b2927] sm:grid-cols-2"
+          >
+            {certifications.map((certification) => {
+              const Icon =
+                certification.type === "PSARA"
+                  ? ShieldCheck
+                  : FileCheck;
+
+              const pending =
+                certification.status ===
+                "pending-upload";
+
+              return (
+                <article
+                  key={certification.id}
+                  className="bg-[#10100f] p-6 sm:p-7"
+                >
+                  <div className="flex size-11 items-center justify-center rounded-full border border-[#b52b22]/25 bg-[#3a211f] text-[#c45a52]">
+                    <Icon
+                      className="size-5"
+                      strokeWidth={1.5}
+                      aria-hidden="true"
+                    />
+                  </div>
+
+                  <h3 className="mt-6 font-heading text-xl font-semibold tracking-tight text-[#f5f1e8]">
+                    {certification.label}
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-6 text-[#77716a]">
+                    {pending
+                      ? "Documentation available on request."
+                      : "Documentation available for review."}
+                  </p>
+                </article>
+              );
+            })}
+          </motion.div>
         </div>
       </div>
     </section>

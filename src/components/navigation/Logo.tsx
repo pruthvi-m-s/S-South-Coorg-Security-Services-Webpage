@@ -1,7 +1,5 @@
 // ============================================================
 // SSCSS — Logo Component
-// Renders the company logo from the content layer.
-// Falls back to a text logo when no asset path is set.
 // ============================================================
 
 import { Link } from "react-router-dom";
@@ -14,7 +12,7 @@ export default function Logo() {
   return (
     <Link
       to={ROUTES.home}
-      className="flex shrink-0 items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      className="flex shrink-0 items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c45a52]"
       aria-label={`${SITE.name} — Home`}
     >
       {hasLogo ? (
@@ -26,7 +24,7 @@ export default function Logo() {
           height="auto"
         />
       ) : (
-        <span className="font-heading text-lg text-ink tracking-[0.01em] md:text-xl">
+        <span className="font-heading text-lg font-semibold tracking-[-0.02em] text-[#f5f1e8] md:text-xl">
           {SITE.shortName}
         </span>
       )}

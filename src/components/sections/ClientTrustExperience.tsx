@@ -1,59 +1,84 @@
 import { useEffect, useRef, useState } from "react";
 import { animate } from "animejs";
-import { ArrowUpRight, CheckCircle2 } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+} from "lucide-react";
 import { Link } from "react-router-dom";
-import { getIcon } from "@/lib/icons";
-import { entranceOfficeGuards, gateSecurity, techPark, techParkGuards } from "@/lib/site-images";
+import { motion } from "framer-motion";
 import type { ClientCategory } from "@/content/clients-page";
 import type { Stat, Testimonial } from "@/types";
+import ClientCategoryCard from "@/components/sections/ClientCategoryCard";
+import { ROUTES } from "@/lib/routes";
+import {
+  staggerContainer,
+  fadeUp,
+  viewportOptions,
+} from "@/lib/motion";
 
-function AnimatedStat({ stat }: { stat: Stat }) {
+function AnimatedStat({
+  stat,
+}: {
+  stat: Stat;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   const [value, setValue] = useState(0);
 
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
+
         observer.disconnect();
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+
+        if (
+          window.matchMedia(
+            "(prefers-reduced-motion: reduce)",
+          ).matches
+        ) {
           setValue(stat.value);
           return;
         }
+
         const counter = { value: 0 };
-        animate(counter, {
+
+        const animation = animate(counter, {
           value: stat.value,
           duration: 800,
           ease: "out(4)",
-          onUpdate: () => setValue(Math.round(counter.value)),
+          onUpdate: () =>
+            setValue(Math.round(counter.value)),
         });
+
+        return () => animation.revert();
       },
       { threshold: 0.7 },
     );
+
     observer.observe(node);
+
     return () => observer.disconnect();
   }, [stat.value]);
 
   return (
     <div>
-      <span ref={ref} className="font-heading text-3xl font-semibold text-ink sm:text-4xl">
+      <span
+        ref={ref}
+        className="font-heading text-4xl font-semibold text-[#f5f1e8] sm:text-5xl"
+      >
         {value}
-        {stat.suffix.replace("+", "+")}
+        <span className="text-[#b52b22]">+</span>
       </span>
-      <p className="mt-1 text-xs uppercase tracking-[0.12em] text-muted-foreground">
+
+      <p className="mt-2 text-xs uppercase tracking-[0.12em] text-[#77716a]">
         {stat.label}
       </p>
     </div>
   );
 }
-
-const categoryImages: Record<string, string> = {
-  Corporate: techParkGuards, Residential: techPark, Educational: entranceOfficeGuards,
-  Healthcare: entranceOfficeGuards, "Banking & Finance": gateSecurity, Hospitality: techParkGuards,
-  Industrial: techPark, Government: gateSecurity,
-};
 
 export default function ClientTrustExperience({
   categories,
@@ -64,119 +89,256 @@ export default function ClientTrustExperience({
   stats: Stat[];
   testimonials: Testimonial[];
 }) {
-  const published = testimonials.filter((item) => !item.isPlaceholder);
+  const published = testimonials.filter(
+    (item) => !item.isPlaceholder,
+  );
 
   return (
     <>
-      {/* ─── Sector strip (static, calm) ───────────────────── */}
+      {/* ============================================================
+          SECTOR STRIP — DARK
+          ============================================================ */}
       <section
-        className="border-y border-border bg-muted py-6"
+        className="border-y border-[#2b2927] bg-[#191918] py-6"
         aria-label="Client sectors"
       >
         <div className="section-container flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
           {categories.map((category) => (
             <span
               key={category.title}
-              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-muted-foreground"
+              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]"
             >
-              <span className="size-1.5 rounded-full bg-primary" aria-hidden="true" />
+              <span
+                className="size-1.5 rounded-full bg-[#b52b22]"
+                aria-hidden="true"
+              />
               {category.title}
             </span>
           ))}
         </div>
       </section>
 
-      {/* ─── Sector panels + stats ─────────────────────────── */}
-      <section className="bg-background" aria-labelledby="trust-title">
+      {/* ============================================================
+          CLIENT CATEGORIES — CREAM HIGHLIGHT
+          ============================================================ */}
+      <section
+        className="bg-[#f3efe6] text-[#171615]"
+        aria-labelledby="clients-category-title"
+      >
         <div className="section-container section-padding">
-          <div className="max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
-              Why organizations trust us
-            </p>
-            <h2
-              id="trust-title"
-              className="mt-3 font-heading text-3xl font-semibold tracking-tight text-ink sm:text-4xl"
+          <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#ad241c]">
+                Where we support
+              </p>
+
+              <h2
+                id="clients-category-title"
+                className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#171615] sm:text-5xl"
+              >
+                Different environments. Different requirements.
+              </h2>
+
+              <p className="mt-5 max-w-md text-sm leading-7 text-[#6a655e] sm:text-base">
+                SSCSS works across residential, corporate,
+                healthcare, educational, hospitality,
+                industrial and institutional environments.
+              </p>
+            </div>
+
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOptions}
+              className="grid gap-px border border-[#d9d1c5] bg-[#d9d1c5] sm:grid-cols-2"
             >
-              Trusted across the places that matter.
-            </h2>
-          </div>
-
-          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {categories.map((category) => {
-              const Icon = getIcon(category.icon);
-              return (
-                <article
+              {categories.map((category) => (
+                <ClientCategoryCard
                   key={category.title}
-                  className="group relative min-h-64 overflow-hidden rounded-xl border border-border bg-card p-5 text-white"
+                  category={category}
+                  className="border-0 bg-[#f3efe6] text-[#171615] hover:bg-[#ebe5da] hover:border-0"
+                />
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+          TRUST + STATS — DARK
+          ============================================================ */}
+      <section
+        className="bg-[#10100f] text-[#f5f1e8]"
+        aria-labelledby="clients-trust-title"
+      >
+        <div className="section-container section-padding">
+          <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]">
+                Why organizations trust us
+              </p>
+
+              <h2
+                id="clients-trust-title"
+                className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
+              >
+                Built around reliable service, not just deployment.
+              </h2>
+
+              <p className="mt-5 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base">
+                Our operating approach is designed around
+                the practical needs of the sites and teams
+                we support.
+              </p>
+
+              <Link
+                to={ROUTES.contact}
+                className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#c45a52] transition-colors hover:text-white"
+              >
+                Start a conversation
+                <ArrowRight
+                  className="size-4"
+                  aria-hidden="true"
+                />
+              </Link>
+            </div>
+
+            <div className="border-t border-[#2b2927]">
+              {[
+                {
+                  title: "Professional deployment",
+                  text: "Personnel and service scope are shaped around the requirement and operating environment.",
+                },
+                {
+                  title: "Ongoing supervision",
+                  text: "Service quality is supported through supervision, reporting and continued coordination.",
+                },
+                {
+                  title: "Flexible support",
+                  text: "Security, manpower and facility support can be combined as requirements evolve.",
+                },
+                {
+                  title: "Long-term relationships",
+                  text: "The goal is dependable service and clear accountability over the life of the engagement.",
+                },
+              ].map((item, index) => (
+                <motion.article
+                  key={item.title}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{
+                    once: true,
+                    amount: 0.15,
+                  }}
+                  transition={{
+                    duration: 0.45,
+                    delay: index * 0.07,
+                  }}
+                  className="grid gap-3 border-b border-[#2b2927] py-6 sm:grid-cols-[0.7fr_1.3fr] sm:gap-8"
                 >
-                  <div
-                    className="absolute inset-0 bg-cover bg-center opacity-35 transition-transform duration-500 group-hover:scale-105"
-                    style={{ backgroundImage: `url(${categoryImages[category.title]})` }}
-                    aria-hidden="true"
-                  >
-                  </div>
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-card via-card/70 to-card/20" aria-hidden="true" />
-                  <Icon className="relative size-6 text-primary" aria-hidden="true" />
-                  <div className="absolute inset-x-5 bottom-5 transition-transform duration-300 group-hover:-translate-y-1">
-                    <h3 className="font-heading text-xl font-semibold">{category.title}</h3>
-                    <p className="mt-2 text-sm leading-5 text-muted-foreground">{category.description}</p>
-                    <Link
-                      to="/services"
-                      className="mt-4 inline-flex min-h-9 items-center gap-1 text-sm font-semibold text-primary opacity-100 transition-opacity lg:opacity-0 lg:group-hover:opacity-100"
-                    >
-                      Explore support <ArrowUpRight className="size-4" aria-hidden="true" />
-                    </Link>
-                  </div>
-                </article>
-              );
-            })}
+                  <h3 className="font-heading text-xl font-semibold tracking-tight text-[#ded8cf]">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-sm leading-6 text-[#77716a] sm:text-base">
+                    {item.text}
+                  </p>
+                </motion.article>
+              ))}
+            </div>
           </div>
 
-          <div className="mt-12 grid gap-6 border-y border-border py-8 sm:grid-cols-3">
+          <div className="mt-14 grid gap-6 border-y border-[#2b2927] py-8 sm:grid-cols-3">
             {stats.map((stat) => (
-              <AnimatedStat key={stat.id} stat={stat} />
+              <AnimatedStat
+                key={stat.id}
+                stat={stat}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── Partnership proof ─────────────────────────────── */}
-      <section className="bg-muted" aria-labelledby="proof-title">
+      {/* ============================================================
+          PARTNERSHIP PROOF — DARK
+          ============================================================ */}
+      <section
+        className="bg-[#191918] text-[#f5f1e8]"
+        aria-labelledby="client-proof-title"
+      >
         <div className="section-container section-padding">
-          <div className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr]">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOptions}
+            className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20"
+          >
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+              <motion.p
+                variants={fadeUp}
+                className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
+              >
                 Partnership proof
-              </p>
-              <h2
-                id="proof-title"
-                className="mt-3 font-heading text-3xl font-semibold tracking-tight text-ink"
+              </motion.p>
+
+              <motion.h2
+                id="client-proof-title"
+                variants={fadeUp}
+                className="mt-3 font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
               >
                 Proof before promotion.
-              </h2>
-              <p className="mt-4 text-sm leading-6 text-muted-foreground">
-                Only client permissions and approved testimonials are published.
-              </p>
+              </motion.h2>
+
+              <motion.p
+                variants={fadeUp}
+                className="mt-4 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base"
+              >
+                Client names, logos and testimonials are
+                presented only when the appropriate
+                permission is available.
+              </motion.p>
             </div>
-            {published.length ? (
-              <div className="grid gap-3 sm:grid-cols-2">
+
+            {published.length > 0 ? (
+              <div className="grid gap-px border border-[#2b2927] bg-[#2b2927] sm:grid-cols-2">
                 {published.map((item) => (
                   <blockquote
                     key={item.id}
-                    className="rounded-xl border border-border bg-background p-5 text-sm leading-6 text-muted-foreground"
+                    className="bg-[#10100f] p-6 sm:p-7"
                   >
-                    “{item.quote}”
-                    <footer className="mt-4 text-xs font-semibold text-ink">{item.authorName}</footer>
+                    <p className="font-heading text-xl font-medium leading-snug text-[#ded8cf]">
+                      “{item.quote}”
+                    </p>
+
+                    <footer className="mt-5 text-xs font-semibold uppercase tracking-[0.12em] text-[#77716a]">
+                      {item.authorName}
+                    </footer>
                   </blockquote>
                 ))}
               </div>
             ) : (
-              <div className="flex items-center gap-3 rounded-xl border border-border bg-background p-6 text-sm text-muted-foreground">
-                <CheckCircle2 className="size-5 shrink-0 text-primary" aria-hidden="true" />
-                Client names and testimonials are published only with approval.
+              <div className="flex items-start gap-4 border border-[#2b2927] bg-[#10100f] p-6 sm:p-8">
+                <CheckCircle2
+                  className="mt-0.5 size-5 shrink-0 text-[#c45a52]"
+                  aria-hidden="true"
+                />
+
+                <div>
+                  <h3 className="font-heading text-xl font-semibold text-[#f5f1e8]">
+                    Client proof is permission-led.
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-6 text-[#77716a]">
+                    Client names, logos and testimonials
+                    are published only after the required
+                    approval is available.
+                  </p>
+                </div>
               </div>
             )}
-          </div>
+          </motion.div>
         </div>
       </section>
     </>

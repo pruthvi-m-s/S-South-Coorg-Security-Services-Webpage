@@ -1,16 +1,3 @@
-// ============================================================
-// SSCSS — About Page
-// 7 sections in order:
-//   1. About Hero
-//   2. Company Story
-//   3. Meet Our Founder (AboutFounderPortrait)
-//   4. Process (reused component)
-//   5. Certifications & Compliance (reused AboutEvidenceSection)
-//   6. Company Statistics (reused StatsGrid)
-//   7. Final CTA (reused component)
-// Content-driven: all copy from content layer. No hardcoded text.
-// ============================================================
-
 import AboutHero from "@/components/sections/AboutHero";
 import CompanyStory from "@/components/sections/CompanyStory";
 import ProcessSection from "@/components/sections/ProcessSection";
@@ -28,15 +15,15 @@ import {
 
 export default function AboutPage() {
   return (
-    <>
-      {/* 1. About Hero */}
+    <div className="bg-[#10100f] text-[#f5f1e8]">
+      {/* HERO — DARK */}
       <AboutHero
         title={ABOUT.heroTitle}
         subtitle={ABOUT.heroSubtitle}
         image={ABOUT.heroImage}
       />
 
-      {/* 2. Company Story */}
+      {/* STORY — DARK */}
       <CompanyStory
         title={ABOUT.story.title}
         paragraphs={ABOUT.story.paragraphs}
@@ -45,44 +32,56 @@ export default function AboutPage() {
         videoSrc={ABOUT.story.videoSrc}
       />
 
+      {/* FOUNDER — DARK */}
       <AboutFounderPortrait content={FOUNDER} />
 
-      {/* Process */}
+      {/* PROCESS — CREAM HIGHLIGHT */}
       <ProcessSection
         title={ABOUT.process.title}
         subtitle={ABOUT.process.subtitle}
         steps={ABOUT.process.steps}
       />
 
-      <AboutEvidenceSection certifications={CERTIFICATIONS} href={ABOUT.certificationsSection.complianceCta.href} />
+      {/* COMPLIANCE — DARK */}
+      <AboutEvidenceSection
+        certifications={CERTIFICATIONS}
+        href={ABOUT.certificationsSection.complianceCta.href}
+      />
 
-      {/* 7. Company Statistics */}
+      {/* STATS — DARK */}
       <section
-        className="relative bg-muted"
-        aria-label="Company Statistics"
+        className="bg-[#10100f] text-[#f5f1e8]"
+        aria-labelledby="about-stats-title"
       >
         <div className="section-container section-padding">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="font-heading text-3xl font-semibold leading-tight tracking-tight text-ink sm:text-4xl">
-              By the Numbers
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Our track record speaks for itself. These numbers
-              represent the trust our clients place in us every day.
+          <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-20">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]">
+                The numbers
+              </p>
+
+              <h2
+                id="about-stats-title"
+                className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
+              >
+                Built over time. Measured in people and relationships.
+              </h2>
+            </div>
+
+            <p className="max-w-xl text-sm leading-7 text-[#b4aea5] sm:text-base">
+              The current company profile reflects the scale of SSCSS across
+              experience, personnel and client relationships.
             </p>
           </div>
-          <div className="mt-12">
-            <StatsGrid
-              stats={STATS}
-              columns={3}
-            />
+
+          <div className="mt-12 border-y border-[#2b2927]">
+            <StatsGrid stats={STATS} columns={3} />
           </div>
         </div>
       </section>
 
-      {/* 8. Final CTA */}
+      {/* CTA — DARK */}
       <FinalCtaSection content={FINAL_CTA} />
-    </>
+    </div>
   );
 }
-

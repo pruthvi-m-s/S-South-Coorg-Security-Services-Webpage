@@ -3,7 +3,6 @@ import { useSearchParams, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
 import { MapPin, Clock, Phone } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import ContactForm from "@/components/forms/ContactForm";
 import type { SubmissionState } from "@/components/forms/ContactForm";
@@ -40,8 +39,6 @@ import {
 } from "@/lib/analytics";
 import { ROUTES } from "@/lib/routes";
 
-// ─── Initial form state ─────────────────────────────────────
-
 const INITIAL_FORM_DATA: ContactFormData = {
   name: "",
   company: "",
@@ -51,54 +48,65 @@ const INITIAL_FORM_DATA: ContactFormData = {
   message: "",
 };
 
-// WhatsApp number (digits only) for click-to-chat links.
-// String() cast handles the `as const` empty-string literal type.
 const WA_NUMBER = String(CONTACT.whatsapp).replace(/\D/g, "");
-
-// ─── ContactPage ────────────────────────────────────────────
 
 export default function ContactPage() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
 
-  // ─── Deep-link support: /contact#contact-form ─────────────
-  // React Router does not perform native fragment navigation, so smoothly
-  // scroll to the inquiry form when the hash is present (same pattern as Faqs.tsx).
   useEffect(() => {
     if (location.hash === "#contact-form") {
-      document.getElementById("contact-form")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
+      requestAnimationFrame(() => {
+        document.getElementById("contact-form")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       });
     }
   }, [location.hash]);
 
-  // Pre-select a service from the query param (?service=slug) so visitors
-  // arriving from a service page never have to re-select what they clicked into.
-  const serviceOptions = useMemo(() => {
-    return SERVICES.map((s) => ({
-      slug: s.slug,
-      name: s.name,
-    }));
-  }, []);
+  const serviceOptions = useMemo(
+    () =>
+      SERVICES.map((service) => ({
+        slug: service.slug,
+        name: service.name,
+      })),
+    [],
+  );
 
   const initialService = useMemo(() => {
-    const fromQuery = searchParams.get("service")?.trim().toLowerCase();
-    if (!fromQuery || !/^[a-z0-9-]{1,80}$/.test(fromQuery)) return "";
-    return serviceOptions.some((s) => s.slug === fromQuery) ? fromQuery : "";
+    const fromQuery = searchParams
+      .get("service")
+      ?.trim()
+      .toLowerCase();
+
+    if (!fromQuery || !/^[a-z0-9-]{1,80}$/.test(fromQuery)) {
+      return "";
+    }
+
+    return serviceOptions.some(
+      (service) => service.slug === fromQuery,
+    )
+      ? fromQuery
+      : "";
   }, [searchParams, serviceOptions]);
 
-  const [formData, setFormData] = useState<ContactFormData>(() => ({
-    ...INITIAL_FORM_DATA,
-    service: initialService,
-  }));
-  const [errors, setErrors] = useState<ContactFormErrors>({});
-  const [submissionState, setSubmissionState] = useState<SubmissionState>({
-    status: "idle",
-  });
+  const [formData, setFormData] =
+    useState<ContactFormData>(() => ({
+      ...INITIAL_FORM_DATA,
+      service: initialService,
+    }));
+
+  const [errors, setErrors] =
+    useState<ContactFormErrors>({});
+
+  const [submissionState, setSubmissionState] =
+    useState<SubmissionState>({
+      status: "idle",
+    });
 
   const contactInfoContent = useMemo(() => {
-    const enrichedItems: Array<{
+    const items: Array<{
       label: string;
       icon: string;
       value: string;
@@ -106,7 +114,7 @@ export default function ContactPage() {
     }> = [];
 
     if (CONTACT.phone) {
-      enrichedItems.push({
+      items.push({
         label: "Phone",
         icon: "Phone",
         value: CONTACT.phone,
@@ -115,7 +123,7 @@ export default function ContactPage() {
     }
 
     if (CONTACT.email) {
-      enrichedItems.push({
+      items.push({
         label: "Email",
         icon: "Mail",
         value: CONTACT.email,
@@ -124,7 +132,7 @@ export default function ContactPage() {
     }
 
     if (CONTACT.address) {
-      enrichedItems.push({
+      items.push({
         label: "Office Address",
         icon: "MapPin",
         value: CONTACT.address,
@@ -134,7 +142,7 @@ export default function ContactPage() {
 
     return {
       ...CONTACT_PAGE.contactInfo,
-      items: enrichedItems,
+      items,
     };
   }, []);
 
@@ -145,109 +153,126 @@ export default function ContactPage() {
       Process: 3,
     };
 
-    const sorted = [...FAQS].sort((a, b) => {
-      const pa = priority[a.category] ?? 99;
-      const pb = priority[b.category] ?? 99;
-      return pa - pb;
-    });
-
-    return sorted.slice(0, CONTACT_PAGE.faqPreview.count);
-  }, []);
-
-  const sanitizeInput = useCallback((field: keyof ContactFormData, value: string): string => {
-    const trimmed = value.trim();
-    if (field === "email") {
-      return trimmed.toLowerCase();
-    }
-    if (field === "phone") {
-      return trimmed.replace(/\s+/g, " ");
-    }
-    if (field === "message") {
-      return trimmed.replace(/\s+/g, " ");
-    }
-    return trimmed.replace(/\s+/g, " ");
+    return [...FAQS]
+      .sort(
+        (a, b) =>
+          (priority[a.category] ?? 99) -
+          (priority[b.category] ?? 99),
+      )
+      .slice(0, CONTACT_PAGE.faqPreview.count);
   }, []);
 
   const handleFieldChange = useCallback(
-    (field: keyof ContactFormData, value: string) => {
-      const normalizedValue = sanitizeInput(field, value);
-      setFormData((prev) => ({ ...prev, [field]: normalizedValue }));
+    (
+      field: keyof ContactFormData,
+      value: string,
+    ) => {
+      const normalized =
+        field === "email"
+          ? value.trim().toLowerCase()
+          : value.replace(/\s+/g, " ");
+
+      setFormData((previous) => ({
+        ...previous,
+        [field]: normalized,
+      }));
+
       if (submissionState.status !== "idle") {
         setSubmissionState({ status: "idle" });
       }
-      if (field === "name" || field === "phone" || field === "email" || field === "service" || field === "message") {
-        setErrors((prev) => {
-          const current = prev[field];
-          if (current === undefined) return prev;
-          const next = { ...prev };
-          delete next[field];
-          return next;
-        });
-      }
+
+      setErrors((previous) => {
+        if (!previous[field]) return previous;
+
+        const next = { ...previous };
+        delete next[field];
+        return next;
+      });
     },
-    [sanitizeInput, submissionState.status],
+    [submissionState.status],
   );
 
   const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
+    async (event: React.FormEvent) => {
+      event.preventDefault();
 
-      const sanitizedFormData: ContactFormData = {
-        ...formData,
+      const sanitized: ContactFormData = {
         name: formData.name.trim().replace(/\s+/g, " "),
-        company: formData.company.trim().replace(/\s+/g, " "),
-        phone: formData.phone.trim().replace(/\s+/g, " "),
+        company: formData.company
+          .trim()
+          .replace(/\s+/g, " "),
+        phone: formData.phone
+          .trim()
+          .replace(/\s+/g, " "),
         email: formData.email.trim().toLowerCase(),
-        service: formData.service.trim().replace(/\s+/g, " "),
-        message: formData.message.trim().replace(/\s+/g, " "),
+        service: formData.service.trim(),
+        message: formData.message
+          .trim()
+          .replace(/\s+/g, " "),
       };
 
-      const validationErrors = validateContactForm(sanitizedFormData);
+      const validationErrors =
+        validateContactForm(sanitized);
+
       setErrors(validationErrors);
 
       if (hasErrors(validationErrors)) {
-        const firstField = (["name", "phone", "email", "service", "message"] as const).find(
-          (field) => Boolean(validationErrors[field]),
-        );
+        const firstField = (
+          [
+            "name",
+            "phone",
+            "email",
+            "service",
+            "message",
+          ] as const
+        ).find((field) => Boolean(validationErrors[field]));
 
         if (firstField) {
-          const fieldId = firstField === "service" ? "field-service" : `field-${firstField}`;
+          const element = document.getElementById(
+            `field-${firstField}`,
+          );
+
           requestAnimationFrame(() => {
-            const element = document.getElementById(fieldId);
-            if (element) {
-              element.scrollIntoView({ behavior: "smooth", block: "center" });
-              (element as HTMLElement).focus({ preventScroll: true });
-            }
+            element?.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+
+            element?.focus({
+              preventScroll: true,
+            });
           });
         }
+
         return;
       }
 
-      setSubmissionState({ status: "submitting" });
+      setSubmissionState({
+        status: "submitting",
+      });
 
-      try {
-        const result = await submitContactForm(sanitizedFormData);
-        if (result.success) {
-          trackFormSubmitSuccess({
-            source_page: getSourcePage(),
-            service_interested: sanitizedFormData.service || "not-sure",
-          });
-          setSubmissionState({ status: "success", message: result.message });
-        } else {
-          trackFormSubmitError({
-            source_page: getSourcePage(),
-            error_type: "submission_failed",
-          });
-          setSubmissionState({ status: "error", message: result.message });
-        }
-      } catch {
+      const result = await submitContactForm(sanitized);
+
+      if (result.success) {
+        trackFormSubmitSuccess({
+          source_page: getSourcePage(),
+          service_interested:
+            sanitized.service || "not-sure",
+        });
+
+        setSubmissionState({
+          status: "success",
+          message: result.message,
+        });
+      } else {
         trackFormSubmitError({
           source_page: getSourcePage(),
-          error_type: "unexpected_error",
+          error_type: "submission_failed",
         });
+
         setSubmissionState({
           status: "error",
-          message: "An unexpected error occurred. Please try again or contact us directly.",
+          message: result.message,
         });
       }
     },
@@ -259,56 +284,302 @@ export default function ContactPage() {
     setErrors({});
     setSubmissionState({ status: "idle" });
   }, []);
-const ctaContent = useMemo(() => {
-  return {
-    heading: CONTACT_PAGE.cta.heading,
-    supportingText: CONTACT_PAGE.cta.supportingText,
-    primaryCta: {
-      label: CONTACT_PAGE.cta.primaryCta.label,
-      href: `${ROUTES.contact}#contact-form`,
-    },
-    secondaryCta: CONTACT.email
-      ? {
-          label: "Email Us",
-          href: `mailto:${CONTACT.email}`,
-        }
-      : undefined,
-  };
-}, []);
+
+  const ctaContent = useMemo(
+    () => ({
+      heading: CONTACT_PAGE.cta.heading,
+      supportingText: CONTACT_PAGE.cta.supportingText,
+      primaryCta: {
+        label: CONTACT_PAGE.cta.primaryCta.label,
+        href: `${ROUTES.contact}#contact-form`,
+      },
+      secondaryCta: CONTACT.email
+        ? {
+            label: "Email Us",
+            href: `mailto:${CONTACT.email}`,
+          }
+        : undefined,
+    }),
+    [],
+  );
+
   return (
-    <>
-      <section className="relative bg-muted" aria-label="Contact Hero">
+    <div className="bg-[#10100f] text-[#f5f1e8]">
+      {/* HERO */}
+      <section
+        className="overflow-hidden bg-[#10100f]"
+        aria-labelledby="contact-hero-title"
+      >
+        <div className="section-container py-20 sm:py-24 lg:py-28">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOptions}
+            className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-end lg:gap-20"
+          >
+            <div>
+              <motion.p
+                variants={fadeUp}
+                className="text-xs font-semibold uppercase tracking-[0.16em] text-[#c45a52]"
+              >
+                Start a conversation
+              </motion.p>
+
+              <div className="mt-4">
+                <HeadlineReveal
+                  as="h1"
+                  delay={0.1}
+                  className="max-w-3xl font-heading text-5xl font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f1e8] sm:text-6xl lg:text-[4.5rem]"
+                >
+                  {CONTACT_PAGE.hero.title}
+                </HeadlineReveal>
+              </div>
+            </div>
+
+            <motion.div
+              variants={fadeUp}
+              className="border-l-2 border-[#b52b22] pl-6 sm:pl-8"
+            >
+              <p
+                id="contact-hero-title"
+                className="max-w-2xl text-base leading-7 text-[#b4aea5] sm:text-lg"
+              >
+                {CONTACT_PAGE.hero.subtitle}
+              </p>
+
+              <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+                <span>Security</span>
+                <span>Manpower</span>
+                <span>Facility Support</span>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CONTACT INFORMATION */}
+      <ContactInfo content={contactInfoContent} />
+
+      {/* CONTACT FORM */}
+      <section
+        id="contact-form"
+        className="scroll-mt-[var(--header-height)] bg-[#f3efe6] text-[#171615]"
+        aria-labelledby="contact-form-title"
+      >
         <div className="section-container section-padding">
           <motion.div
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOptions}
-            className="mx-auto max-w-4xl text-center"
           >
-<HeadlineReveal
-              as="h1"
-              delay={0.1}
-              className="font-heading text-4xl font-semibold leading-tight tracking-tight sm:text-5xl text-ink"
-            >
-              {CONTACT_PAGE.hero.title}
-            </HeadlineReveal>
-            <motion.p
-              variants={fadeUp}
-              className="mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg text-muted-foreground"
-            >
-              {CONTACT_PAGE.hero.subtitle}
-            </motion.p>
+            <div className="grid gap-10 lg:grid-cols-[0.68fr_1.32fr] lg:gap-20">
+              <div>
+                <motion.p
+                  variants={fadeUp}
+                  className="text-xs font-semibold uppercase tracking-[0.14em] text-[#ad241c]"
+                >
+                  Tell us what you need
+                </motion.p>
+
+                <motion.h2
+                  id="contact-form-title"
+                  variants={fadeUp}
+                  className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#171615] sm:text-5xl"
+                >
+                  {CONTACT_PAGE.form.title}
+                </motion.h2>
+
+                <motion.p
+                  variants={fadeUp}
+                  className="mt-5 max-w-md text-sm leading-7 text-[#6a655e] sm:text-base"
+                >
+                  {CONTACT_PAGE.form.subtitle}
+                </motion.p>
+
+                <motion.div
+                  variants={fadeUp}
+                  className="mt-8 border-t border-[#d9d1c5] pt-6"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                    What happens next
+                  </p>
+
+                  <div className="mt-4 space-y-4 text-sm leading-6 text-[#6a655e]">
+                    <p>
+                      <span className="mr-2 font-semibold text-[#ad241c]">
+                        01
+                      </span>
+                      We review your requirement.
+                    </p>
+                    <p>
+                      <span className="mr-2 font-semibold text-[#ad241c]">
+                        02
+                      </span>
+                      We discuss the site and staffing needs.
+                    </p>
+                    <p>
+                      <span className="mr-2 font-semibold text-[#ad241c]">
+                        03
+                      </span>
+                      We work out the appropriate next step.
+                    </p>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  variants={fadeUp}
+                  className="mt-8"
+                >
+                  <TrustRibbon
+                    stats={STATS}
+                    certifications={CERTIFICATIONS}
+                    psaraLabels={COMPLIANCE_PAGE.psaraBadge}
+                  />
+
+                  <div className="mt-4">
+                    <ResponseTimePromise className="text-[#6a655e]" />
+                  </div>
+                </motion.div>
+              </div>
+
+              <motion.div
+                variants={fadeUp}
+                className="border border-[#d9d1c5] bg-[#ebe5da] p-6 sm:p-8 lg:p-10"
+              >
+                <ContactForm
+                  content={CONTACT_PAGE.form}
+                  services={serviceOptions}
+                  formData={formData}
+                  errors={errors}
+                  submissionState={submissionState}
+                  onFieldChange={handleFieldChange}
+                  onSubmit={handleSubmit}
+                  onReset={handleReset}
+                />
+
+                {(CONTACT.phone || WA_NUMBER) && (
+                  <div className="mt-8 border-t border-[#d9d1c5] pt-6">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                      Prefer to speak directly?
+                    </p>
+
+                    <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                      {CONTACT.phone && (
+                        <a
+                          href={`tel:${CONTACT.phone}`}
+                          data-analytics-component="contact_page_call"
+                          className="inline-flex min-h-11 items-center justify-center gap-2 border border-[#cfc7bb] px-4 text-sm font-semibold text-[#171615] transition-colors hover:border-[#ad241c] hover:text-[#ad241c]"
+                        >
+                          <Phone className="size-4" />
+                          Call Now
+                        </a>
+                      )}
+
+                      {WA_NUMBER && (
+                        <a
+                          href={`https://wa.me/${WA_NUMBER}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          data-analytics-component="contact_page_whatsapp"
+                          className="inline-flex min-h-11 items-center justify-center gap-2 border border-[#cfc7bb] px-4 text-sm font-semibold text-[#171615] transition-colors hover:border-[#25D366] hover:text-[#168c45]"
+                        >
+                          <WhatsAppIcon className="size-4" />
+                          WhatsApp Us
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      <ContactInfo content={contactInfoContent} />
-
+      {/* OFFICE / COVERAGE */}
       <section
-        id="contact-form"
-        className="relative scroll-mt-[var(--header-height)] bg-muted"
-        aria-label="Contact Form Section"
+        className="bg-[#191918] text-[#f5f1e8]"
+        aria-label="Office and Coverage"
+      >
+        <div className="section-container section-padding">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOptions}
+          >
+            <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+              <div>
+                <motion.p
+                  variants={fadeUp}
+                  className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
+                >
+                  Office & coverage
+                </motion.p>
+
+                <motion.h2
+                  variants={fadeUp}
+                  className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
+                >
+                  {CONTACT_PAGE.office.title}
+                </motion.h2>
+
+                <motion.p
+                  variants={fadeUp}
+                  className="mt-5 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base"
+                >
+                  {CONTACT_PAGE.office.subtitle}
+                </motion.p>
+              </div>
+
+              <motion.div
+                variants={fadeUp}
+                className="border border-[#2b2927] bg-[#10100f]"
+              >
+                <div className="flex min-h-[280px] flex-col items-center justify-center p-8 text-center sm:p-10">
+                  <MapPin
+                    size={38}
+                    strokeWidth={1.5}
+                    className="text-[#c45a52]"
+                    aria-hidden="true"
+                  />
+
+                  <p className="mt-5 font-heading text-2xl font-semibold text-[#f5f1e8]">
+                    {CONTACT_PAGE.office.placeholder.title}
+                  </p>
+
+                  <p className="mt-3 max-w-md text-sm leading-6 text-[#77716a]">
+                    {CONTACT_PAGE.office.placeholder.description}
+                  </p>
+
+                  <span className="mt-5 border border-[#3a3835] px-3 py-1.5 text-xs font-medium uppercase tracking-[0.12em] text-[#77716a]">
+                    {CONTACT_PAGE.office.placeholder.note}
+                  </span>
+                </div>
+
+                {CONTACT.address && (
+                  <div className="border-t border-[#2b2927] p-6 text-center">
+                    <p className="text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+                      {CONTACT_PAGE.office.address.label}
+                    </p>
+
+                    <p className="mt-2 text-sm leading-6 text-[#ded8cf]">
+                      {CONTACT.address}
+                    </p>
+                  </div>
+                )}
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* BUSINESS HOURS */}
+      <section
+        className="bg-[#10100f] text-[#f5f1e8]"
+        aria-label="Business Hours"
       >
         <div className="section-container section-padding">
           <motion.div
@@ -318,190 +589,77 @@ const ctaContent = useMemo(() => {
             viewport={viewportOptions}
             className="mx-auto max-w-4xl"
           >
-            <motion.h2
-              variants={fadeUp}
-              className="font-heading text-3xl font-semibold leading-tight tracking-tight sm:text-4xl text-ink text-center"
-            >
-              {CONTACT_PAGE.form.title}
-            </motion.h2>
             <motion.p
               variants={fadeUp}
-              className="mx-auto mt-4 mb-10 max-w-2xl text-center text-base leading-relaxed sm:text-lg text-muted-foreground"
+              className="text-center text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
             >
-              {CONTACT_PAGE.form.subtitle}
+              Availability
             </motion.p>
 
-            {/* Trust signal directly above the form (trust-at-decision-point) */}
-            <motion.div variants={fadeUp} className="mb-8">
-              <TrustRibbon
-                stats={STATS}
-                certifications={CERTIFICATIONS}
-                psaraLabels={COMPLIANCE_PAGE.psaraBadge}
-              />
-              <div className="mt-4 flex justify-center">
-                <ResponseTimePromise />
-              </div>
-            </motion.div>
-
-            <div className="mx-auto max-w-2xl">
-              <ContactForm
-                content={CONTACT_PAGE.form}
-                services={serviceOptions}
-                formData={formData}
-                errors={errors}
-                submissionState={submissionState}
-                onFieldChange={handleFieldChange}
-                onSubmit={handleSubmit}
-                onReset={handleReset}
-              />
-
-{/* Parallel contact channels — visitors who prefer calling/messaging */}
-              {(CONTACT.phone || WA_NUMBER) && (
-                <div className="mt-6 flex flex-col items-center justify-center gap-3 rounded-xl border border-border bg-card p-5 shadow-sm sm:flex-row sm:gap-6">
-                  {CONTACT.phone && (
-                    <a
-                      href={`tel:${CONTACT.phone}`}
-                      data-analytics-component="contact_page_call"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-ink transition-colors duration-300 ease-premium-out hover:text-primary"
-                    >
-                      <span className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-primary" aria-hidden="true">
-                        <Phone size={16} />
-                      </span>
-                      Call Now
-                    </a>
-                  )}
-                  {WA_NUMBER && (
-                    <a
-                      href={`https://wa.me/${WA_NUMBER}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-analytics-component="contact_page_whatsapp"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-ink transition-colors duration-300 ease-premium-out hover:text-primary"
-                    >
-                      <span className="flex size-9 items-center justify-center rounded-full bg-[#25D366]/10 text-[#25D366]" aria-hidden="true">
-                        <WhatsAppIcon className="size-4" />
-                      </span>
-                      WhatsApp Us
-                    </a>
-                  )}
-                </div>
-              )}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="relative bg-background" aria-label="Office and Coverage">
-        <div className="section-container section-padding">
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOptions}
-          >
             <motion.h2
               variants={fadeUp}
-              className="font-heading text-3xl font-semibold leading-tight tracking-tight sm:text-4xl text-ink text-center"
-            >
-              {CONTACT_PAGE.office.title}
-            </motion.h2>
-            <motion.p
-              variants={fadeUp}
-              className="mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed sm:text-lg text-muted-foreground"
-            >
-              {CONTACT_PAGE.office.subtitle}
-            </motion.p>
-
-            <motion.div variants={fadeUp} className="mt-12">
-              <Card className="mx-auto flex max-w-lg flex-col items-center justify-center p-10 text-center border border-dashed border-muted-foreground/30 bg-muted/50 min-h-[280px]">
-                <MapPin
-                  size={40}
-                  strokeWidth={1.5}
-                  className="text-muted-foreground/50"
-                  aria-hidden="true"
-                />
-                <p className="mt-4 font-heading text-lg font-semibold text-ink">
-                  {CONTACT_PAGE.office.placeholder.title}
-                </p>
-                <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
-                  {CONTACT_PAGE.office.placeholder.description}
-                </p>
-                <span className="mt-4 inline-flex items-center rounded-full bg-muted-foreground/10 px-3 py-1 text-xs font-medium text-muted-foreground">
-                  {CONTACT_PAGE.office.placeholder.note}
-                </span>
-              </Card>
-
-              {CONTACT.address && (
-                <div className="mt-6 text-center">
-                  <p className="text-sm font-medium text-muted-foreground">
-                    {CONTACT_PAGE.office.address.label}
-                  </p>
-                  <p className="mt-1 text-base text-ink">{CONTACT.address}</p>
-                </div>
-              )}
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="relative bg-muted" aria-label="Business Hours">
-        <div className="section-container section-padding">
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOptions}
-            className="mx-auto max-w-4xl"
-          >
-            <motion.h2
-              variants={fadeUp}
-              className="font-heading text-3xl font-semibold leading-tight tracking-tight sm:text-4xl text-ink text-center"
+              className="mt-3 text-center font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
             >
               {CONTACT_PAGE.businessHours.title}
             </motion.h2>
+
             <motion.p
               variants={fadeUp}
-              className="mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed sm:text-lg text-muted-foreground"
+              className="mx-auto mt-4 max-w-2xl text-center text-sm leading-7 text-[#b4aea5] sm:text-base"
             >
               {CONTACT_PAGE.businessHours.subtitle}
             </motion.p>
 
-            <motion.div variants={fadeUp} className="mt-10">
-              <div className="mx-auto max-w-xl">
-                <div className="overflow-hidden rounded-xl border border-border bg-card">
-                  {CONTACT_PAGE.businessHours.schedule.map((entry, index) => (
-                    <div
-                      key={`hours-${index}`}
-                      className={`flex items-center justify-between px-6 py-4 sm:px-8 ${
-                        index < CONTACT_PAGE.businessHours.schedule.length - 1
-                          ? "border-b border-border"
-                          : ""
-                      }`}
-                    >
-                      <span className="text-sm font-medium text-ink">{entry.days}</span>
-                      <span className="text-sm text-muted-foreground">{entry.hours}</span>
-                    </div>
-                  ))}
-                </div>
+            <motion.div
+              variants={fadeUp}
+              className="mx-auto mt-10 max-w-xl border border-[#2b2927] bg-[#191918]"
+            >
+              {CONTACT_PAGE.businessHours.schedule.map(
+                (entry, index) => (
+                  <div
+                    key={`hours-${index}`}
+                    className={
+                      index <
+                      CONTACT_PAGE.businessHours.schedule
+                        .length -
+                        1
+                        ? "flex items-center justify-between gap-6 border-b border-[#2b2927] px-6 py-4 sm:px-8"
+                        : "flex items-center justify-between gap-6 px-6 py-4 sm:px-8"
+                    }
+                  >
+                    <span className="text-sm font-medium text-[#ded8cf]">
+                      {entry.days}
+                    </span>
 
-                {CONTACT_PAGE.businessHours.note && (
-                  <div className="mt-4 flex items-start gap-2 rounded-lg bg-primary-50 p-4">
-                    <Clock
-                      size={16}
-                      className="mt-0.5 shrink-0 text-primary"
-                      aria-hidden="true"
-                    />
-                    <p className="text-xs leading-relaxed text-muted-foreground">
-                      {CONTACT_PAGE.businessHours.note}
-                    </p>
+                    <span className="text-sm text-[#99938c]">
+                      {entry.hours}
+                    </span>
                   </div>
-                )}
-              </div>
+                ),
+              )}
             </motion.div>
+
+            {CONTACT_PAGE.businessHours.note && (
+              <motion.div
+                variants={fadeUp}
+                className="mx-auto mt-4 flex max-w-xl items-start gap-3 border-l-2 border-[#b52b22] bg-[#191918] p-4"
+              >
+                <Clock
+                  size={17}
+                  className="mt-0.5 shrink-0 text-[#c45a52]"
+                  aria-hidden="true"
+                />
+
+                <p className="text-xs leading-6 text-[#99938c]">
+                  {CONTACT_PAGE.businessHours.note}
+                </p>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </section>
 
+      {/* FAQ */}
       <FaqPreview
         title={CONTACT_PAGE.faqPreview.title}
         subtitle={CONTACT_PAGE.faqPreview.subtitle}
@@ -510,7 +668,8 @@ const ctaContent = useMemo(() => {
         viewAllHref={ROUTES.faqs}
       />
 
+      {/* FINAL CTA */}
       <FinalCtaSection content={ctaContent} />
-    </>
+    </div>
   );
 }

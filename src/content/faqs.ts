@@ -20,7 +20,7 @@ export const FAQS: Faq[] = [
     category: "General",
     question: "How long has SSCSS been in business?",
     answer:
-      "SSCSS has been serving Bengaluru since 2008, with over 15 years of experience in the security and manpower industry.",
+      "SSCSS has been serving Bengaluru since 2008, with more than 18 years of company operations in security and manpower services.",
   },
   {
     id: "faq-general-3",

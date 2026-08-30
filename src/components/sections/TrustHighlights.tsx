@@ -1,16 +1,6 @@
-// ============================================================
-// SSCSS — TrustHighlights Component
-// Reusable trust/company highlights section showing key
-// qualitative strengths (professionalism, trained staff,
-// compliance, operational excellence).
-// Content-driven: all copy from the content layer.
-// Responsive: 4 cols desktop, 2 cols tablet, 1 col mobile.
-// ============================================================
-
-import { motion } from "framer-motion";
 import { createElement } from "react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
 import { getIcon } from "@/lib/icons";
 import {
   staggerContainer,
@@ -19,7 +9,6 @@ import {
 } from "@/lib/motion";
 import type { WhyChooseUsItem } from "@/types";
 
-// ─── Props ────────────────────────────────────────────────────
 interface TrustHighlightsProps {
   title: string;
   subtitle: string;
@@ -27,7 +16,6 @@ interface TrustHighlightsProps {
   className?: string;
 }
 
-// ─── TrustHighlights ──────────────────────────────────────────
 export default function TrustHighlights({
   title,
   subtitle,
@@ -39,10 +27,10 @@ export default function TrustHighlights({
   return (
     <section
       className={cn(
-        "relative bg-background",
+        "bg-[#191918] text-[#f5f1e8]",
         className,
       )}
-      aria-label="Trust and Company Highlights"
+      aria-labelledby="gallery-trust-title"
     >
       <div className="section-container section-padding">
         <motion.div
@@ -51,91 +39,62 @@ export default function TrustHighlights({
           whileInView="visible"
           viewport={viewportOptions}
         >
-          {/* Section Heading */}
-          <motion.h2
-            variants={fadeUp}
-            className={cn(
-              "font-heading text-3xl font-semibold leading-tight tracking-tight",
-              "sm:text-4xl",
-              "text-ink text-center",
-            )}
-          >
-            {title}
-          </motion.h2>
+          <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <div>
+              <motion.p
+                variants={fadeUp}
+                className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
+              >
+                Why it matters
+              </motion.p>
 
-          {/* Section Intro */}
-          <motion.p
-            variants={fadeUp}
-            className={cn(
-              "mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed",
-              "sm:text-lg",
-              "text-muted-foreground",
-            )}
-          >
-            {subtitle}
-          </motion.p>
+              <motion.h2
+                id="gallery-trust-title"
+                variants={fadeUp}
+                className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
+              >
+                {title}
+              </motion.h2>
 
-          {/* Highlights Grid — responsive: 4/2/1 columns */}
-          <motion.div
-            variants={fadeUp}
-            className="mt-12"
-          >
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <motion.p
+                variants={fadeUp}
+                className="mt-5 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base"
+              >
+                {subtitle}
+              </motion.p>
+            </div>
+
+            <motion.div
+              variants={fadeUp}
+              className="grid gap-px border border-[#2b2927] bg-[#2b2927] sm:grid-cols-2"
+            >
               {items.map((item, index) => (
-                <motion.div
+                <motion.article
                   key={`${item.title}-${index}`}
                   variants={fadeUp}
+                  className="bg-[#10100f] p-6 transition-colors duration-300 hover:bg-[#151514] sm:p-7"
                 >
-                  <Card
-                    className={cn(
-"group/card flex flex-col items-center p-6 text-center sm:p-8",
-                      "border border-border bg-card",
-                      "transition-all duration-300 ease-premium-out",
-                      "hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg",
-                      "h-full",
-                    )}
-                  >
-                    {/* Icon */}
-                    <div
-                      className={cn(
-                        "mb-4 flex size-14 items-center justify-center rounded-full",
-                        "bg-primary-50 text-primary",
-                      )}
-                      aria-hidden="true"
-                    >
-                      {createElement(getIcon(item.icon), {
-                        size: 24,
-                        strokeWidth: 1.5,
-                      })}
-                    </div>
+                  <div className="flex size-11 items-center justify-center rounded-full border border-[#b52b22]/25 bg-[#3a211f] text-[#c45a52]">
+                    {createElement(getIcon(item.icon), {
+                      size: 20,
+                      strokeWidth: 1.5,
+                      "aria-hidden": true,
+                    })}
+                  </div>
 
-                    {/* Title */}
-                    <h3
-                      className={cn(
-                        "font-heading text-lg font-semibold leading-snug tracking-tight",
-                        "text-ink",
-                      )}
-                    >
-                      {item.title}
-                    </h3>
+                  <h3 className="mt-6 font-heading text-xl font-semibold tracking-tight text-[#f5f1e8]">
+                    {item.title}
+                  </h3>
 
-                    {/* Description */}
-                    <p
-                      className={cn(
-                        "mt-2 flex-1 text-sm leading-relaxed",
-                        "text-muted-foreground",
-                      )}
-                    >
-                      {item.description}
-                    </p>
-                  </Card>
-                </motion.div>
+                  <p className="mt-3 text-sm leading-7 text-[#77716a]">
+                    {item.description}
+                  </p>
+                </motion.article>
               ))}
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>
   );
 }
-

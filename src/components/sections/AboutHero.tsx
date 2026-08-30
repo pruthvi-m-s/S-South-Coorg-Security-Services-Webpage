@@ -1,17 +1,12 @@
-// ============================================================
-// SSCSS — About Hero Section
-// Page-level hero for the About page.
-// Content-driven: heading, subtitle, and image from content layer.
-// Simpler than the homepage hero — no CTAs, just introduces the page.
-// ============================================================
-
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
 import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
 import HeroSkeleton from "@/components/common/HeroSkeleton";
-import { BorderTrail } from "../../../components/motion-primitives/border-trail";
 import type { ImageRef } from "@/types";
+import { ROUTES } from "@/lib/routes";
 import {
   staggerContainer,
   fadeUp,
@@ -19,7 +14,6 @@ import {
   viewportOptions,
 } from "@/lib/motion";
 
-// ─── Props ────────────────────────────────────────────────────
 interface AboutHeroProps {
   title: string;
   subtitle: string;
@@ -27,7 +21,6 @@ interface AboutHeroProps {
   className?: string;
 }
 
-// ─── AboutHero ────────────────────────────────────────────────
 export default function AboutHero({
   title,
   subtitle,
@@ -37,93 +30,138 @@ export default function AboutHero({
   return (
     <section
       className={cn(
-        "relative overflow-hidden bg-background",
-        "pt-24 pb-16 md:pt-32 md:pb-20 lg:pb-24",
+        "overflow-hidden bg-[#10100f] text-[#f5f1e8]",
         className,
       )}
-      aria-label="About Hero"
+      aria-labelledby="about-hero-title"
     >
-      <div className="section-container">
+      <div className="section-container py-16 sm:py-20 lg:py-24">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
           viewport={viewportOptions}
-          className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16"
+          className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20"
         >
-          {/* ─── Left Content ──────────────────────────── */}
           <div>
-            {/* Page label */}
-            <motion.span
-              variants={fadeUp}
-              className={cn(
-                "mb-4 inline-block text-xs font-semibold uppercase tracking-[0.12em]",
-                "text-primary",
-              )}
-            >
-              About Us
-            </motion.span>
-
-{/* Heading — H1 for the About page, Apple-style mask reveal */}
-            <HeadlineReveal
-              as="h1"
-              delay={0.15}
-              className={cn(
-                "font-heading text-4xl font-semibold leading-tight tracking-tight",
-                "sm:text-5xl lg:text-6xl",
-                "text-ink",
-              )}
-            >
-              {title}
-            </HeadlineReveal>
-
-            {/* Subtitle */}
             <motion.p
               variants={fadeUp}
-              className={cn(
-                "mt-5 max-w-xl text-base leading-relaxed",
-                "sm:text-lg",
-                "text-muted-foreground",
-              )}
+              className="text-xs font-semibold uppercase tracking-[0.15em] text-[#c45a52]"
+            >
+              About SSCSS
+            </motion.p>
+
+            <div className="mt-4">
+              <HeadlineReveal
+                as="h1"
+                delay={0.12}
+                className="max-w-2xl font-heading text-5xl font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f1e8] sm:text-6xl lg:text-[4.25rem]"
+              >
+                {title}
+              </HeadlineReveal>
+            </div>
+
+            <motion.p
+              id="about-hero-title"
+              variants={fadeUp}
+              className="mt-6 max-w-xl text-base leading-7 text-[#b4aea5] sm:text-lg"
             >
               {subtitle}
             </motion.p>
+
+            <motion.div
+              variants={fadeUp}
+              className="mt-8 flex flex-col gap-3 sm:flex-row"
+            >
+              <Link
+                to={`${ROUTES.contact}#contact-form`}
+                data-analytics-cta="about_hero_contact"
+                className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#b52b22] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#8f1912]"
+              >
+                Discuss your requirement
+                <ArrowRight
+                  className="size-4"
+                  aria-hidden="true"
+                />
+              </Link>
+
+              <Link
+                to={ROUTES.services}
+                className="inline-flex min-h-12 items-center justify-center border border-[#3a3835] px-5 text-sm font-semibold text-[#f5f1e8] transition-colors hover:border-[#b52b22]"
+              >
+                Explore our services
+              </Link>
+            </motion.div>
+
+            <motion.div
+              variants={fadeUp}
+              className="mt-8 grid max-w-xl gap-4 border-t border-[#2b2927] pt-6 sm:grid-cols-3"
+            >
+              <div>
+                <p className="text-2xl font-semibold text-[#f5f1e8]">
+                  2008
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[#77716a]">
+                  Founded
+                </p>
+              </div>
+
+              <div>
+                <p className="text-2xl font-semibold text-[#f5f1e8]">
+                  100+
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[#77716a]">
+                  Personnel
+                </p>
+              </div>
+
+              <div>
+                <p className="text-2xl font-semibold text-[#f5f1e8]">
+                  50+
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[#77716a]">
+                  Clients
+                </p>
+              </div>
+            </motion.div>
           </div>
 
-          {/* ─── Right Visual ──────────────────────────── */}
-          <motion.div
+          <motion.figure
             variants={scaleIn}
-            className="flex justify-center"
+            className="relative"
           >
-<figure className="relative rounded-lg">
+            <div className="aspect-[4/3] overflow-hidden bg-[#191918]">
               <ImageWithSkeleton
                 src={image.src}
                 alt={image.alt}
-                skeleton={<HeroSkeleton className="h-full w-full" />}
-                containerClassName="w-full max-w-lg"
-                className={cn(
-                  "h-auto w-full max-w-lg rounded-lg object-cover",
-                  "shadow-lg",
-                )}
-                width={800}
-                height={600}
-                loading="lazy"
+                skeleton={
+                  <HeroSkeleton className="size-full rounded-none" />
+                }
+                containerClassName="size-full"
+                className="size-full object-cover"
+                width={1200}
+                height={900}
+                loading="eager"
+                fetchPriority="high"
                 decoding="async"
-                fetchPriority="low"
               />
-              <BorderTrail
-                size={60}
-                className="bg-primary/50"
-                transition={{ repeat: Infinity, duration: 9, ease: "linear" }}
-              />
-              {image.isPlaceholder && image.credit && (
-                <figcaption className="sr-only">{image.credit}</figcaption>
-              )}
-            </figure>
-          </motion.div>
+            </div>
+
+            <div
+              className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10"
+              aria-hidden="true"
+            />
+
+            <figcaption className="absolute bottom-0 left-0 border-l-2 border-[#b52b22] bg-black/70 px-5 py-4 text-xs font-semibold uppercase tracking-[0.14em] text-white/75 backdrop-blur-sm">
+              S South Coorg Security Services
+            </figcaption>
+
+            {image.isPlaceholder && image.credit && (
+              <span className="sr-only">{image.credit}</span>
+            )}
+          </motion.figure>
         </motion.div>
       </div>
     </section>
   );
 }
-

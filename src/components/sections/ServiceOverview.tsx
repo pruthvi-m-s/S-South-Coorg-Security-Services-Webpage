@@ -1,10 +1,3 @@
-// ============================================================
-// SSCSS — ServiceOverview Component
-// Displays the overview text for a service detail page.
-// Content-driven: title and overview paragraphs from content layer.
-// Uses staggerContainer, fadeUp animations.
-// ============================================================
-
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
@@ -13,26 +6,29 @@ import {
   viewportOptions,
 } from "@/lib/motion";
 
-// ─── Props ────────────────────────────────────────────────────
 interface ServiceOverviewProps {
   title?: string;
   overview: string;
   className?: string;
 }
 
-// ─── ServiceOverview ──────────────────────────────────────────
 export default function ServiceOverview({
   title,
   overview,
   className,
 }: ServiceOverviewProps) {
+  const paragraphs = overview
+    .split("\n\n")
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+
   return (
     <section
       className={cn(
-        "relative bg-background",
+        "bg-[#10100f] text-[#f5f1e8]",
         className,
       )}
-      aria-label="Service Overview"
+      aria-labelledby="service-overview-title"
     >
       <div className="section-container section-padding">
         <motion.div
@@ -40,34 +36,41 @@ export default function ServiceOverview({
           initial="hidden"
           whileInView="visible"
           viewport={viewportOptions}
-          className="mx-auto max-w-4xl"
+          className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20"
         >
-          {/* Section Heading */}
-          {title && (
-            <motion.h2
+          <div>
+            <motion.p
               variants={fadeUp}
-              className={cn(
-                "font-heading text-3xl font-semibold leading-tight tracking-tight",
-                "sm:text-4xl",
-                "text-ink text-center",
-              )}
+              className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
             >
-              {title}
-            </motion.h2>
-          )}
+              The requirement
+            </motion.p>
 
-          {/* Overview Paragraphs */}
+            {title && (
+              <motion.h2
+                id="service-overview-title"
+                variants={fadeUp}
+                className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
+              >
+                {title}
+              </motion.h2>
+            )}
+          </div>
+
           <motion.div
             variants={fadeUp}
-            className={cn(
-              "space-y-5 text-base leading-relaxed sm:text-lg",
-              "text-muted-foreground",
-              title ? "mt-8" : "",
-            )}
+            className="border-t border-[#2b2927]"
           >
-            {/* Split overview string by double newlines into paragraphs */}
-            {overview.split("\n\n").filter(Boolean).map((paragraph, index) => (
-              <p key={index} className={index === 0 ? "font-medium text-ink" : undefined}>
+            {paragraphs.map((paragraph, index) => (
+              <p
+                key={index}
+                className={cn(
+                  "border-b border-[#2b2927] py-6 text-base leading-7",
+                  index === 0
+                    ? "text-[#ded8cf] sm:text-lg"
+                    : "text-[#9f9991] sm:text-base",
+                )}
+              >
                 {paragraph}
               </p>
             ))}
@@ -77,4 +80,3 @@ export default function ServiceOverview({
     </section>
   );
 }
-

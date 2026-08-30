@@ -1,20 +1,11 @@
-// ============================================================
-// SSCSS — PricingDisclaimerNote
-// Small, honest note clarifying that pricing is quote-based.
-// Shown near inquiry CTAs on service pages.
-// Kept extremely short — every deployment is different.
-// ============================================================
-
 import { Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PRICING_DISCLAIMER } from "@/content";
 
-// ─── Props ────────────────────────────────────────────────────
 interface PricingDisclaimerNoteProps {
   className?: string;
 }
 
-// ─── PricingDisclaimerNote ────────────────────────────────────
 export default function PricingDisclaimerNote({
   className,
 }: PricingDisclaimerNoteProps) {
@@ -27,9 +18,13 @@ export default function PricingDisclaimerNote({
         className,
       )}
     >
-      <Info size={14} className="mt-0.5 shrink-0 text-muted-foreground/60" aria-hidden="true" />
+      <Info
+        size={14}
+        className="mt-0.5 shrink-0 opacity-60"
+        aria-hidden="true"
+      />
+
       <span>{PRICING_DISCLAIMER.text}</span>
     </p>
   );
 }
-

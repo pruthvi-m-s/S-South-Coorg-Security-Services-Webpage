@@ -28,7 +28,7 @@ export const SEO_SERVICES = [
   ["Event Security", "/services/event-security", "Comprehensive security management for events, conferences, and gatherings."],
   ["Background Verification", "/services/background-verification", "Thorough background checks for individuals and organizations."],
   ["Private Detective Services", "/services/private-detective-services", "Discreet, professional investigative services for individuals and businesses."],
-  ["Integrated Facility Management Services", "/services/facility-management", "Complete facility operations management — security, housekeeping, staffing, and more."],
+  ["Integrated Facility Management Services", "/services/integrated-facility-management-services", "Complete facility operations management — security, housekeeping, staffing, and more."],
 ] as const;
 
 export const SEO_INDUSTRIES = [

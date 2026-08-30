@@ -1,13 +1,3 @@
-// ============================================================
-// SSCSS — FaqPreview Component
-// FAQ preview for the Services Hub page.
-// Displays the first N FAQs from the content layer.
-// Simple stacked layout — no accordion, no expand/collapse.
-// Each FAQ shows question (h3) and answer in a styled card.
-// Includes a "View All FAQs" CTA linking to the full FAQ page.
-// Content-driven: all copy from the content layer.
-// ============================================================
-
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -18,28 +8,23 @@ import {
   fadeUp,
   viewportOptions,
 } from "@/lib/motion";
-import { ROUTES } from "@/lib/routes";
 import type { Faq } from "@/types";
 
-// ─── Props ────────────────────────────────────────────────────
 interface FaqPreviewProps {
   title: string;
   subtitle: string;
   faqs: Faq[];
-  /** Number of FAQs to display (default: 5) */
   count?: number;
-  /** Link for the "View All FAQs" button (default: ROUTES.faqs) */
   viewAllHref: string;
   className?: string;
 }
 
-// ─── FaqPreview ───────────────────────────────────────────────
 export default function FaqPreview({
   title,
   subtitle,
   faqs,
   count = 5,
-  viewAllHref = ROUTES.faqs,
+  viewAllHref,
   className,
 }: FaqPreviewProps) {
   if (faqs.length === 0) return null;
@@ -49,10 +34,10 @@ export default function FaqPreview({
   return (
     <section
       className={cn(
-        "relative bg-background",
+        "bg-[#10100f] text-[#f5f1e8]",
         className,
       )}
-      aria-label="Frequently Asked Questions"
+      aria-labelledby="services-faq-title"
     >
       <div className="section-container section-padding">
         <motion.div
@@ -61,94 +46,80 @@ export default function FaqPreview({
           whileInView="visible"
           viewport={viewportOptions}
         >
-          {/* Section Heading */}
-          <motion.h2
-            variants={fadeUp}
-            className={cn(
-              "font-heading text-3xl font-semibold leading-tight tracking-tight",
-              "sm:text-4xl",
-              "text-ink text-center",
-            )}
-          >
-            {title}
-          </motion.h2>
+          <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+            <div>
+              <motion.p
+                variants={fadeUp}
+                className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
+              >
+                Common questions
+              </motion.p>
 
-          {/* Section Subtitle */}
-          <motion.p
-            variants={fadeUp}
-            className={cn(
-              "mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed",
-              "sm:text-lg",
-              "text-muted-foreground",
-            )}
-          >
-            {subtitle}
-          </motion.p>
+              <motion.h2
+                id="services-faq-title"
+                variants={fadeUp}
+                className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
+              >
+                {title}
+              </motion.h2>
 
-          {/* FAQ List — Stacked layout, no accordion */}
-          <motion.div
-            variants={fadeUp}
-            className="mt-12 mx-auto max-w-4xl"
-          >
-            <div className="space-y-6">
-              {displayedFaqs.map((faq) => (
+              <motion.p
+                variants={fadeUp}
+                className="mt-5 max-w-lg text-sm leading-7 text-[#b4aea5] sm:text-base"
+              >
+                {subtitle}
+              </motion.p>
+
+              <motion.div
+                variants={fadeUp}
+                className="mt-7"
+              >
+                <Link to={viewAllHref}>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-[#3a3835] bg-transparent text-[#f5f1e8] hover:border-[#b52b22] hover:bg-[#b52b22]/10 hover:text-[#f5f1e8]"
+                  >
+                    View all FAQs
+                    <ArrowRight
+                      className="ml-1 size-4"
+                      aria-hidden="true"
+                    />
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
+
+            <motion.div
+              variants={fadeUp}
+              className="border-t border-[#2b2927]"
+            >
+              {displayedFaqs.map((faq, index) => (
                 <article
                   key={faq.id}
-                  className={cn(
-                    "rounded-xl border border-border bg-card p-6 sm:p-8",
-                    "transition-all duration-300 ease-premium-out",
-                    "hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md",
-                    "focus-within:border-primary/30 focus-within:shadow-[0_0_0_4px_rgba(139,30,30,0.12)]",
-                  )}
+                  className="border-b border-[#2b2927] py-6 sm:py-7"
                 >
-                  {/* Question */}
-                  <h3
-                    className={cn(
-                      "font-heading text-lg font-semibold leading-snug tracking-tight",
-                      "text-ink",
-                    )}
-                  >
-                    {faq.question}
-                  </h3>
+                  <div className="flex gap-5">
+                    <span className="pt-1 text-xs font-semibold tracking-[0.14em] text-[#c45a52]">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
 
-                  {/* Answer */}
-                  <p
-                    className={cn(
-                      "mt-3 text-base leading-relaxed",
-                      "text-muted-foreground",
-                    )}
-                  >
-                    {faq.answer}
-                  </p>
+                    <div>
+                      <h3 className="font-heading text-xl font-semibold tracking-tight text-[#f5f1e8] sm:text-2xl">
+                        {faq.question}
+                      </h3>
+
+                      <p className="mt-3 max-w-2xl text-sm leading-6 text-[#b4aea5] sm:text-base">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </div>
                 </article>
               ))}
-            </div>
-          </motion.div>
-
-          {/* View All FAQs CTA */}
-          <motion.div
-            variants={fadeUp}
-            className="mt-10 flex justify-center"
-          >
-            <Link to={viewAllHref}>
-              <Button
-                variant="outline"
-                size="lg"
-                className="group/cta"
-              >
-                View All FAQs
-                <ArrowRight
-                  size={16}
-                  strokeWidth={2}
-                  className="ml-1.5 transition-transform duration-300 ease-premium-out group-hover/cta:translate-x-0.5"
-                  aria-hidden="true"
-                />
-              </Button>
-            </Link>
-          </motion.div>
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>
   );
 }
-

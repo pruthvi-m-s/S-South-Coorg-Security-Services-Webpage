@@ -22,5 +22,5 @@
   <url><loc>http://localhost:5173/services/event-security</loc></url>
   <url><loc>http://localhost:5173/services/background-verification</loc></url>
   <url><loc>http://localhost:5173/services/private-detective-services</loc></url>
-  <url><loc>http://localhost:5173/services/facility-management</loc></url>
+  <url><loc>http://localhost:5173/services/integrated-facility-management-services</loc></url>
 </urlset>

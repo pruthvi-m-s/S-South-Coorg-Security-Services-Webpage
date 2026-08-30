@@ -1,30 +1,21 @@
-// ============================================================
-// SSCSS — ServicesHero Component
-// Page-level hero for the Services Hub page.
-// Content-driven: title, subtitle from content layer.
-// H1 heading for semantic hierarchy.
-// Uses staggerContainer, fadeUp animations.
-// Background: bg-muted for visual separation from the page.
-// No CTAs — this is a hub overview hero.
-// ============================================================
-
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
+import { ROUTES } from "@/lib/routes";
 import {
   staggerContainer,
   fadeUp,
   viewportOptions,
 } from "@/lib/motion";
 
-// ─── Props ────────────────────────────────────────────────────
 interface ServicesHeroProps {
   title: string;
   subtitle: string;
   className?: string;
 }
 
-// ─── ServicesHero ─────────────────────────────────────────────
 export default function ServicesHero({
   title,
   subtitle,
@@ -33,46 +24,97 @@ export default function ServicesHero({
   return (
     <section
       className={cn(
-        "relative bg-muted",
+        "relative overflow-hidden bg-[#10100f] text-[#f5f1e8]",
         className,
       )}
-      aria-label="Services Hub"
+      aria-labelledby="services-hero-title"
     >
-      <div className="section-container section-padding">
+      <div className="section-container py-20 sm:py-24 lg:py-28">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={viewportOptions}
-          className="mx-auto max-w-4xl text-center"
+          className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-end lg:gap-20"
         >
-{/* Page Title — Apple-style mask reveal */}
-          <HeadlineReveal
-            as="h1"
-            delay={0.1}
-            className={cn(
-              "font-heading text-4xl font-semibold leading-tight tracking-tight",
-              "sm:text-5xl lg:text-6xl",
-              "text-ink",
-            )}
-          >
-            {title}
-          </HeadlineReveal>
+          <div>
+            <motion.p
+              variants={fadeUp}
+              className="text-xs font-semibold uppercase tracking-[0.16em] text-[#c45a52]"
+            >
+              Security • Manpower • Facility Support
+            </motion.p>
 
-          {/* Subtitle */}
-          <motion.p
+            <HeadlineReveal
+              as="h1"
+              delay={0.12}
+              className="mt-4 max-w-3xl font-heading text-5xl font-semibold leading-[1] tracking-[-0.045em] text-[#f5f1e8] sm:text-6xl lg:text-[4.5rem]"
+            >
+              {title}
+            </HeadlineReveal>
+
+            <motion.div
+              variants={fadeUp}
+              className="mt-8 flex flex-col gap-3 sm:flex-row"
+            >
+              <Link
+                to={`${ROUTES.contact}#contact-form`}
+                data-analytics-cta="services_hero_contact"
+                className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#b52b22] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#8f1912]"
+              >
+                Discuss your requirement
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Link>
+
+              <Link
+                to={`${ROUTES.services}#service-groups`}
+                className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#3a3835] px-5 text-sm font-semibold text-[#f5f1e8] transition-colors hover:border-[#b52b22] hover:text-white"
+              >
+                Explore services
+              </Link>
+            </motion.div>
+          </div>
+
+          <motion.div
             variants={fadeUp}
-            className={cn(
-              "mx-auto mt-5 max-w-3xl text-base leading-relaxed",
-              "sm:text-lg",
-              "text-muted-foreground",
-            )}
+            className="border-l-2 border-[#b52b22] pl-6 sm:pl-8"
           >
-            {subtitle}
-          </motion.p>
+            <p className="max-w-2xl text-base leading-7 text-[#b4aea5] sm:text-lg">
+              {subtitle}
+            </p>
+
+            <div className="mt-8 grid gap-6 border-t border-[#2b2927] pt-6 sm:grid-cols-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                  Security
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[#ded8cf]">
+                  Guards, corporate, industrial, residential and event
+                  security.
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                  Manpower
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[#ded8cf]">
+                  Skilled, unskilled and corporate staffing support.
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                  Facility
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[#ded8cf]">
+                  Housekeeping and front-office management.
+                </p>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
   );
 }
-

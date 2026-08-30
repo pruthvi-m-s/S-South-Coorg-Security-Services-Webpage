@@ -1,393 +1,184 @@
-import { useLayoutEffect, useRef, useState } from "react";
-import { animate } from "animejs";
-import { ArrowUpRight, MapPin, ShieldCheck } from "lucide-react";
+import { createElement, useMemo, useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { getIcon } from "@/lib/icons";
-import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
+import { servicePath } from "@/lib/routes";
+import { getServiceBySlug } from "@/content/services";
 import type { Industry } from "@/types";
 
-function EnvironmentBrief({ industry }: { industry: Industry }) {
-  const Icon = getIcon(industry.icon);
-
-  return (
-    <div className="rounded-xl border border-white/10 bg-card p-5 text-slate-200">
-      <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.13em] text-slate-400">
-        <span>Environment brief</span>
-        <span className="text-emerald-300">Configured</span>
-      </div>
-
-      <div className="mt-5 grid gap-4 sm:grid-cols-[1.15fr_0.85fr]">
-        <div className="relative min-h-44 overflow-hidden rounded-lg border border-white/10 bg-white/[0.03] p-4">
-          <Icon
-            className="absolute right-4 top-4 size-8 text-primary/80"
-            aria-hidden="true"
-          />
-
-          <svg
-            className="absolute inset-0 size-full"
-            viewBox="0 0 320 160"
-            aria-hidden="true"
-          >
-            <path
-              d="M30 120H118V43H250V120H290"
-              fill="none"
-              stroke="currentColor"
-              className="text-slate-600"
-              strokeWidth="1"
-            />
-
-            <path
-              d="M54 126C85 80 115 130 151 93S220 66 272 37"
-              fill="none"
-              stroke="currentColor"
-              className="text-primary"
-              strokeWidth="2"
-            />
-
-            <circle
-              cx="54"
-              cy="126"
-              r="4"
-              className="fill-emerald-300"
-            />
-
-            <circle
-              cx="272"
-              cy="37"
-              r="4"
-              className="fill-primary"
-            />
-          </svg>
-
-          <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 text-xs text-slate-300">
-            <MapPin className="size-3.5 text-primary" />
-            Site coverage
-          </span>
-        </div>
-
-        <div className="space-y-3">
-          <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3 text-xs text-slate-300">
-            <ShieldCheck className="mb-2 size-4 text-emerald-300" />
-            Access &amp; perimeter
-            <br />
-            <span className="text-white">Monitored</span>
-          </div>
-
-          <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3 text-xs text-slate-300">
-            Deployment model
-
-            <div className="mt-2 flex gap-1">
-              {[0, 1, 2, 3].map((item) => (
-                <span
-                  key={item}
-                  className="h-1.5 flex-1 rounded-full bg-primary/80"
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/*
- * Each industry gets its own appropriate visual.
- * These paths are relative to /public.
- */
-function imageForIndustry(slug: string) {
-  const images: Record<string, string> = {
-    "apartment-associations": "/images/services/reception-front.png",
-    "factories": "/images/services/factories.png",
-    "warehouses": "/images/services/warehouse.png",
-    "it-companies": "/images/services/tech-park.png",
-    "corporate-offices": "/images/services/corporate-offices.png",
-    "hospitals": "/images/services/hospitals.png",
-    "schools": "/images/services/schools.png",
-    "hotels": "/images/services/entrance-dark.png",
-    "commercial-buildings": "/images/services/commercial-buildings.png",
-    "business-parks": "/images/services/tech-park.png",
-    "construction-sites": "/images/services/construction-sites.png",
-    "government-institutions": "/images/services/gate-security.png",
-  };
-
-  return images[slug] ?? "/images/services/office-front.png";
+interface IndustryExplorerProps {
+  industries: Industry[];
+  className?: string;
 }
 
 export default function IndustryExplorer({
   industries,
-}: {
-  industries: Industry[];
-}) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  className,
+}: IndustryExplorerProps) {
+  const [activeSlug, setActiveSlug] = useState(
+    industries[0]?.slug ?? "",
+  );
 
-  const [visual, setVisual] = useState({
-    current: industries[0],
-    previous: undefined as Industry | undefined,
-  });
+  const activeIndustry = useMemo(
+    () =>
+      industries.find(
+        (industry) => industry.slug === activeSlug,
+      ) ?? industries[0],
+    [industries, activeSlug],
+  );
 
-  const wheelRef = useRef<HTMLDivElement>(null);
-  const currentRef = useRef<HTMLDivElement>(null);
-  const previousRef = useRef<HTMLDivElement>(null);
+  const activeServices = useMemo(() => {
+    if (!activeIndustry) return [];
 
-  const selected = industries[selectedIndex] ?? industries[0];
+    return activeIndustry.relevantServiceSlugs
+      .map((slug) => getServiceBySlug(slug))
+      .filter(
+        (
+          service,
+        ): service is NonNullable<
+          ReturnType<typeof getServiceBySlug>
+        > => Boolean(service),
+      )
+      .slice(0, 4);
+  }, [activeIndustry]);
 
-  /*
-   * Change the active industry.
-   * Used by hover, click and keyboard focus.
-   */
-  const choose = (index: number) => {
-    if (index === selectedIndex) return;
-
-    setSelectedIndex(index);
-
-    setVisual((state) => ({
-      previous: state.current,
-      current: industries[index],
-    }));
-  };
-
-  /*
-   * Rotate the industry wheel when selection changes.
-   */
-  useLayoutEffect(() => {
-    const wheel = wheelRef.current;
-
-    if (
-      !wheel ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return;
-    }
-
-    const rotation = animate(wheel, {
-      rotate: -selectedIndex * (360 / industries.length),
-      duration: 520,
-      ease: "out(4)",
-    });
-
-    return () => {
-      rotation.revert();
-    };
-  }, [industries.length, selectedIndex]);
-
-  /*
-   * Animate the image transition.
-   */
-  useLayoutEffect(() => {
-    const current = currentRef.current;
-    const previous = previousRef.current;
-
-    if (
-      !current ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return;
-    }
-
-    const animations = [
-      animate(current, {
-        opacity: [0, 1],
-        scale: [1.03, 1],
-        duration: 420,
-        ease: "out(4)",
-      }),
-
-      ...(previous
-        ? [
-            animate(previous, {
-              opacity: [1, 0],
-              duration: 300,
-              ease: "out(4)",
-            }),
-          ]
-        : []),
-    ];
-
-    return () => {
-      animations.forEach((item) => item.revert());
-    };
-  }, [visual.current.slug]);
-
-  if (!selected) return null;
+  if (!activeIndustry) return null;
 
   return (
     <section
-      className="bg-background"
+      className={cn(
+        "bg-[#10100f] text-[#f5f1e8]",
+        className,
+      )}
       aria-labelledby="industry-explorer-title"
     >
       <div className="section-container section-padding">
-
-        {/* Section heading */}
-        <div className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
-            Where we operate
-          </p>
-
-          <h2
-            id="industry-explorer-title"
-            className="mt-3 font-heading text-3xl font-semibold tracking-tight text-ink sm:text-4xl"
-          >
-            Security shaped around the environment.
-          </h2>
-        </div>
-
-        {/* Main industry explorer */}
-        <div className="mt-10 grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-
-          {/* =========================
-              INDUSTRY WHEEL
-              ========================= */}
-          <div className="relative mx-auto hidden aspect-square w-full max-w-md lg:block">
-
-            <div
-              ref={wheelRef}
-              className="absolute inset-8 rounded-full border border-border"
-            >
-              <div className="absolute inset-5 rounded-full border border-border/70" />
-            </div>
-
-            {industries.map((industry, index) => {
-              const angle =
-                (index / industries.length) * 360 - 90;
-
-              const active = index === selectedIndex;
-
-              return (
-                <button
-                  key={industry.slug}
-                  type="button"
-
-                  /*
-                   * HOVER = change image immediately
-                   */
-                  onMouseEnter={() => choose(index)}
-
-                  /*
-                   * CLICK = still works
-                   */
-                  onClick={() => choose(index)}
-
-                  /*
-                   * KEYBOARD = still works
-                   */
-                  onFocus={() => choose(index)}
-
-                  className={cn(
-                    "absolute left-1/2 top-1/2 z-10 -ml-12 -mt-5 w-24 rounded-md px-2 py-1.5 text-xs font-medium transition-colors",
-                    "focus-visible:outline-2 focus-visible:outline-primary",
-
-                    active
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-background text-muted-foreground hover:text-ink",
-                  )}
-                  style={{
-                    transform: `rotate(${angle}deg) translateX(11.3rem) rotate(${-angle}deg)`,
-                  }}
-                >
-                  {industry.name}
-                </button>
-              );
-            })}
-
-            {/* Center */}
-            <div className="absolute inset-[31%] grid place-items-center rounded-full border border-primary/30 bg-muted">
-              <span className="text-center text-xs font-semibold text-primary">
-                Select
-                <br />
-                environment
-              </span>
-            </div>
-          </div>
-
-          {/* =========================
-              IMAGE + DESCRIPTION
-              ========================= */}
+        <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
           <div>
-
-            <div className="relative min-h-64 overflow-hidden rounded-xl border border-border bg-muted">
-
-              {/* Previous image */}
-              <div
-                ref={previousRef}
-                className="absolute inset-0"
-              >
-                {visual.previous && (
-                  <ImageWithSkeleton
-                    src={imageForIndustry(visual.previous.slug)}
-                    alt=""
-                    aria-hidden="true"
-                    containerClassName="size-full"
-                    className="size-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                    fetchPriority="low"
-                  />
-                )}
-              </div>
-
-              {/* Current image */}
-              <div
-                ref={currentRef}
-                className="absolute inset-0"
-              >
-                <ImageWithSkeleton
-                  src={imageForIndustry(visual.current.slug)}
-                  alt={`${selected.name} security environment`}
-                  containerClassName="size-full"
-                  className="size-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                  fetchPriority="low"
-                />
-              </div>
-            </div>
-
-            <h3 className="mt-6 font-heading text-2xl font-semibold text-ink">
-              {selected.name}
-            </h3>
-
-            <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
-              {selected.description}
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]">
+              Where we work
             </p>
 
-            <Link
-              to="/services"
-              className="mt-5 inline-flex min-h-11 items-center gap-1.5 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            <h2
+              id="industry-explorer-title"
+              className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
             >
-              View services
-              <ArrowUpRight className="size-4" />
-            </Link>
+              Security and manpower for the environments you operate in.
+            </h2>
+
+            <p className="mt-5 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base">
+              Select an industry to see the type of requirements SSCSS
+              can support and the services commonly associated with it.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-2">
+              {industries.map((industry, index) => {
+                const active =
+                  industry.slug === activeIndustry.slug;
+
+                return (
+                  <button
+                    key={industry.slug}
+                    type="button"
+                    onClick={() => setActiveSlug(industry.slug)}
+                    onMouseEnter={() => setActiveSlug(industry.slug)}
+                    className={cn(
+                      "inline-flex items-center gap-2 border px-3 py-2 text-left text-xs font-semibold transition-all duration-200",
+                      active
+                        ? "border-[#b52b22] bg-[#b52b22] text-white"
+                        : "border-[#3a3835] bg-transparent text-[#a7a19a] hover:border-[#77716a] hover:text-[#f5f1e8]",
+                    )}
+                    aria-pressed={active}
+                  >
+                    <span className="opacity-60">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    {industry.name}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
-        {/* =========================
-            MOBILE INDUSTRY SELECTOR
-            ========================= */}
-        <div className="mt-8 grid gap-2 sm:grid-cols-2 lg:hidden">
-          {industries.map((industry, index) => (
-            <button
-              key={industry.slug}
-              type="button"
-              onClick={() => choose(index)}
-              className={cn(
-                "min-h-11 rounded-md border px-3 text-left text-sm font-medium",
-                "focus-visible:outline-2 focus-visible:outline-primary",
+          <div className="border border-[#2b2927] bg-[#191918]">
+            <div className="border-b border-[#2b2927] p-6 sm:p-8">
+              <div className="flex items-start gap-4">
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-full border border-[#b52b22]/25 bg-[#3a211f] text-[#c45a52]">
+                  {createElement(getIcon(activeIndustry.icon), {
+                    size: 22,
+                    strokeWidth: 1.5,
+                    "aria-hidden": true,
+                  })}
+                </span>
 
-                index === selectedIndex
-                  ? "border-primary bg-primary-50 text-primary"
-                  : "border-border text-muted-foreground",
-              )}
-            >
-              {industry.name}
-            </button>
-          ))}
-        </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]">
+                    Selected environment
+                  </p>
 
-        {/* Environment brief */}
-        <div className="mt-10">
-          <EnvironmentBrief industry={selected} />
+                  <h3 className="mt-2 font-heading text-3xl font-semibold tracking-tight text-[#f5f1e8]">
+                    {activeIndustry.name}
+                  </h3>
+                </div>
+              </div>
+
+              <p className="mt-6 max-w-2xl text-base leading-7 text-[#b4aea5]">
+                {activeIndustry.description}
+              </p>
+            </div>
+
+            <div className="p-6 sm:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                Relevant services
+              </p>
+
+              <div className="mt-4 border-t border-[#2b2927]">
+                {activeServices.map((service) => (
+                  <Link
+                    key={service.slug}
+                    to={servicePath(service.slug)}
+                    className="group flex items-center gap-4 border-b border-[#2b2927] py-4 transition-colors hover:text-white"
+                  >
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-[#3a3835] bg-[#10100f] text-[#c45a52]">
+                      {createElement(getIcon(service.icon), {
+                        size: 16,
+                        strokeWidth: 1.5,
+                        "aria-hidden": true,
+                      })}
+                    </span>
+
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-semibold text-[#ded8cf] group-hover:text-white">
+                        {service.name}
+                      </span>
+
+                      <span className="mt-1 block text-xs leading-5 text-[#77716a]">
+                        {service.shortTagline}
+                      </span>
+                    </span>
+
+                    <ArrowRight
+                      className="size-4 shrink-0 text-[#77716a] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#c45a52]"
+                      aria-hidden="true"
+                    />
+                  </Link>
+                ))}
+              </div>
+
+              <Link
+                to="/services"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#c45a52] hover:text-white"
+              >
+                Explore all services
+                <ArrowRight
+                  className="size-4"
+                  aria-hidden="true"
+                />
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -1,18 +1,6 @@
-// ============================================================
-// SSCSS — ContactInfo Section Component
-// Displays contact details (phone, email, address, WhatsApp,
-// emergency contact, service regions, office notes) from the
-// content layer.
-//
-// Future-proof: supports any combination of fields.
-// Items are rendered dynamically from an array — add new
-// item types to CONTACT_PAGE.contactInfo.items to extend.
-// ============================================================
-
 import { createElement } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
 import { getIcon } from "@/lib/icons";
 import {
   staggerContainer,
@@ -21,14 +9,10 @@ import {
 } from "@/lib/motion";
 import type { ContactPageContent } from "@/content/contact-page";
 
-// ─── Props ──────────────────────────────────────────────────
-
 interface ContactInfoProps {
   content: ContactPageContent["contactInfo"];
   className?: string;
 }
-
-// ─── ContactInfo ────────────────────────────────────────────
 
 export default function ContactInfo({
   content,
@@ -41,7 +25,7 @@ export default function ContactInfo({
   return (
     <section
       className={cn(
-        "relative bg-background",
+        "bg-[#191918] text-[#f5f1e8]",
         className,
       )}
       aria-label="Contact Information"
@@ -53,118 +37,110 @@ export default function ContactInfo({
           whileInView="visible"
           viewport={viewportOptions}
         >
-          {/* Section Heading */}
-          <motion.h2
-            variants={fadeUp}
-            className={cn(
-              "font-heading text-3xl font-semibold leading-tight tracking-tight",
-              "sm:text-4xl",
-              "text-ink text-center",
-            )}
-          >
-            {title}
-          </motion.h2>
+          <div className="grid gap-8 lg:grid-cols-[0.65fr_1.35fr] lg:gap-20">
+            <div>
+              <motion.p
+                variants={fadeUp}
+                className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
+              >
+                Contact SSCSS
+              </motion.p>
 
-          {/* Section Subtitle */}
-          {subtitle && (
-            <motion.p
-              variants={fadeUp}
-              className={cn(
-                "mx-auto mt-4 max-w-2xl text-center text-base leading-relaxed",
-                "sm:text-lg",
-                "text-muted-foreground",
-              )}
-            >
-              {subtitle}
-            </motion.p>
-          )}
+              <motion.h2
+                variants={fadeUp}
+                className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
+              >
+                {title}
+              </motion.h2>
 
-          {/* Contact Items Grid */}
-          <motion.div
-            variants={fadeUp}
-            className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-          >
-            {items.map((item, index) => {
-              const IconComponent = getIcon(item.icon);
-              const isLink = Boolean(item.href);
-
-              const cardContent = (
-                <Card
-                  key={`contact-${index}`}
-                  className={cn(
-                    "flex items-start gap-4 p-6 sm:p-8",
-                    "border border-border bg-card",
-                    "transition-all duration-300 ease-premium-out",
-                    isLink && "hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md",
-                    isLink && "focus-within:border-primary/30 focus-within:shadow-[0_0_0_4px_rgba(139,30,30,0.12)]",
-                  )}
+              {subtitle && (
+                <motion.p
+                  variants={fadeUp}
+                  className="mt-5 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base"
                 >
-                  {/* Icon */}
-                  <div
-                    className={cn(
-                      "flex size-12 shrink-0 items-center justify-center rounded-full",
-                      "bg-primary-50 text-primary",
-                    )}
-                    aria-hidden="true"
-                  >
-                    {createElement(IconComponent, {
-                      size: 22,
-                      strokeWidth: 1.5,
-                    })}
-                  </div>
+                  {subtitle}
+                </motion.p>
+              )}
+            </div>
 
-                  {/* Content */}
-                  <div className="min-w-0">
-                    <h3
-                      className={cn(
-                        "font-heading text-sm font-semibold tracking-tight",
-                        "text-muted-foreground",
+            <motion.div
+              variants={fadeUp}
+              className="grid gap-px border border-[#2b2927] bg-[#2b2927] sm:grid-cols-2"
+            >
+              {items.map((item, index) => {
+                const IconComponent = getIcon(item.icon);
+                const isLink = Boolean(item.href);
+
+                const card = (
+                  <div className="group h-full bg-[#10100f] p-6 transition-colors duration-300 hover:bg-[#151514] sm:p-7">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex size-11 items-center justify-center rounded-full border border-[#b52b22]/25 bg-[#3a211f] text-[#c45a52]">
+                        {createElement(
+                          IconComponent,
+                          {
+                            size: 20,
+                            strokeWidth: 1.5,
+                            "aria-hidden": true,
+                          },
+                        )}
+                      </div>
+
+                      {isLink && (
+                        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[#77716a] transition-colors group-hover:text-[#c45a52]">
+                          Open
+                        </span>
                       )}
-                    >
+                    </div>
+
+                    <h3 className="mt-7 font-heading text-lg font-semibold tracking-tight text-[#ded8cf]">
                       {item.label}
                     </h3>
-                    <p
-                      className={cn(
-                        "mt-1 text-base leading-relaxed",
-                        "text-ink break-words",
-                      )}
-                    >
+
+                    <p className="mt-2 break-words text-sm leading-6 text-[#99938c]">
                       {item.value}
                     </p>
                   </div>
-                </Card>
-              );
-
-              // If href exists, wrap in anchor
-              if (isLink && item.href) {
-                const isPhoneLink = item.href.startsWith("tel:");
-                const isWhatsAppLink = item.href.startsWith("https://wa.me");
-                return (
-                  <a
-                    key={`contact-${index}`}
-                    href={item.href}
-                    data-analytics-component={
-                      isPhoneLink
-                        ? "contact_info_phone"
-                        : isWhatsAppLink
-                          ? "contact_info_whatsapp"
-                          : undefined
-                    }
-                    className="group block no-underline"
-                    aria-label={`${item.label}: ${item.value}`}
-                    title={isLink ? `${item.label}: ${item.value}` : undefined}
-                  >
-                    {cardContent}
-                  </a>
                 );
-              }
 
-              return cardContent;
-            })}
-          </motion.div>
+                if (isLink && item.href) {
+                  const isPhoneLink =
+                    item.href.startsWith("tel:");
+                  const isWhatsAppLink =
+                    item.href.startsWith(
+                      "https://wa.me",
+                    );
+
+                  return (
+                    <a
+                      key={`contact-${index}`}
+                      href={item.href}
+                      data-analytics-component={
+                        isPhoneLink
+                          ? "contact_info_phone"
+                          : isWhatsAppLink
+                            ? "contact_info_whatsapp"
+                            : undefined
+                      }
+                      className="block no-underline"
+                      aria-label={`${item.label}: ${item.value}`}
+                    >
+                      {card}
+                    </a>
+                  );
+                }
+
+                return (
+                  <div
+                    key={`contact-${index}`}
+                  >
+                    {card}
+                  </div>
+                );
+              })}
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>
   );
 }
-

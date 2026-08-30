@@ -1,15 +1,18 @@
 // ============================================================
 // SSCSS — Contact Form Validation
-// Validation rules for the inquiry form.
-// Pure functions — no UI dependencies.
-// Replace with Zod or any validation library later if needed.
 // ============================================================
 
 const MAX_TEXT_LENGTH = 200;
 const MAX_MESSAGE_LENGTH = 2000;
+
+// eslint-disable-next-line no-control-regex
 const CONTROL_CHAR_PATTERN = /[\u0000-\u001F\u007F]/;
-const HTML_TAG_PATTERN = /<\/?(?:a|abbr|acronym|b|blockquote|br|code|div|em|form|h1|h2|h3|h4|h5|h6|hr|i|img|li|ol|p|pre|script|span|strong|table|tbody|td|th|tr|ul)\b[^>]*>/i;
-const SCRIPT_PATTERN = /(?:<\s*script|javascript:|on\w+\s*=)/i;
+
+const HTML_TAG_PATTERN =
+  /<\/?(?:a|abbr|acronym|b|blockquote|br|code|div|em|form|h1|h2|h3|h4|h5|h6|hr|i|img|li|ol|p|pre|script|span|strong|table|tbody|td|th|tr|ul)\b[^>]*>/i;
+
+const SCRIPT_PATTERN =
+  /(?:<\s*script|javascript:|on\w+\s*=)/i;
 
 // ─── Types ──────────────────────────────────────────────────
 
@@ -61,20 +64,31 @@ function containsUnsupportedCharacters(value: string): boolean {
 }
 
 function containsUnsafeContent(value: string): boolean {
-  return HTML_TAG_PATTERN.test(value) || SCRIPT_PATTERN.test(value);
+  return (
+    HTML_TAG_PATTERN.test(value) ||
+    SCRIPT_PATTERN.test(value)
+  );
 }
 
-/** Validate Indian phone number (10 digits, optionally prefixed with +91) */
+/**
+ * Validate Indian phone number.
+ *
+ * Accepts:
+ * - 10-digit Indian mobile number
+ * - +91 followed by 10 digits
+ */
 function isValidIndianPhone(phone: string): boolean {
   const cleaned = phone.replace(/[\s\-()]/g, "");
-  // Accept +91 followed by 10 digits, or just 10 digits
-  const pattern = /^(\+91)?[6-9]\d{9}$/;
+
+  const pattern = /^(?:\+91)?[6-9]\d{9}$/;
+
   return pattern.test(cleaned);
 }
 
 /** Validate email format */
 function isValidEmail(email: string): boolean {
   const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   return pattern.test(email.trim());
 }
 
@@ -86,54 +100,76 @@ export function validateContactForm(
   const errors: ContactFormErrors = {};
 
   const name = normalizeText(data.name);
+
   if (!name) {
     errors.name = VALIDATION_MESSAGES.nameRequired;
   } else if (name.length < 2) {
     errors.name = VALIDATION_MESSAGES.nameTooShort;
   } else if (name.length > MAX_TEXT_LENGTH) {
     errors.name = VALIDATION_MESSAGES.nameTooLong;
-  } else if (containsUnsupportedCharacters(name) || containsUnsafeContent(name)) {
+  } else if (
+    containsUnsupportedCharacters(name) ||
+    containsUnsafeContent(name)
+  ) {
     errors.name = VALIDATION_MESSAGES.invalidContent;
   }
 
   const company = normalizeText(data.company);
+
   if (company && company.length > MAX_TEXT_LENGTH) {
     errors.company = VALIDATION_MESSAGES.companyTooLong;
-  } else if (company && (containsUnsupportedCharacters(company) || containsUnsafeContent(company))) {
+  } else if (
+    company &&
+    (containsUnsupportedCharacters(company) ||
+      containsUnsafeContent(company))
+  ) {
     errors.company = VALIDATION_MESSAGES.invalidContent;
   }
 
   const phone = normalizeText(data.phone);
+
   if (!phone) {
     errors.phone = VALIDATION_MESSAGES.phoneRequired;
-  } else if (containsUnsupportedCharacters(phone) || containsUnsafeContent(phone)) {
+  } else if (
+    containsUnsupportedCharacters(phone) ||
+    containsUnsafeContent(phone)
+  ) {
     errors.phone = VALIDATION_MESSAGES.invalidContent;
   } else if (!isValidIndianPhone(phone)) {
     errors.phone = VALIDATION_MESSAGES.phoneInvalid;
   }
 
   const email = normalizeText(data.email).toLowerCase();
+
   if (!email) {
     errors.email = VALIDATION_MESSAGES.emailRequired;
-  } else if (containsUnsupportedCharacters(email) || containsUnsafeContent(email)) {
+  } else if (
+    containsUnsupportedCharacters(email) ||
+    containsUnsafeContent(email)
+  ) {
     errors.email = VALIDATION_MESSAGES.invalidContent;
   } else if (!isValidEmail(email)) {
     errors.email = VALIDATION_MESSAGES.emailInvalid;
   }
 
   const service = normalizeText(data.service);
+
   if (!service) {
     errors.service = VALIDATION_MESSAGES.serviceRequired;
   }
 
   const message = normalizeText(data.message);
+
   if (!message) {
     errors.message = VALIDATION_MESSAGES.messageRequired;
   } else if (message.length < 10) {
     errors.message = VALIDATION_MESSAGES.messageTooShort;
   } else if (message.length > MAX_MESSAGE_LENGTH) {
     errors.message = VALIDATION_MESSAGES.messageTooLong;
-  } else if (containsUnsupportedCharacters(message) || containsUnsafeContent(message)) {
+  } else if (
+    containsUnsupportedCharacters(message) ||
+    containsUnsafeContent(message)
+  ) {
     errors.message = VALIDATION_MESSAGES.invalidContent;
   }
 
@@ -141,7 +177,10 @@ export function validateContactForm(
 }
 
 /** Check if errors object has any errors */
-export function hasErrors(errors: ContactFormErrors): boolean {
-  return Object.values(errors).some((error) => error !== undefined);
+export function hasErrors(
+  errors: ContactFormErrors,
+): boolean {
+  return Object.values(errors).some(
+    (error) => error !== undefined,
+  );
 }
-

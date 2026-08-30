@@ -1,60 +1,70 @@
-// ============================================================
-// SSCSS — StatsGrid Component
-// Displays a responsive grid of StatCards.
-// Content-driven — all data from the content layer.
-// Reusable across pages (Home, About, etc.).
-// ============================================================
-
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import StatCard from "@/components/sections/StatCard";
-import {
-  staggerContainer,
-  viewportOptions,
-} from "@/lib/motion";
 import type { Stat } from "@/types";
 
-// ─── Props ────────────────────────────────────────────────────
 interface StatsGridProps {
   stats: Stat[];
-  className?: string;
-  /** Number of columns on desktop (default: based on content count) */
   columns?: 2 | 3 | 4;
+  className?: string;
 }
 
-// ─── StatsGrid ────────────────────────────────────────────────
 export default function StatsGrid({
   stats,
+  columns = 3,
   className,
-  columns,
 }: StatsGridProps) {
   if (stats.length === 0) return null;
 
-  // Determine column count based on content or explicit prop
-  const gridCols = columns ?? (stats.length === 2 ? 2 : stats.length === 3 ? 3 : 4);
-
-  const gridClass = {
-    2: "sm:grid-cols-2",
-    3: "sm:grid-cols-2 lg:grid-cols-3",
-    4: "sm:grid-cols-2 lg:grid-cols-4",
-  }[gridCols];
+  const columnClass =
+    columns === 4
+      ? "lg:grid-cols-4"
+      : columns === 2
+        ? "lg:grid-cols-2"
+        : "lg:grid-cols-3";
 
   return (
     <motion.div
-      variants={staggerContainer}
       initial="hidden"
       whileInView="visible"
-      viewport={viewportOptions}
+      viewport={{ once: true, amount: 0.15 }}
       className={cn(
-        "grid grid-cols-1 gap-6",
-        gridClass,
+        "grid grid-cols-1 sm:grid-cols-2",
+        columnClass,
         className,
       )}
     >
-      {stats.map((stat) => (
-        <StatCard key={stat.id} stat={stat} />
+      {stats.map((stat, index) => (
+        <motion.div
+          key={stat.id}
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.45,
+            delay: index * 0.08,
+          }}
+          className={cn(
+            "border-b border-[#2b2927] px-0 py-7 sm:px-6",
+            "lg:border-b-0 lg:border-r lg:px-8",
+            index === 0 && "sm:pl-0 lg:pl-0",
+            index === stats.length - 1 &&
+              "lg:border-r-0 lg:pr-0",
+          )}
+        >
+          <p className="font-heading text-5xl font-semibold leading-none tracking-tight text-[#f5f1e8] sm:text-6xl">
+            {stat.value}
+            <span className="text-[#b52b22]">+</span>
+          </p>
+
+          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]">
+            {stat.label}
+          </p>
+
+          <p className="mt-2 text-sm leading-6 text-[#77716a]">
+            {stat.suffix.replace("+", "").trim()}
+          </p>
+        </motion.div>
       ))}
     </motion.div>
   );
 }
-

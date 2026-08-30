@@ -12,7 +12,7 @@ export const HERO: HeroContent = {
   eyebrow: "S South Coorg Security Services",
   headline: "Trusted Security & Manpower Solutions Across Bengaluru",
   description:
-    "With 15+ years of experience, 100+ trained personnel, and 50+ satisfied clients, SSCSS delivers enterprise-grade security and staffing services tailored to your needs. Reliable. Professional. Disciplined.",
+    "With 18+ years of company operations, 100+ trained personnel, and 50+ clients, SSCSS delivers enterprise-grade security and staffing services tailored to your needs. Reliable. Professional. Disciplined.",
   primaryCta: {
     label: "Get a Quote",
     href: ROUTES.contact,

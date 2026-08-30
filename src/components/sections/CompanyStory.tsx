@@ -3,7 +3,10 @@ import { animate, stagger } from "animejs";
 import { cn } from "@/lib/utils";
 import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
 import HeroSkeleton from "@/components/common/HeroSkeleton";
-import type { CompanyHistoryEntry, ImageRef } from "@/types";
+import type {
+  CompanyHistoryEntry,
+  ImageRef,
+} from "@/types";
 
 interface CompanyStoryProps {
   title: string;
@@ -22,15 +25,34 @@ export default function CompanyStory({
   videoSrc,
   className,
 }: CompanyStoryProps) {
-  const [videoUnavailable, setVideoUnavailable] = useState(!videoSrc);
+  const [videoUnavailable, setVideoUnavailable] =
+    useState(!videoSrc);
+
   const storyRef = useRef<HTMLElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
   const history = useMemo(() => {
-    return [entries[0], entries[1], entries[2], entries.at(-1)].filter(Boolean) as CompanyHistoryEntry[];
+    const selected: CompanyHistoryEntry[] = [];
+
+    for (const entry of [
+      entries[0],
+      entries[1],
+      entries[2],
+      entries.at(-1),
+    ]) {
+      if (
+        entry &&
+        !selected.some(
+          (item) => item.year === entry.year,
+        )
+      ) {
+        selected.push(entry);
+      }
+    }
+
+    return selected;
   }, [entries]);
 
   useEffect(() => {
@@ -44,142 +66,156 @@ export default function CompanyStory({
           observer.disconnect();
         }
       },
-      { threshold: 0.18 },
+      { threshold: 0.15 },
     );
 
     observer.observe(node);
+
     return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
-    if (!visible || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (
+      !visible ||
+      window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches
+    ) {
       return;
     }
 
-    const items = timelineRef.current ? Array.from(timelineRef.current.children) : [];
-    const timeline = items.length
-      ? animate(items, {
+    const timelineItems = timelineRef.current
+      ? Array.from(timelineRef.current.children)
+      : [];
+
+    const timeline = timelineItems.length
+      ? animate(timelineItems, {
           opacity: [0, 1],
           translateY: [12, 0],
-          delay: stagger(130),
-          duration: 420,
+          delay: stagger(110),
+          duration: 450,
           ease: "out(4)",
         })
       : undefined;
-    const line = lineRef.current
-      ? animate(lineRef.current, {
-          width: ["0%", "100%"],
-          duration: 900,
+
+    const media = mediaRef.current
+      ? animate(mediaRef.current, {
+          opacity: [0, 1],
+          scale: [1.025, 1],
+          duration: 700,
           ease: "out(4)",
         })
       : undefined;
 
     return () => {
       timeline?.revert();
-      line?.revert();
+      media?.revert();
     };
   }, [visible]);
-
-  useEffect(() => {
-    const media = mediaRef.current;
-    if (!visible || !media || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
-    const reveal = animate(media, {
-      opacity: [0, 1],
-      scale: [1.025, 1],
-      duration: 750,
-      ease: "out(4)",
-    });
-
-    return () => {
-      reveal.revert();
-    };
-  }, [visible]);
-
-  const storyLead = paragraphs[0] ?? "";
 
   return (
     <section
       ref={storyRef}
-      className={cn("relative overflow-hidden bg-background", className)}
-      aria-labelledby="story-title"
+      className={cn(
+        "bg-[#191918] text-[#f5f1e8]",
+        className,
+      )}
+      aria-labelledby="about-story-title"
     >
       <div className="section-container section-padding">
-        <div className="relative min-h-152 overflow-hidden rounded-[1.75rem] border border-white/10 bg-card shadow-[0_30px_70px_-35px_rgba(0,0,0,0.9)]">
-          <div ref={mediaRef} className="absolute inset-0">
-            {!videoUnavailable && videoSrc ? (
-              <video
-                className="h-full w-full object-cover opacity-75"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                poster={fallbackImage.src}
-                onError={() => setVideoUnavailable(true)}
-              >
-                <source src={videoSrc} />
-              </video>
-            ) : (
-              <ImageWithSkeleton
-                src={fallbackImage.src}
-                alt={fallbackImage.alt}
-                skeleton={<HeroSkeleton className="h-full w-full rounded-none" />}
-                containerClassName="h-full w-full"
-                className="h-full w-full object-cover opacity-60"
-                loading="lazy"
-                decoding="async"
-                fetchPriority="low"
-              />
-            )}
-          </div>
-
-          <div className="absolute inset-0 bg-background/70" aria-hidden="true" />
-          <div
-            className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-background via-background/55 to-transparent"
-            aria-hidden="true"
-          />
-
-          <div className="relative flex min-h-152 flex-col justify-end p-6 text-white sm:p-10 lg:p-14">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+        <div className="grid gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:items-center lg:gap-20">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]">
               Since 2008
             </p>
+
             <h2
-              id="story-title"
-              className="mt-3 max-w-2xl font-heading text-3xl font-semibold tracking-tight sm:text-5xl"
+              id="about-story-title"
+              className="mt-3 max-w-lg font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
             >
               {title}
             </h2>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-              {storyLead}
-            </p>
 
-            <div className="mt-8 flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.12em] text-slate-200/90">
-              <span className="rounded-full border border-white/15 bg-white/5 px-3 py-2 backdrop-blur-[2px]">
-                Built on trust
-              </span>
-              <span className="rounded-full border border-white/15 bg-white/5 px-3 py-2 backdrop-blur-[2px]">
-                15+ years
-              </span>
-              <span className="rounded-full border border-white/15 bg-white/5 px-3 py-2 backdrop-blur-[2px]">
-                100+ guards
-              </span>
+            <div className="mt-7 space-y-5">
+              {paragraphs.map((paragraph, index) => (
+                <p
+                  key={index}
+                  className={cn(
+                    "max-w-xl text-sm leading-7 sm:text-base",
+                    index === 0
+                      ? "text-[#ded8cf]"
+                      : "text-[#9f9991]",
+                  )}
+                >
+                  {paragraph}
+                </p>
+              ))}
             </div>
+          </div>
 
-            <div className="relative mt-10 border-t border-white/20 pt-5">
+          <div>
+            <div className="relative aspect-[4/3] overflow-hidden bg-[#10100f]">
               <div
-                ref={lineRef}
-                className="absolute left-0 -top-px h-px w-0 bg-primary"
+                ref={mediaRef}
+                className="absolute inset-0"
+              >
+                {!videoUnavailable && videoSrc ? (
+                  <video
+                    className="size-full object-cover opacity-80"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    poster={fallbackImage.src}
+                    onError={() =>
+                      setVideoUnavailable(true)
+                    }
+                  >
+                    <source src={videoSrc} />
+                  </video>
+                ) : (
+                  <ImageWithSkeleton
+                    src={fallbackImage.src}
+                    alt={fallbackImage.alt}
+                    skeleton={
+                      <HeroSkeleton className="size-full rounded-none" />
+                    }
+                    containerClassName="size-full"
+                    className="size-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                    fetchPriority="low"
+                  />
+                )}
+              </div>
+
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent"
                 aria-hidden="true"
               />
-              <div ref={timelineRef} className="grid gap-5 sm:grid-cols-4">
+            </div>
+
+            <div className="mt-6 border-t border-[#2b2927] pt-6">
+              <div
+                ref={timelineRef}
+                className="grid gap-6 sm:grid-cols-2"
+              >
                 {history.map((entry) => (
-                  <div key={entry.year} className="opacity-0">
-                    <p className="font-heading text-2xl font-semibold text-white">{entry.year}</p>
-                    <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.12em] text-slate-300">
+                  <div
+                    key={entry.year}
+                    className="opacity-0"
+                  >
+                    <p className="font-heading text-3xl font-semibold text-[#f5f1e8]">
+                      {entry.year}
+                    </p>
+
+                    <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#c45a52]">
                       {entry.title}
+                    </p>
+
+                    <p className="mt-2 text-sm leading-6 text-[#77716a]">
+                      {entry.description}
                     </p>
                   </div>
                 ))}
