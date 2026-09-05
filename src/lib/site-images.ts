@@ -1,5 +1,6 @@
 import companyOwner from "../../Images/Company owner.webp";
 import entranceOfficeGuards from "../../Images/Entrance Office Guards.webp";
+import entranceOfficeGuardsMobile from "../../Images/Entrance Office Guards-mobile.webp";
 import gateSecurity from "../../Images/Gate Security.webp";
 import soloGuard from "../../Images/Solo Guard.webp";
 import techParkGuards from "../../Images/Tech park Guards.webp";
@@ -12,6 +13,7 @@ import entranceDark from "../../Images/Entrance dark.webp";
 export {
   companyOwner,
   entranceOfficeGuards,
+  entranceOfficeGuardsMobile,
   gateSecurity,
   soloGuard,
   techParkGuards,
