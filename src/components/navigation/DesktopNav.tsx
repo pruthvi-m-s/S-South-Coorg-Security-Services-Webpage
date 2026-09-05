@@ -296,6 +296,9 @@ function ServiceMegaMenu({
               alt=""
               aria-hidden="true"
               className="absolute inset-0 size-full object-cover opacity-45"
+              loading="lazy"
+              decoding="async"
+              fetchPriority="low"
             />
 
             <div

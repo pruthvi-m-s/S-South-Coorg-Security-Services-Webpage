@@ -158,7 +158,7 @@ heroImage: {
       "Professional security management for corporate offices and IT parks.",
     icon: "Building2",
     heroImage: {
-      src: "/images/services/gate-security.png",
+      src: "/images/services/gate-security.webp",
       alt: "Security personnel deployed at a corporate entrance",
       isPlaceholder: false,
     },
@@ -283,7 +283,7 @@ heroImage: {
       "Robust security solutions for factories, warehouses, and industrial facilities.",
     icon: "Factory",
     heroImage: {
-      src: "/images/services/warehouse.png",
+      src: "/images/services/warehouse.webp",
       alt: "Industrial, warehouse and commercial environments",
       isPlaceholder: false,
     },
@@ -531,7 +531,7 @@ heroImage: {
       "Professional housekeeping and cleaning services for commercial and residential spaces.",
     icon: "Sparkles",
 heroImage: {
-      src: "/images/real/sscss-housekeeping-1.jpg",
+      src: "/images/real/sscss-housekeeping-1.webp",
       alt: "SSCSS professional housekeeping staff at work",
       isPlaceholder: false,
     },
@@ -657,7 +657,7 @@ heroImage: {
       "Professional front desk and reception management for your business.",
     icon: "UserCheck",
     heroImage: {
-      src: "/images/services/front-office-management.png",
+      src: "/images/services/front-office-management.webp",
       alt: "Professional corporate reception and visitor-management environment",
       isPlaceholder: false,
     },
@@ -782,7 +782,7 @@ heroImage: {
       "Qualified skilled workers for your operational and project needs.",
     icon: "Wrench",
     heroImage: {
-      src: "/images/services/skilled-labour.png",
+      src: "/images/services/skilled-labour.webp",
       alt: "Warehouse environment supporting skilled labour operations",
       isPlaceholder: false,
     },
@@ -907,7 +907,7 @@ heroImage: {
       "Reliable general labour support for your operations and projects.",
     icon: "Ham",
     heroImage: {
-      src: "/images/services/unskilled-labour.png",
+      src: "/images/services/unskilled-labour.webp",
       alt: "Warehouse and logistics environment for general labour support",
       isPlaceholder: false,
     },
@@ -1032,7 +1032,7 @@ heroImage: {
       "End-to-end staffing solutions for corporate and administrative roles.",
     icon: "UserPlus",
     heroImage: {
-      src: "/images/services/corporate-staffing.png",
+      src: "/images/services/corporate-staffing.webp",
       alt: "Professional office environment for corporate staffing",
       isPlaceholder: false,
     },
@@ -1156,7 +1156,7 @@ heroImage: {
       "Disciplined, experienced ex-servicemen for premium security needs.",
     icon: "Medal",
 heroImage: {
-      src: "/images/services/ex-army-security-guards.png",
+      src: "/images/services/ex-army-security-guards.webp",
       alt: "Professional security officer stationed at a property",
       isPlaceholder: false,
     },
@@ -1282,7 +1282,7 @@ heroImage: {
       "Comprehensive security management for events, conferences, and gatherings.",
     icon: "CalendarCheck",
 heroImage: {
-      src: "/images/services/event-security.png",
+      src: "/images/services/event-security.webp",
       alt: "Corporate event environment for professional event security",
       isPlaceholder: false,
     },
@@ -1406,7 +1406,7 @@ heroImage: {
       "Thorough background checks for individuals and organizations.",
     icon: "SearchCheck",
     heroImage: {
-      src: "/images/services/background-verification.png",
+      src: "/images/services/background-verification.webp",
       alt: "Professional desk for background verification and due diligence",
       isPlaceholder: false,
     },
@@ -1532,7 +1532,7 @@ heroImage: {
       "Discreet, professional investigative services for individuals and businesses.",
     icon: "Search",
     heroImage: {
-  src: "/images/services/private-detective-services.png",
+  src: "/images/services/private-detective-services.webp",
   alt: "Discreet professional workspace for investigative services",
   isPlaceholder: false,
 },
@@ -1656,7 +1656,7 @@ heroImage: {
       "Complete facility operations management — security, housekeeping, staffing, and more.",
     icon: "Building2",
     heroImage: {
-      src: "/images/services/integrated-facility-management.png",
+      src: "/images/services/integrated-facility-management.webp",
       alt: "Corporate campus environment for integrated facility management",
       isPlaceholder: false,
     },
@@ -1819,7 +1819,7 @@ export const PRIMARY_SERVICE_CATEGORIES: PrimaryServiceCategory[] = [
       "private-detective-services",
     ],
     image: {
-      src: "/images/services/gate-security.png",
+      src: "/images/services/gate-security.webp",
       alt: "Security professional managing controlled access at a gate",
       isPlaceholder: false,
     },
@@ -1830,7 +1830,7 @@ export const PRIMARY_SERVICE_CATEGORIES: PrimaryServiceCategory[] = [
     primarySlug: "housekeeping",
     serviceSlugs: ["housekeeping"],
     image: {
-      src: "/images/services/reception-front.png",
+      src: "/images/services/reception-front.webp",
       alt: "Professional reception environment for property management services",
       isPlaceholder: false,
     },
@@ -1841,7 +1841,7 @@ export const PRIMARY_SERVICE_CATEGORIES: PrimaryServiceCategory[] = [
     primarySlug: "ex-army-security-guards",
     serviceSlugs: ["ex-army-security-guards"],
     image: {
-      src: "/images/services/entrance-dark.png",
+      src: "/images/services/entrance-dark.webp",
       alt: "Controlled VIP entrance environment for executive protection",
       isPlaceholder: false,
     },
@@ -1852,7 +1852,7 @@ export const PRIMARY_SERVICE_CATEGORIES: PrimaryServiceCategory[] = [
     primarySlug: "front-office-management",
     serviceSlugs: ["front-office-management"],
     image: {
-      src: "/images/services/front-office-management.png",
+      src: "/images/services/front-office-management.webp",
       alt: "Professional corporate reception and visitor-management environment",
       isPlaceholder: false,
     },
@@ -1867,7 +1867,7 @@ export const PRIMARY_SERVICE_CATEGORIES: PrimaryServiceCategory[] = [
       "corporate-staffing",
     ],
     image: {
-      src: "/images/services/skilled-labour.png",
+      src: "/images/services/skilled-labour.webp",
       alt: "Warehouse and logistics environment for manpower support",
       isPlaceholder: false,
     },
@@ -1878,7 +1878,7 @@ export const PRIMARY_SERVICE_CATEGORIES: PrimaryServiceCategory[] = [
     primarySlug: "event-security",
     serviceSlugs: ["event-security"],
     image: {
-      src: "/images/services/corporate-event.png",
+      src: "/images/services/corporate-event.webp",
       alt: "Corporate event environment for professional event security",
       isPlaceholder: false,
     },
@@ -1889,7 +1889,7 @@ export const PRIMARY_SERVICE_CATEGORIES: PrimaryServiceCategory[] = [
     primarySlug: "facility-management",
     serviceSlugs: ["facility-management"],
     image: {
-      src: "/images/services/tech-park.png",
+      src: "/images/services/tech-park.webp",
       alt: "Corporate campus environment for integrated facility management",
       isPlaceholder: false,
     },

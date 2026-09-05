@@ -67,10 +67,7 @@ export default function OperationalImageSlider({
 
   return (
     <div
-      className={cn(
-        "relative w-full overflow-hidden",
-        className,
-      )}
+      className={cn("relative w-full overflow-hidden", className)}
       role="region"
       aria-roledescription="carousel"
       aria-label={label}
@@ -106,8 +103,9 @@ export default function OperationalImageSlider({
               style={{
                 objectPosition: slide.position ?? "center",
               }}
-              loading={index < 2 ? "eager" : "lazy"}
+              loading="lazy"
               decoding="async"
+              fetchPriority="low"
             />
           </div>
         ))}

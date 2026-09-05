@@ -1,18 +1,12 @@
 // ============================================================
 // SSCSS — ImageWithSkeleton
 //
-// Single reusable wrapper for every real image that should
-// reserve layout, show a skeleton while loading, and fade in
-// smoothly on load — no flashes, no CLS.
-//
-// Pattern:
-//   Skeleton (reserves layout) → image loads → opacity transition
-//   → skeleton removed.
-//
-// Accessibility:
-//   - The skeleton is `aria-hidden`; the real `<img>` keeps its
-//     `alt`/`aria` semantics (passed through).
-//   - Reduced motion respected via global prefers-reduced-motion.
+// Reusable image wrapper that:
+//   - reserves layout
+//   - shows a skeleton while loading
+//   - fades the image in after load
+//   - defaults non-critical images to lazy loading
+//   - supports caller overrides for hero/priority images
 // ============================================================
 
 import { useState, type ReactNode } from "react";
@@ -23,7 +17,7 @@ interface ImageWithSkeletonProps
   extends React.ImgHTMLAttributes<HTMLImageElement> {
   /** Classes for the wrapper (positioning / max-width). */
   containerClassName?: string;
-  /** Optional custom skeleton node (defaults to a filled Skeleton). */
+  /** Optional custom skeleton node. */
   skeleton?: ReactNode;
 }
 
@@ -32,6 +26,9 @@ export default function ImageWithSkeleton({
   skeleton,
   className,
   onLoad,
+  loading = "lazy",
+  decoding = "async",
+  fetchPriority = "auto",
   ...imgProps
 }: ImageWithSkeletonProps) {
   const [loaded, setLoaded] = useState(false);
@@ -43,11 +40,15 @@ export default function ImageWithSkeleton({
           {skeleton ?? <Skeleton className="h-full w-full rounded-lg" />}
         </div>
       )}
+
       <img
         {...imgProps}
-        onLoad={(e) => {
+        loading={loading}
+        decoding={decoding}
+        fetchPriority={fetchPriority}
+        onLoad={(event) => {
           setLoaded(true);
-          onLoad?.(e);
+          onLoad?.(event);
         }}
         className={cn(
           "relative transition-opacity duration-500 ease-premium-out",

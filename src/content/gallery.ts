@@ -110,7 +110,7 @@ export const GALLERY: GalleryContent = {
     // ─── Team ──────────────────────────────────────────────
     {
       id: "team-01",
-      src: `${REAL_BASE}/sscss-guards-team-2.jpg`,
+      src: `${REAL_BASE}/sscss-guards-team-2.webp`,
       alt: "SSCSS security guards in uniform standing at attention",
       title: "Professional Security Team",
       description: "Our professionally trained SSCSS guards in full uniform, demonstrating discipline and readiness.",
@@ -119,7 +119,7 @@ export const GALLERY: GalleryContent = {
     },
     {
       id: "team-02",
-      src: `${REAL_BASE}/sscss-guards-team-1.jpg`,
+      src: `${REAL_BASE}/sscss-guards-team-1.webp`,
       alt: "SSCSS team of security guards assembled at a client premises",
       title: "SSCSS Field Team",
       description: "A deployed team of our security personnel at a client premises, standing ready to serve.",
@@ -128,7 +128,7 @@ export const GALLERY: GalleryContent = {
     },
     {
       id: "team-03",
-      src: `${REAL_BASE}/sscss-guards-team-3.jpg`,
+      src: `${REAL_BASE}/sscss-guards-team-3.webp`,
       alt: "SSCSS security guards in uniform in front of our service equipment",
       title: "Guards on Duty",
       description: "SSCSS promotes discipline and professionalism across every guard we deploy.",
@@ -137,7 +137,7 @@ export const GALLERY: GalleryContent = {
     },
     {
       id: "team-04",
-      src: `${REAL_BASE}/sscss-bodyguard-3.jpg`,
+      src: `${REAL_BASE}/sscss-bodyguard-3.webp`,
       alt: "SSCSS ex-army security guard in professional uniform",
       title: "Ex-Army Personnel",
       description: "Military-trained ex-army personnel bring unmatched discipline and experience to premium assignments.",
@@ -148,7 +148,7 @@ export const GALLERY: GalleryContent = {
     // ─── Deployments ────────────────────────────────────────
     {
       id: "deploy-01",
-      src: `${REAL_BASE}/sscss-security-at-entrance.png`,
+      src: `${REAL_BASE}/sscss-security-at-entrance.webp`,
       alt: "SSCSS security guard at the entrance of a client premises in Bengaluru",
       title: "Site Security Deployment",
       description: "A guard stationed at a premises entrance, managing access control and visitor verification.",
@@ -157,7 +157,7 @@ export const GALLERY: GalleryContent = {
     },
     {
       id: "deploy-02",
-      src: `${REAL_BASE}/sscss-security-rear.png`,
+      src: `${REAL_BASE}/sscss-security-rear.webp`,
       alt: "SSCSS security guard monitoring the rear access point of a facility",
       title: "Perimeter Deployment",
       description: "Security personnel monitoring a facility's rear access point to maintain complete site coverage.",
@@ -271,7 +271,7 @@ export const GALLERY: GalleryContent = {
 // ─── Events ─────────────────────────────────────────────
     {
       id: "event-01",
-      src: `${REAL_BASE}/sscss-event-cfee1924.jpg`,
+      src: `${REAL_BASE}/sscss-event-cfee1924.webp`,
       alt: "SSCSS team at a company event in Bengaluru",
       title: "Company Celebration",
       description: "Our team celebrating milestones and achievements, fostering a strong team culture.",
@@ -280,7 +280,7 @@ export const GALLERY: GalleryContent = {
     },
     {
       id: "event-02",
-      src: `${REAL_BASE}/sscss-event-emmr4893.jpg`,
+      src: `${REAL_BASE}/sscss-event-emmr4893.webp`,
       alt: "SSCSS staff at a company function",
       title: "Staff Meet & Function",
       description: "Recognizing outstanding performance and dedication of our security personnel during our company functions.",
@@ -289,7 +289,7 @@ export const GALLERY: GalleryContent = {
     },
     {
       id: "event-03",
-      src: `${REAL_BASE}/sscss-bodyguard-1.jpg`,
+      src: `${REAL_BASE}/sscss-bodyguard-1.webp`,
       alt: "SSCSS security personnel at an event deployment",
       title: "Event Security Team",
       description: "Our event security team deployed at a client gathering, ensuring a safe and smooth experience.",
