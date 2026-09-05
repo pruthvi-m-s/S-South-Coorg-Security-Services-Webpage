@@ -1,5 +1,5 @@
 const GOOGLE_APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycby5ZEpa7JtZis9PNFDqf2inuzrddOaTvIY-GcjjRNkquEFPA2DIPDRSYF_jlbdOD3Q4/exec";
+  "https://script.google.com/macros/s/AKfycbx1Y7k8ZuxxsdHdvqQVmfQxCay-VVpKtw8vJuo5ic8jceGTFps3MCyZ8Gcw6J68TgF-/exec";
 
 const SERVICE_LABELS = {
   "security-guards": "Security Guards",
