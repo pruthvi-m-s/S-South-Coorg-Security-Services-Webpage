@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
-import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
 import HeroSkeleton from "@/components/common/HeroSkeleton";
 import type { HeroContent } from "@/types";
 import { CONTACT } from "@/content";
 import { fadeUp } from "@/lib/motion";
+import { useState } from "react";
 
 interface HeroProps {
   content: HeroContent;
@@ -25,12 +25,12 @@ export default function Hero({ content, className }: HeroProps) {
     heroImage,
   } = content;
 
+  const [loaded, setLoaded] = useState(false);
+
   return (
     <section
       className={cn(
-        "relative overflow-hidden bg-background",
-        "min-h-[calc(100vh-var(--header-height))]",
-        "flex items-center",
+        "relative flex min-h-[calc(100vh-var(--header-height))] items-center overflow-hidden bg-background",
         className,
       )}
       aria-label="Hero"
@@ -130,21 +130,37 @@ export default function Hero({ content, className }: HeroProps) {
             className="order-1 lg:order-2"
           >
             <div className="relative overflow-hidden bg-card shadow-xl">
-              <div className="aspect-[16/10] w-full">
-                <ImageWithSkeleton
-                  src={heroImage.src}
-                  alt={heroImage.alt}
-                  skeleton={
+              <div className="relative aspect-[16/10] w-full">
+                {!loaded && (
+                  <div
+                    className="absolute inset-0"
+                    aria-hidden="true"
+                  >
                     <HeroSkeleton className="size-full rounded-none" />
-                  }
-                  containerClassName="size-full"
-                  className="size-full object-cover object-center"
-                  width={1400}
-                  height={875}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="sync"
-                />
+                  </div>
+                )}
+
+                <picture>
+                  <source
+                    media="(max-width: 767px)"
+                    srcSet="/Images/Entrance Office Guards-mobile.webp"
+                  />
+
+                  <img
+                    src={heroImage.src}
+                    alt={heroImage.alt}
+                    width={1400}
+                    height={875}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                    onLoad={() => setLoaded(true)}
+                    className={cn(
+                      "relative size-full object-cover object-center transition-opacity duration-500 ease-premium-out",
+                      loaded ? "opacity-100" : "opacity-0",
+                    )}
+                  />
+                </picture>
               </div>
 
               <div
