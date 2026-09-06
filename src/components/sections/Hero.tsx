@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -7,8 +8,8 @@ import HeadlineReveal from "@/components/common/HeadlineReveal";
 import HeroSkeleton from "@/components/common/HeroSkeleton";
 import type { HeroContent } from "@/types";
 import { CONTACT } from "@/content";
+import { entranceOfficeGuardsMobile } from "@/lib/site-images";
 import { fadeUp } from "@/lib/motion";
-import { useState } from "react";
 
 interface HeroProps {
   content: HeroContent;
@@ -26,6 +27,14 @@ export default function Hero({ content, className }: HeroProps) {
   } = content;
 
   const [loaded, setLoaded] = useState(false);
+
+  const isMobile =
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 767px)").matches;
+
+  const heroSrc = isMobile
+    ? entranceOfficeGuardsMobile
+    : heroImage.src;
 
   return (
     <section
@@ -140,27 +149,20 @@ export default function Hero({ content, className }: HeroProps) {
                   </div>
                 )}
 
-                <picture>
-                  <source
-                    media="(max-width: 767px)"
-                    srcSet="/Images/Entrance Office Guards-mobile.webp"
-                  />
-
-                  <img
-                    src={heroImage.src}
-                    alt={heroImage.alt}
-                    width={1400}
-                    height={875}
-                    loading="eager"
-                    fetchPriority="high"
-                    decoding="async"
-                    onLoad={() => setLoaded(true)}
-                    className={cn(
-                      "relative size-full object-cover object-center transition-opacity duration-500 ease-premium-out",
-                      loaded ? "opacity-100" : "opacity-0",
-                    )}
-                  />
-                </picture>
+                <img
+                  src={heroSrc}
+                  alt={heroImage.alt}
+                  width={isMobile ? 900 : 1400}
+                  height={isMobile ? 563 : 875}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                  onLoad={() => setLoaded(true)}
+                  className={cn(
+                    "relative size-full object-cover object-center transition-opacity duration-500 ease-premium-out",
+                    loaded ? "opacity-100" : "opacity-0",
+                  )}
+                />
               </div>
 
               <div
