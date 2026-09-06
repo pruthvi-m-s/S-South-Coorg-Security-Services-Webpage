@@ -3,7 +3,11 @@ import { cn } from "@/lib/utils";
 import Skeleton from "@/components/common/Skeleton";
 
 function getResponsiveImageProps(src: string) {
-  if (!src.startsWith("/images/real/") || !src.endsWith(".webp")) {
+  if (
+    (!src.startsWith("/images/real/") &&
+      !src.startsWith("/images/site/")) ||
+    !src.endsWith(".webp")
+  ) {
     return {};
   }
 
@@ -14,13 +18,14 @@ function getResponsiveImageProps(src: string) {
   }
 
   const baseName = fileName.slice(0, -".webp".length);
+  const type = src.startsWith("/images/real/") ? "real" : "site";
 
   return {
     srcSet: [
-      `/images/responsive/real/${baseName}-480.webp 480w`,
-      `/images/responsive/real/${baseName}-768.webp 768w`,
-      `/images/responsive/real/${baseName}-1024.webp 1024w`,
-      `/images/responsive/real/${baseName}-1400.webp 1400w`,
+      `/images/responsive/${type}/${baseName}-480.webp 480w`,
+      `/images/responsive/${type}/${baseName}-768.webp 768w`,
+      `/images/responsive/${type}/${baseName}-1024.webp 1024w`,
+      `/images/responsive/${type}/${baseName}-1400.webp 1400w`,
     ].join(", "),
   };
 }
@@ -47,9 +52,7 @@ export default function ImageWithSkeleton({
   const [loaded, setLoaded] = useState(false);
 
   const responsiveProps =
-    src && !srcSet
-      ? getResponsiveImageProps(src)
-      : {};
+    src && !srcSet ? getResponsiveImageProps(src) : {};
 
   return (
     <div

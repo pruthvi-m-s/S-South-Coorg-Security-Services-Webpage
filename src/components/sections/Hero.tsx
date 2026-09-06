@@ -31,6 +31,13 @@ export default function Hero({ content, className }: HeroProps) {
     typeof window !== "undefined" &&
     window.matchMedia("(max-width: 767px)").matches;
 
+  const desktopSrcSet = [
+    "/images/responsive/site/Entrance Office Guards-480.webp 480w",
+    "/images/responsive/site/Entrance Office Guards-768.webp 768w",
+    "/images/responsive/site/Entrance Office Guards-1024.webp 1024w",
+    "/images/responsive/site/Entrance Office Guards-1400.webp 1400w",
+  ].join(", ");
+
   return (
     <section
       className={cn(
@@ -124,13 +131,8 @@ export default function Hero({ content, className }: HeroProps) {
           </div>
 
           <motion.figure
-            initial={{ opacity: 0, scale: 1.025, y: 12 }}
+            initial={{ opacity: 1, scale: 1, y: 0 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{
-              duration: 0.9,
-              delay: 0.08,
-              ease: [0.16, 1, 0.3, 1],
-            }}
             className="order-1 lg:order-2"
           >
             <div className="relative overflow-hidden bg-card shadow-xl">
@@ -149,6 +151,12 @@ export default function Hero({ content, className }: HeroProps) {
                     isMobile
                       ? "/images/hero/entrance-office-guards-mobile.webp"
                       : heroImage.src
+                  }
+                  srcSet={isMobile ? undefined : desktopSrcSet}
+                  sizes={
+                    isMobile
+                      ? undefined
+                      : "(min-width: 1024px) 58vw, 100vw"
                   }
                   alt={heroImage.alt}
                   width={isMobile ? 900 : 1400}
