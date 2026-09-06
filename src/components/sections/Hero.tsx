@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
-import HeroSkeleton from "@/components/common/HeroSkeleton";
 import type { HeroContent } from "@/types";
 import { CONTACT } from "@/content";
 import { fadeUp } from "@/lib/motion";
@@ -24,8 +22,6 @@ export default function Hero({ content, className }: HeroProps) {
     secondaryCta,
     heroImage,
   } = content;
-
-  const [loaded, setLoaded] = useState(false);
 
   const isMobile =
     typeof window !== "undefined" &&
@@ -130,27 +126,14 @@ export default function Hero({ content, className }: HeroProps) {
             )}
           </div>
 
-          <motion.figure
-            initial={{ opacity: 1, scale: 1, y: 0 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="order-1 lg:order-2"
-          >
+          <figure className="order-1 lg:order-2">
             <div className="relative overflow-hidden bg-card shadow-xl">
               <div className="relative aspect-[16/10] w-full">
-                {!loaded && (
-                  <div
-                    className="absolute inset-0"
-                    aria-hidden="true"
-                  >
-                    <HeroSkeleton className="size-full rounded-none" />
-                  </div>
-                )}
-
                 <img
                   src={
                     isMobile
                       ? "/images/hero/entrance-office-guards-mobile.webp"
-                      : heroImage.src
+                      : "/images/site/entrance-office-guards.webp"
                   }
                   srcSet={isMobile ? undefined : desktopSrcSet}
                   sizes={
@@ -164,11 +147,7 @@ export default function Hero({ content, className }: HeroProps) {
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"
-                  onLoad={() => setLoaded(true)}
-                  className={cn(
-                    "relative size-full object-cover object-center transition-opacity duration-500 ease-premium-out",
-                    loaded ? "opacity-100" : "opacity-0",
-                  )}
+                  className="relative size-full object-cover object-center"
                 />
               </div>
 
@@ -189,7 +168,7 @@ export default function Hero({ content, className }: HeroProps) {
                 {heroImage.credit}
               </figcaption>
             )}
-          </motion.figure>
+          </figure>
         </div>
       </div>
     </section>
