@@ -363,12 +363,12 @@
     @apply border-border outline-ring/50;
   }
 
-  html {
-    font-family: var(--font-body);
-    scroll-behavior: smooth;
-    background: var(--background);
-    color: var(--foreground);
-  }
+html {
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+  background: var(--background);
+  color: var(--foreground);
+}
 
   body {
     margin: 0;
@@ -376,7 +376,7 @@
     background: var(--background);
     color: var(--foreground);
 
-    font-family: var(--font-body);
+    font-family: var(--font-sans);
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.7;
@@ -438,14 +438,12 @@
     letter-spacing: -0.015em;
   }
 
-  p {
-    margin: 0;
-
-    font-family: var(--font-body);
-    font-weight: 400;
-
-    line-height: 1.75;
-  }
+ p {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.75;
+}
 
   button,
   input,
