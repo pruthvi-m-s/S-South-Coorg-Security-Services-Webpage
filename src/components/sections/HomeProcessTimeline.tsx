@@ -9,7 +9,6 @@ export default function HomeProcessTimeline({
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
-  const [progress, setProgress] = useState(0);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -20,75 +19,71 @@ export default function HomeProcessTimeline({
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    const observer = new IntersectionObserver(
+    const sectionObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true);
+          sectionObserver.disconnect();
         }
       },
       { threshold: 0.12 },
     );
 
-    observer.observe(section);
+    sectionObserver.observe(section);
 
     const items = Array.from(
       section.querySelectorAll<HTMLElement>("[data-process-step]"),
     );
 
-    const updateScrollState = () => {
-      const rect = section.getBoundingClientRect();
-      const viewportCenter = window.innerHeight / 2;
+    if (reduced) {
+      setActive(steps.length - 1);
+    } else if (items.length > 0) {
+      const itemObserver = new IntersectionObserver(
+        (entries) => {
+          let bestIndex = -1;
+          let bestRatio = 0;
 
-      if (!reduced) {
-        const progressStart = window.innerHeight * 0.68;
-        const progressEnd = window.innerHeight * 0.35;
-        const sectionStart = rect.top + progressEnd;
-        const sectionEnd = rect.bottom - progressStart;
+          for (const entry of entries) {
+            if (!entry.isIntersecting || entry.intersectionRatio <= bestRatio) {
+              continue;
+            }
 
-        const raw =
-          (viewportCenter - sectionStart) /
-          Math.max(sectionEnd - sectionStart, 1);
+            const index = items.indexOf(entry.target as HTMLElement);
 
-        setProgress(Math.min(1, Math.max(0, raw)));
-      } else {
-        setProgress(1);
-      }
+            if (index >= 0) {
+              bestIndex = index;
+              bestRatio = entry.intersectionRatio;
+            }
+          }
 
-      let closestIndex = 0;
-      let closestDistance = Number.POSITIVE_INFINITY;
+          if (bestIndex >= 0) {
+            setActive(bestIndex);
+          }
+        },
+        {
+          root: null,
+          rootMargin: "-35% 0px -35% 0px",
+          threshold: [0.15, 0.35, 0.55, 0.75, 1],
+        },
+      );
 
-      items.forEach((item, index) => {
-        const itemRect = item.getBoundingClientRect();
-        const itemCenter =
-          itemRect.top + itemRect.height / 2;
-        const distance = Math.abs(itemCenter - viewportCenter);
+      items.forEach((item) => itemObserver.observe(item));
 
-        if (
-          itemRect.bottom > viewportCenter - 80 &&
-          itemRect.top < viewportCenter + 80 &&
-          distance < closestDistance
-        ) {
-          closestIndex = index;
-          closestDistance = distance;
-        }
-      });
-
-      setActive(closestIndex);
-    };
-
-    window.addEventListener("scroll", updateScrollState, {
-      passive: true,
-    });
-    window.addEventListener("resize", updateScrollState);
-
-    updateScrollState();
+      return () => {
+        sectionObserver.disconnect();
+        itemObserver.disconnect();
+      };
+    }
 
     return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", updateScrollState);
-      window.removeEventListener("resize", updateScrollState);
+      sectionObserver.disconnect();
     };
   }, [steps.length]);
+
+  const progress =
+    steps.length <= 1
+      ? 1
+      : active / (steps.length - 1);
 
   return (
     <section
@@ -133,7 +128,7 @@ export default function HomeProcessTimeline({
           >
             <div
               data-process-progress
-              className="h-full w-full origin-top bg-[#ad241c] transition-transform duration-150 ease-out motion-reduce:transition-none"
+              className="h-full w-full origin-top bg-[#ad241c] transition-transform duration-300 ease-out motion-reduce:transition-none"
               style={{
                 transform: `scaleY(${progress})`,
               }}

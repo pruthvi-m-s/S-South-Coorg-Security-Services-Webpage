@@ -1,8 +1,3 @@
-// ============================================================
-// SSCSS — Global Site Header
-// Dark editorial header matching the new site-wide visual system.
-// ============================================================
-
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -11,39 +6,47 @@ import Logo from "./Logo";
 import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
 
-const SCROLL_THRESHOLD = 20;
-
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > SCROLL_THRESHOLD);
+    const sentinel = document.createElement("div");
+
+    sentinel.setAttribute("aria-hidden", "true");
+    sentinel.style.position = "absolute";
+    sentinel.style.top = "0";
+    sentinel.style.left = "0";
+    sentinel.style.width = "1px";
+    sentinel.style.height = "1px";
+    sentinel.style.pointerEvents = "none";
+
+    document.body.prepend(sentinel);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setScrolled(!entry.isIntersecting);
+      },
+      {
+        threshold: 0,
+      },
+    );
+
+    observer.observe(sentinel);
+
+    return () => {
+      observer.disconnect();
+      sentinel.remove();
     };
-
-    handleScroll();
-
-    window.addEventListener("scroll", handleScroll, {
-      passive: true,
-    });
-
-    return () =>
-      window.removeEventListener(
-        "scroll",
-        handleScroll,
-      );
   }, []);
 
-  const closeMobile = useCallback(
-    () => setMobileOpen(false),
-    [],
-  );
+  const closeMobile = useCallback(() => {
+    setMobileOpen(false);
+  }, []);
 
-  const toggleMobile = useCallback(
-    () => setMobileOpen((previous) => !previous),
-    [],
-  );
+  const toggleMobile = useCallback(() => {
+    setMobileOpen((previous) => !previous);
+  }, []);
 
   const ctaHref = `${ROUTES.contact}#contact-form`;
 
@@ -53,7 +56,7 @@ export default function Header() {
       className={cn(
         "fixed inset-x-0 top-0 z-navbar",
         "h-14 border-b border-[#2b2927] bg-[#10100f]/96 text-[#f5f1e8]",
-        "transition-[height,background-color,border-color,box-shadow,backdrop-filter] duration-300 ease-premium-out",
+        "transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 ease-premium-out",
         "md:h-16",
         scrolled &&
           "border-[#3a3835] bg-[#10100f]/88 shadow-lg backdrop-blur-xl md:h-14",
