@@ -8,7 +8,6 @@ import HeadlineReveal from "@/components/common/HeadlineReveal";
 import HeroSkeleton from "@/components/common/HeroSkeleton";
 import type { HeroContent } from "@/types";
 import { CONTACT } from "@/content";
-import { entranceOfficeGuardsMobile } from "@/lib/site-images";
 import { fadeUp } from "@/lib/motion";
 
 interface HeroProps {
@@ -31,10 +30,6 @@ export default function Hero({ content, className }: HeroProps) {
   const isMobile =
     typeof window !== "undefined" &&
     window.matchMedia("(max-width: 767px)").matches;
-
-  const heroSrc = isMobile
-    ? entranceOfficeGuardsMobile
-    : heroImage.src;
 
   return (
     <section
@@ -150,7 +145,11 @@ export default function Hero({ content, className }: HeroProps) {
                 )}
 
                 <img
-                  src={heroSrc}
+                  src={
+                    isMobile
+                      ? "/images/hero/entrance-office-guards-mobile.webp"
+                      : heroImage.src
+                  }
                   alt={heroImage.alt}
                   width={isMobile ? 900 : 1400}
                   height={isMobile ? 563 : 875}
