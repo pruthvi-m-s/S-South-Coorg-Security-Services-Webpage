@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { animate, stagger } from "animejs";
 import { cn } from "@/lib/utils";
 import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
 import HeroSkeleton from "@/components/common/HeroSkeleton";
@@ -25,12 +24,9 @@ export default function CompanyStory({
   videoSrc,
   className,
 }: CompanyStoryProps) {
-  const [videoUnavailable, setVideoUnavailable] =
-    useState(!videoSrc);
+  const [videoUnavailable, setVideoUnavailable] = useState(!videoSrc);
 
   const storyRef = useRef<HTMLElement>(null);
-  const mediaRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
   const history = useMemo(() => {
@@ -44,9 +40,7 @@ export default function CompanyStory({
     ]) {
       if (
         entry &&
-        !selected.some(
-          (item) => item.year === entry.year,
-        )
+        !selected.some((item) => item.year === entry.year)
       ) {
         selected.push(entry);
       }
@@ -74,44 +68,9 @@ export default function CompanyStory({
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (
-      !visible ||
-      window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches
-    ) {
-      return;
-    }
-
-    const timelineItems = timelineRef.current
-      ? Array.from(timelineRef.current.children)
-      : [];
-
-    const timeline = timelineItems.length
-      ? animate(timelineItems, {
-          opacity: [0, 1],
-          translateY: [12, 0],
-          delay: stagger(110),
-          duration: 450,
-          ease: "out(4)",
-        })
-      : undefined;
-
-    const media = mediaRef.current
-      ? animate(mediaRef.current, {
-          opacity: [0, 1],
-          scale: [1.025, 1],
-          duration: 700,
-          ease: "out(4)",
-        })
-      : undefined;
-
-    return () => {
-      timeline?.revert();
-      media?.revert();
-    };
-  }, [visible]);
+  const motionEnabled =
+    visible &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   return (
     <section
@@ -156,8 +115,13 @@ export default function CompanyStory({
           <div>
             <div className="relative aspect-[4/3] overflow-hidden bg-[#10100f]">
               <div
-                ref={mediaRef}
-                className="absolute inset-0"
+                className={cn(
+                  "absolute inset-0 transition-all duration-700 ease-premium-out",
+                  motionEnabled
+                    ? "opacity-100 scale-100"
+                    : "opacity-100 scale-100 motion-reduce:transition-none",
+                  visible || "opacity-0 scale-[1.025]",
+                )}
               >
                 {!videoUnavailable && videoSrc ? (
                   <video
@@ -168,9 +132,7 @@ export default function CompanyStory({
                     playsInline
                     preload="metadata"
                     poster={fallbackImage.src}
-                    onError={() =>
-                      setVideoUnavailable(true)
-                    }
+                    onError={() => setVideoUnavailable(true)}
                   >
                     <source src={videoSrc} />
                   </video>
@@ -197,14 +159,19 @@ export default function CompanyStory({
             </div>
 
             <div className="mt-6 border-t border-[#2b2927] pt-6">
-              <div
-                ref={timelineRef}
-                className="grid gap-6 sm:grid-cols-2"
-              >
-                {history.map((entry) => (
+              <div className="grid gap-6 sm:grid-cols-2">
+                {history.map((entry, index) => (
                   <div
                     key={entry.year}
-                    className="opacity-0"
+                    className={cn(
+                      "transform-gpu transition-all duration-500 ease-premium-out",
+                      visible
+                        ? "translate-y-0 opacity-100"
+                        : "translate-y-3 opacity-0",
+                    )}
+                    style={{
+                      transitionDelay: `${index * 110}ms`,
+                    }}
                   >
                     <p className="font-heading text-3xl font-semibold text-[#f5f1e8]">
                       {entry.year}

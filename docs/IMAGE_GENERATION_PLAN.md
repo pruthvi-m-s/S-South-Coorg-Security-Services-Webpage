@@ -45,7 +45,7 @@
 | Founder portrait | `founder.jpg` missing → bare skeleton | **No AI person.** Improve presentation with a sophisticated placeholder (refined monogram "MS", double-line frame, subtle brand pattern) until a real authorized portrait is supplied. Real portrait is the only swap accepted. |
 | Certifications / evidence | "Preview on request" FileText cards (honest) | **No fabricated certificates.** Optionally refine presentation with a premium document-frame aesthetic (paper texture + "Request evidence" affordance) — presentation only, never a fake scan. |
 | Deployment `deploy-01` / `deploy-02` | Real SSCSS entrance/rear photos | **Keep real.** No generation. |
-| Deployment `deploy-03` (residential) | Placeholder letter-tile | **Reuse real** `images/real/sscss-security-at-entrance.png` (cropped) — real residential SSCSS photo exists. |
+| Deployment `deploy-03` (residential) | Placeholder letter-tile | **Reuse real** `images/real/sscss-security-at-entrance.webp` (cropped) — real residential SSCSS photo exists. |
 | Gallery team tiles (team-01…04) | Real SSCSS photos | **Keep real.** No generation. |
 | Gallery events (event-01…03) | Real SSCSS photos | **Keep real.** No generation. |
 | About hero / CompanyStory | Real `sscss-guards-team-1.jpg` | **Keep real.** No generation. |

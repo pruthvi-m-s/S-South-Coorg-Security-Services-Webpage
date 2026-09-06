@@ -1,23 +1,33 @@
-// ============================================================
-// SSCSS — ImageWithSkeleton
-//
-// Reusable image wrapper that:
-//   - reserves layout
-//   - shows a skeleton while loading
-//   - fades the image in after load
-//   - defaults non-critical images to lazy loading
-//   - supports caller overrides for hero/priority images
-// ============================================================
-
 import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import Skeleton from "@/components/common/Skeleton";
 
+function getResponsiveImageProps(src: string) {
+  if (!src.startsWith("/images/real/") || !src.endsWith(".webp")) {
+    return {};
+  }
+
+  const fileName = src.split("/").pop();
+
+  if (!fileName) {
+    return {};
+  }
+
+  const baseName = fileName.slice(0, -".webp".length);
+
+  return {
+    srcSet: [
+      `/images/responsive/real/${baseName}-480.webp 480w`,
+      `/images/responsive/real/${baseName}-768.webp 768w`,
+      `/images/responsive/real/${baseName}-1024.webp 1024w`,
+      `/images/responsive/real/${baseName}-1400.webp 1400w`,
+    ].join(", "),
+  };
+}
+
 interface ImageWithSkeletonProps
   extends React.ImgHTMLAttributes<HTMLImageElement> {
-  /** Classes for the wrapper (positioning / max-width). */
   containerClassName?: string;
-  /** Optional custom skeleton node. */
   skeleton?: ReactNode;
 }
 
@@ -29,20 +39,46 @@ export default function ImageWithSkeleton({
   loading = "lazy",
   decoding = "async",
   fetchPriority = "auto",
+  sizes,
+  src,
+  srcSet,
   ...imgProps
 }: ImageWithSkeletonProps) {
   const [loaded, setLoaded] = useState(false);
 
+  const responsiveProps =
+    src && !srcSet
+      ? getResponsiveImageProps(src)
+      : {};
+
   return (
-    <div className={cn("relative overflow-hidden", containerClassName)}>
+    <div
+      className={cn(
+        "relative overflow-hidden",
+        containerClassName,
+      )}
+    >
       {!loaded && (
-        <div className="absolute inset-0" aria-hidden="true">
-          {skeleton ?? <Skeleton className="h-full w-full rounded-lg" />}
+        <div
+          className="absolute inset-0"
+          aria-hidden="true"
+        >
+          {skeleton ?? (
+            <Skeleton className="h-full w-full rounded-lg" />
+          )}
         </div>
       )}
 
       <img
         {...imgProps}
+        src={src}
+        srcSet={srcSet ?? responsiveProps.srcSet}
+        sizes={
+          sizes ??
+          (responsiveProps.srcSet
+            ? "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            : undefined)
+        }
         loading={loading}
         decoding={decoding}
         fetchPriority={fetchPriority}

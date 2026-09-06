@@ -1,14 +1,16 @@
-import companyOwner from "../../Images/Company owner.webp";
-import entranceOfficeGuards from "../../Images/Entrance Office Guards.webp";
-import entranceOfficeGuardsMobile from "../../Images/Entrance Office Guards-mobile.webp";
-import gateSecurity from "../../Images/Gate Security.webp";
-import soloGuard from "../../Images/Solo Guard.webp";
-import techParkGuards from "../../Images/Tech park Guards.webp";
-import techPark from "../../Images/Tech park.webp";
-import corporateEvent from "../../Images/Corporate Event.webp";
-import receptionGuard from "../../Images/Reception Guard.webp";
-import officeFront from "../../Images/Office front.webp";
-import entranceDark from "../../Images/Entrance dark.webp";
+const BASE = "/images/site";
+
+const companyOwner = `${BASE}/company-owner.webp`;
+const entranceOfficeGuards = `${BASE}/entrance-office-guards.webp`;
+const entranceOfficeGuardsMobile = "/images/hero/entrance-office-guards-mobile.webp";
+const gateSecurity = `${BASE}/gate-security.webp`;
+const soloGuard = `${BASE}/solo-guard.webp`;
+const techParkGuards = `${BASE}/tech-park-guards.webp`;
+const techPark = `${BASE}/tech-park.webp`;
+const corporateEvent = `${BASE}/corporate-event.webp`;
+const receptionGuard = `${BASE}/reception-guard.webp`;
+const officeFront = `${BASE}/office-front.webp`;
+const entranceDark = `${BASE}/entrance-dark.webp`;
 
 export {
   companyOwner,

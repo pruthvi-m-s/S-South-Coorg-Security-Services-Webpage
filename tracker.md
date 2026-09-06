@@ -1076,8 +1076,8 @@ GalleryPage
 - `Guards 1.jpg` → `sscss-guards-team-1.jpg`
 - `Guards 2.jpg` → `sscss-guards-team-2.jpg`
 - `Guards 3.jpg` → `sscss-guards-team-3.jpg`
-- `Security at entrance.png` → `sscss-security-at-entrance.png`
-- `Security rear.png` → `sscss-security-rear.png`
+- `Security at entrance.webp` → `sscss-security-at-entrance.webp`
+- `Security rear.webp` → `sscss-security-rear.webp`
 - `HouseKeeping 1.jpg` → `sscss-housekeeping-1.jpg`
 - `bodyguards 1.jpg` → `sscss-bodyguard-1.jpg`
 - `bodyguards 3.jpg` → `sscss-bodyguard-3.jpg`
@@ -1086,7 +1086,7 @@ GalleryPage
 
 **Content-layer wiring (all real assets set `isPlaceholder: false`):**
 - `about.ts` — About hero + CompanyStory fallback → `sscss-guards-team-1.jpg` (already wired; confirmed).
-- `services.ts` — Five personnel service heroes wired: `security-guards` (`sscss-guards-team-2.jpg`), `residential-security` (`sscss-security-at-entrance.png`), `housekeeping` (`sscss-housekeeping-1.jpg`), `ex-army-security-guards` (`sscss-bodyguard-3.jpg`), `event-security` (`sscss-bodyguard-1.jpg`).
+- `services.ts` — Five personnel service heroes wired: `security-guards` (`sscss-guards-team-2.jpg`), `residential-security` (`sscss-security-at-entrance.webp`), `housekeeping` (`sscss-housekeeping-1.jpg`), `ex-army-security-guards` (`sscss-bodyguard-3.jpg`), `event-security` (`sscss-bodyguard-1.jpg`).
 - `gallery.ts` — Team tiles (4) → guards team 1/2/3 + bodyguard-3; Deployments (2) → security-at-entrance + security-rear; Events (3) → event-cfee1924 + event-emmr4893 + bodyguard-1.
 
 **Deliberately left as placeholders (environment/other surfaces, per audit rules):**

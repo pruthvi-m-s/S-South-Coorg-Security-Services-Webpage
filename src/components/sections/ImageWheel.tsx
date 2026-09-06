@@ -1,6 +1,4 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef, useState } from "react";
 import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
 import HeroSkeleton from "@/components/common/HeroSkeleton";
 import {
@@ -13,8 +11,6 @@ import {
   officeFront,
   receptionGuard,
 } from "@/lib/site-images";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const COLUMN_ONE = [
   {
@@ -56,36 +52,25 @@ const COLUMN_TWO = [
 
 export default function ImageWheel() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
-
     if (!section) return;
 
-    const context = gsap.context(() => {
-      if (
-        window.matchMedia(
-          "(prefers-reduced-motion: reduce)",
-        ).matches
-      ) {
-        return;
-      }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12 },
+    );
 
-      gsap.from("[data-people-reveal]", {
-        opacity: 0,
-        y: 24,
-        duration: 0.72,
-        stagger: 0.12,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: section,
-          start: "top 78%",
-          once: true,
-        },
-      });
-    }, section);
+    observer.observe(section);
 
-    return () => context.revert();
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -98,7 +83,11 @@ export default function ImageWheel() {
         <div className="grid items-center gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:gap-20">
           <div
             data-people-reveal
-            className="max-w-xl"
+            className={`max-w-xl transition-all duration-700 ease-premium-out ${
+              visible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-6 opacity-0"
+            }`}
           >
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]">
               Real people. Real presence.
@@ -121,6 +110,7 @@ export default function ImageWheel() {
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
                   Presence
                 </p>
+
                 <p className="mt-2 text-sm leading-6 text-[#ded8cf]">
                   Visible personnel where the property needs them.
                 </p>
@@ -130,6 +120,7 @@ export default function ImageWheel() {
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
                   Professionalism
                 </p>
+
                 <p className="mt-2 text-sm leading-6 text-[#ded8cf]">
                   The standard of conduct matters as much as the uniform.
                 </p>
@@ -139,7 +130,12 @@ export default function ImageWheel() {
 
           <div
             data-people-reveal
-            className="relative h-[520px] overflow-hidden"
+            className={`relative h-[520px] overflow-hidden transition-all duration-700 ease-premium-out ${
+              visible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-6 opacity-0"
+            }`}
+            style={{ transitionDelay: "120ms" }}
           >
             <div
               className="pointer-events-none absolute inset-x-0 top-0 z-20 h-24 bg-gradient-to-b from-[#10100f] to-transparent"

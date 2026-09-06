@@ -1,12 +1,11 @@
 import { useLayoutEffect, useRef, type ReactNode } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
-import { animate } from "animejs";
 
-/**
- * Keeps route changes feeling deliberate without unmounting the global shell.
- * Browser history restores its own scroll position; new navigations begin at top.
- */
-export default function RouteExperience({ children }: { children: ReactNode }) {
+export default function RouteExperience({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const contentRef = useRef<HTMLDivElement>(null);
   const { pathname, hash } = useLocation();
   const navigationType = useNavigationType();
@@ -17,8 +16,11 @@ export default function RouteExperience({ children }: { children: ReactNode }) {
     if (navigationType !== "POP") {
       if (hash) {
         window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
         hashFrame = window.requestAnimationFrame(() => {
-          document.getElementById(hash.slice(1))?.scrollIntoView({ block: "start" });
+          document
+            .getElementById(hash.slice(1))
+            ?.scrollIntoView({ block: "start" });
         });
       } else {
         window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -26,20 +28,28 @@ export default function RouteExperience({ children }: { children: ReactNode }) {
     }
 
     const node = contentRef.current;
-    if (!node || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+
+    if (
+      !node ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       return () => window.cancelAnimationFrame(hashFrame ?? 0);
     }
 
-    const entrance = animate(node, {
-      opacity: [0, 1],
-      translateY: [10, 0],
-      duration: 420,
-      ease: "out(4)",
-    });
+    node.animate(
+      [
+        { opacity: 0, transform: "translateY(10px)" },
+        { opacity: 1, transform: "translateY(0)" },
+      ],
+      {
+        duration: 420,
+        easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+        fill: "both",
+      },
+    );
 
     return () => {
       window.cancelAnimationFrame(hashFrame ?? 0);
-      entrance.revert();
     };
   }, [hash, navigationType, pathname]);
 

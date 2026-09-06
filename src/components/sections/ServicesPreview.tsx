@@ -2,8 +2,7 @@
 // SSCSS — Homepage primary services editorial list
 // ============================================================
 
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
-import { animate, stagger } from "animejs";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
@@ -27,12 +26,22 @@ const SECTION_INTRO =
   "From trained security personnel to professional housekeeping and investigative services, we offer comprehensive solutions to protect and manage your premises.";
 
 function usePrefersReducedMotion() {
-  return useMemo(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-    [],
-  );
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+
+    const update = () => setReducedMotion(media.matches);
+
+    update();
+    media.addEventListener("change", update);
+
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return reducedMotion;
 }
 
 function RelatedServiceLinks({
@@ -45,7 +54,12 @@ function RelatedServiceLinks({
   compact?: boolean;
 }) {
   return (
-    <div className={cn("flex flex-wrap gap-2", compact ? "mt-4" : "mt-5")}>
+    <div
+      className={cn(
+        "flex flex-wrap gap-2",
+        compact ? "mt-4" : "mt-5",
+      )}
+    >
       {category.services.map((service) => (
         <Link
           key={service.slug}
@@ -73,38 +87,29 @@ export default function ServicesPreview({
     [services],
   );
 
-  const [activeId, setActiveId] = useState(() => categories[0]?.id ?? "");
+  const [activeId, setActiveId] = useState(
+    () => categories[0]?.id ?? "",
+  );
 
   const sectionRef = useRef<HTMLElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
 
   const reduceMotion = usePrefersReducedMotion();
 
   const activeCategory =
-    categories.find((category) => category.id === activeId) ?? categories[0];
+    categories.find((category) => category.id === activeId) ??
+    categories[0];
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const section = sectionRef.current;
-    if (!section || reduceMotion) return;
-
-    const revealTargets = Array.from(
-      section.querySelectorAll<HTMLElement>("[data-services-reveal]"),
-    );
+    if (!section) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry?.isIntersecting) return;
-
-        animate(revealTargets, {
-          opacity: [0, 1],
-          translateY: [18, 0],
-          delay: stagger(55),
-          duration: 460,
-          ease: "out(4)",
-        });
-
-        observer.disconnect();
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
       },
       { threshold: 0.2 },
     );
@@ -112,40 +117,7 @@ export default function ServicesPreview({
     observer.observe(section);
 
     return () => observer.disconnect();
-  }, [reduceMotion]);
-
-  useLayoutEffect(() => {
-    if (reduceMotion || !activeCategory) return;
-
-    const animations = [
-      imageRef.current
-        ? animate(imageRef.current, {
-            opacity: [0.72, 1],
-            scale: [1.025, 1],
-            duration: 460,
-            ease: "out(4)",
-          })
-        : null,
-
-      contentRef.current
-        ? animate(contentRef.current, {
-            opacity: [0, 1],
-            translateY: [10, 0],
-            duration: 360,
-            ease: "out(4)",
-          })
-        : null,
-    ].filter(
-      (animation): animation is NonNullable<typeof animation> =>
-        Boolean(animation),
-    );
-
-    return () => {
-      animations.forEach((animation) => {
-        animation.revert();
-      });
-    };
-  }, [activeCategory?.id, reduceMotion]);
+  }, []);
 
   if (!activeCategory) return null;
 
@@ -161,7 +133,12 @@ export default function ServicesPreview({
       <div className="section-container section-padding">
         <div
           data-services-reveal
-          className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between"
+          className={cn(
+            "flex flex-col gap-5 transition-all duration-500 ease-premium-out lg:flex-row lg:items-end lg:justify-between",
+            visible || reduceMotion
+              ? "translate-y-0 opacity-100"
+              : "translate-y-[18px] opacity-0",
+          )}
         >
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
@@ -206,7 +183,9 @@ export default function ServicesPreview({
                   <span
                     className={cn(
                       "w-10 text-sm font-semibold tabular-nums transition-colors duration-300",
-                      active ? "text-accent" : "text-muted-foreground/70",
+                      active
+                        ? "text-accent"
+                        : "text-muted-foreground/70",
                     )}
                     aria-hidden="true"
                   >
@@ -256,14 +235,16 @@ export default function ServicesPreview({
 
           <aside
             data-services-reveal
-            className="sticky top-[calc(var(--header-height)+2rem)] h-fit"
+            className={cn(
+              "sticky top-[calc(var(--header-height)+2rem)] h-fit transition-all duration-500 ease-premium-out",
+              visible || reduceMotion
+                ? "translate-y-0 opacity-100"
+                : "translate-y-[18px] opacity-0",
+            )}
             aria-label={`${activeCategory.name} preview`}
           >
             <div className="overflow-hidden rounded-xl border border-border bg-card shadow-lg">
-              <div
-                ref={imageRef}
-                className="aspect-[4/5] overflow-hidden bg-muted"
-              >
+              <div className="aspect-[4/5] overflow-hidden bg-muted">
                 <ImageWithSkeleton
                   key={activeCategory.id}
                   src={activeCategory.image.src}
@@ -279,10 +260,7 @@ export default function ServicesPreview({
                 />
               </div>
 
-              <div
-                ref={contentRef}
-                className="border-t border-border p-5"
-              >
+              <div className="border-t border-border p-5">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
                   Includes
                 </p>
@@ -375,7 +353,15 @@ export default function ServicesPreview({
           })}
         </div>
 
-        <div data-services-reveal className="mt-10 flex justify-start">
+        <div
+          data-services-reveal
+          className={cn(
+            "mt-10 flex justify-start transition-all duration-500 ease-premium-out",
+            visible || reduceMotion
+              ? "translate-y-0 opacity-100"
+              : "translate-y-[18px] opacity-0",
+          )}
+        >
           <Link
             to={ROUTES.services}
             className={cn(
@@ -385,7 +371,10 @@ export default function ServicesPreview({
             )}
           >
             View all services
-            <ArrowUpRight className="size-4" aria-hidden="true" />
+            <ArrowUpRight
+              className="size-4"
+              aria-hidden="true"
+            />
           </Link>
         </div>
       </div>

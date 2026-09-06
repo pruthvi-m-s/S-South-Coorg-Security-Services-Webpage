@@ -1,9 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { animate } from "animejs";
-import {
-  ArrowRight,
-  CheckCircle2,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import type { ClientCategory } from "@/content/clients-page";
@@ -16,11 +12,7 @@ import {
   viewportOptions,
 } from "@/lib/motion";
 
-function AnimatedStat({
-  stat,
-}: {
-  stat: Stat;
-}) {
+function AnimatedStat({ stat }: { stat: Stat }) {
   const ref = useRef<HTMLSpanElement>(null);
   const [value, setValue] = useState(0);
 
@@ -35,25 +27,32 @@ function AnimatedStat({
         observer.disconnect();
 
         if (
-          window.matchMedia(
-            "(prefers-reduced-motion: reduce)",
-          ).matches
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+          stat.value <= 0
         ) {
           setValue(stat.value);
           return;
         }
 
-        const counter = { value: 0 };
+        const start = performance.now();
+        const duration = 800;
 
-        const animation = animate(counter, {
-          value: stat.value,
-          duration: 800,
-          ease: "out(4)",
-          onUpdate: () =>
-            setValue(Math.round(counter.value)),
-        });
+        let frame = 0;
 
-        return () => animation.revert();
+        const update = (now: number) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 4);
+
+          setValue(Math.round(stat.value * eased));
+
+          if (progress < 1) {
+            frame = window.requestAnimationFrame(update);
+          }
+        };
+
+        frame = window.requestAnimationFrame(update);
+
+        return () => window.cancelAnimationFrame(frame);
       },
       { threshold: 0.7 },
     );
@@ -89,15 +88,10 @@ export default function ClientTrustExperience({
   stats: Stat[];
   testimonials: Testimonial[];
 }) {
-  const published = testimonials.filter(
-    (item) => !item.isPlaceholder,
-  );
+  const published = testimonials.filter((item) => !item.isPlaceholder);
 
   return (
     <>
-      {/* ============================================================
-          SECTOR STRIP — DARK
-          ============================================================ */}
       <section
         className="border-y border-[#2b2927] bg-[#191918] py-6"
         aria-label="Client sectors"
@@ -118,9 +112,6 @@ export default function ClientTrustExperience({
         </div>
       </section>
 
-      {/* ============================================================
-          CLIENT CATEGORIES — CREAM HIGHLIGHT
-          ============================================================ */}
       <section
         className="bg-[#f3efe6] text-[#171615]"
         aria-labelledby="clients-category-title"
@@ -140,9 +131,9 @@ export default function ClientTrustExperience({
               </h2>
 
               <p className="mt-5 max-w-md text-sm leading-7 text-[#6a655e] sm:text-base">
-                SSCSS works across residential, corporate,
-                healthcare, educational, hospitality,
-                industrial and institutional environments.
+                SSCSS works across residential, corporate, healthcare,
+                educational, hospitality, industrial and institutional
+                environments.
               </p>
             </div>
 
@@ -165,9 +156,6 @@ export default function ClientTrustExperience({
         </div>
       </section>
 
-      {/* ============================================================
-          TRUST + STATS — DARK
-          ============================================================ */}
       <section
         className="bg-[#10100f] text-[#f5f1e8]"
         aria-labelledby="clients-trust-title"
@@ -187,9 +175,8 @@ export default function ClientTrustExperience({
               </h2>
 
               <p className="mt-5 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base">
-                Our operating approach is designed around
-                the practical needs of the sites and teams
-                we support.
+                Our operating approach is designed around the practical needs
+                of the sites and teams we support.
               </p>
 
               <Link
@@ -197,10 +184,7 @@ export default function ClientTrustExperience({
                 className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#c45a52] transition-colors hover:text-white"
               >
                 Start a conversation
-                <ArrowRight
-                  className="size-4"
-                  aria-hidden="true"
-                />
+                <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
             </div>
 
@@ -227,10 +211,7 @@ export default function ClientTrustExperience({
                   key={item.title}
                   initial={{ opacity: 0, y: 14 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{
-                    once: true,
-                    amount: 0.15,
-                  }}
+                  viewport={{ once: true, amount: 0.15 }}
                   transition={{
                     duration: 0.45,
                     delay: index * 0.07,
@@ -251,18 +232,12 @@ export default function ClientTrustExperience({
 
           <div className="mt-14 grid gap-6 border-y border-[#2b2927] py-8 sm:grid-cols-3">
             {stats.map((stat) => (
-              <AnimatedStat
-                key={stat.id}
-                stat={stat}
-              />
+              <AnimatedStat key={stat.id} stat={stat} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ============================================================
-          PARTNERSHIP PROOF — DARK
-          ============================================================ */}
       <section
         className="bg-[#191918] text-[#f5f1e8]"
         aria-labelledby="client-proof-title"
@@ -295,9 +270,8 @@ export default function ClientTrustExperience({
                 variants={fadeUp}
                 className="mt-4 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base"
               >
-                Client names, logos and testimonials are
-                presented only when the appropriate
-                permission is available.
+                Client names, logos and testimonials are presented only when
+                the appropriate permission is available.
               </motion.p>
             </div>
 
@@ -331,9 +305,8 @@ export default function ClientTrustExperience({
                   </h3>
 
                   <p className="mt-2 text-sm leading-6 text-[#77716a]">
-                    Client names, logos and testimonials
-                    are published only after the required
-                    approval is available.
+                    Client names, logos and testimonials are published only
+                    after the required approval is available.
                   </p>
                 </div>
               </div>

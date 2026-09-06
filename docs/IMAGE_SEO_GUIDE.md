@@ -63,7 +63,7 @@ Captions appear on hero images (`figcaption`), gallery tiles, and lightbox. Use 
 
 ## 4. Open Graph / social shares
 
-- **og:image** is currently a single fallback `public/og/sscss-default.png` (referenced by `SEO_DEFAULTS.ogImage`).
+- **og:image** is currently a single fallback `public/og/sscss-default.webp` (referenced by `SEO_DEFAULTS.ogImage`).
 - **Recommendation:** generate a **per-page og:image** (1200×630) from each page's hero/master. At minimum, ensure the Home og:image is the premium hero still, not the placeholder dot.
 - Rule: og:image must be JPG/WebP ≥600×315, ratio 1.91:1, and load without disrupting LCP.
 

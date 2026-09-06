@@ -17,7 +17,7 @@
 // ============================================================
 
 import { TextEffect } from "../../../components/motion-primitives/text-effect";
-import type { Variants } from "motion/react";
+import type { Variants } from "framer-motion";
 
 // ─── Props ────────────────────────────────────────────────────
 interface HeadlineRevealProps {

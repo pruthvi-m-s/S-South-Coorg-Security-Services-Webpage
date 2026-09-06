@@ -358,8 +358,8 @@ The approved real SSCSS photography has been copied from `Images/` into `public/
 | Guards 1.jpg | `sscss-guards-team-1.jpg` | About hero / CompanyStory fallback; Gallery team-02 |
 | Guards 2.jpg | `sscss-guards-team-2.jpg` | `security-guards` service hero; Gallery team-01 |
 | Guards 3.jpg | `sscss-guards-team-3.jpg` | Gallery team-03 |
-| Security at entrance.png | `sscss-security-at-entrance.png` | `residential-security` service hero; Gallery deploy-01 |
-| Security rear.png | `sscss-security-rear.png` | Gallery deploy-02 |
+| Security at entrance.webp | `sscss-security-at-entrance.webp` | `residential-security` service hero; Gallery deploy-01 |
+| Security rear.webp | `sscss-security-rear.webp` | Gallery deploy-02 |
 | HouseKeeping 1.jpg | `sscss-housekeeping-1.jpg` | `housekeeping` service hero |
 | bodyguards 1.jpg | `sscss-bodyguard-1.jpg` | `event-security` service hero; Gallery event-03 |
 | bodyguards 3.jpg | `sscss-bodyguard-3.jpg` | `ex-army-security-guards` service hero; Gallery team-04 |
@@ -374,7 +374,7 @@ All real assets are referenced with `isPlaceholder: false` in the content layer 
 - **Security personnel photographs** (`sscss-bodyguard-3.jpg`) — the Ex-Army Security Guards service hero and a Gallery team tile.
 - **Housekeeping photograph** (`sscss-housekeeping-1.jpg`) — the Housekeeping service hero.
 - **Bodyguard/event photographs** (`sscss-bodyguard-1.jpg`, `sscss-event-cfee1924.jpg`, `sscss-event-emmr4893.jpg`) — the Event Security service hero and Gallery events tiles.
-- **Deployment photographs** (`sscss-security-at-entrance.png`, `sscss-security-rear.png`) — the Residential Security service hero and Gallery "Deployments" tiles.
+- **Deployment photographs** (`sscss-security-at-entrance.webp`, `sscss-security-rear.webp`) — the Residential Security service hero and Gallery "Deployments" tiles.
 
 ### Alignment with IMAGE_AUDIT_FINAL.md decisions
 

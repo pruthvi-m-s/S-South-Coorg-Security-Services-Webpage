@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { ProcessStep } from "@/types";
 import { cn } from "@/lib/utils";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function HomeProcessTimeline({
   steps,
@@ -13,62 +9,85 @@ export default function HomeProcessTimeline({
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
-
     if (!section) return;
 
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+        }
+      },
+      { threshold: 0.12 },
+    );
+
+    observer.observe(section);
+
     const items = Array.from(
       section.querySelectorAll<HTMLElement>("[data-process-step]"),
     );
 
-    const context = gsap.context(() => {
-      if (!reduced) {
-        gsap.from(
-          "[data-process-heading], [data-process-step]",
-          {
-            opacity: 0,
-            y: 18,
-            stagger: 0.08,
-            duration: 0.58,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top 78%",
-              once: true,
-            },
-          },
-        );
+    const updateScrollState = () => {
+      const rect = section.getBoundingClientRect();
+      const viewportCenter = window.innerHeight / 2;
 
-        gsap.to("[data-process-progress]", {
-          scaleY: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 68%",
-            end: "bottom 65%",
-            scrub: 0.25,
-          },
-        });
+      if (!reduced) {
+        const progressStart = window.innerHeight * 0.68;
+        const progressEnd = window.innerHeight * 0.35;
+        const sectionStart = rect.top + progressEnd;
+        const sectionEnd = rect.bottom - progressStart;
+
+        const raw =
+          (viewportCenter - sectionStart) /
+          Math.max(sectionEnd - sectionStart, 1);
+
+        setProgress(Math.min(1, Math.max(0, raw)));
+      } else {
+        setProgress(1);
       }
 
-      items.forEach((item, index) => {
-        ScrollTrigger.create({
-          trigger: item,
-          start: "top center+=80",
-          end: "bottom center+=80",
-          onEnter: () => setActive(index),
-          onEnterBack: () => setActive(index),
-        });
-      });
-    }, section);
+      let closestIndex = 0;
+      let closestDistance = Number.POSITIVE_INFINITY;
 
-    return () => context.revert();
+      items.forEach((item, index) => {
+        const itemRect = item.getBoundingClientRect();
+        const itemCenter =
+          itemRect.top + itemRect.height / 2;
+        const distance = Math.abs(itemCenter - viewportCenter);
+
+        if (
+          itemRect.bottom > viewportCenter - 80 &&
+          itemRect.top < viewportCenter + 80 &&
+          distance < closestDistance
+        ) {
+          closestIndex = index;
+          closestDistance = distance;
+        }
+      });
+
+      setActive(closestIndex);
+    };
+
+    window.addEventListener("scroll", updateScrollState, {
+      passive: true,
+    });
+    window.addEventListener("resize", updateScrollState);
+
+    updateScrollState();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+    };
   }, [steps.length]);
 
   return (
@@ -80,7 +99,12 @@ export default function HomeProcessTimeline({
       <div className="section-container section-padding">
         <div
           data-process-heading
-          className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20"
+          className={cn(
+            "grid gap-8 transition-all duration-700 ease-premium-out lg:grid-cols-[0.7fr_1.3fr] lg:gap-20",
+            visible
+              ? "translate-y-0 opacity-100"
+              : "translate-y-[18px] opacity-0",
+          )}
         >
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#ad241c]">
@@ -96,9 +120,9 @@ export default function HomeProcessTimeline({
           </div>
 
           <p className="max-w-xl text-sm leading-7 text-[#6a655e] sm:text-base">
-            The process matters as much as the people you deploy. The objective
-            is to understand the requirement, establish the deployment plan and
-            maintain accountability after the first day.
+            The process matters as much as the people you deploy. The
+            objective is to understand the requirement, establish the
+            deployment plan and maintain accountability after the first day.
           </p>
         </div>
 
@@ -109,7 +133,10 @@ export default function HomeProcessTimeline({
           >
             <div
               data-process-progress
-              className="h-full w-full origin-top scale-y-0 bg-[#ad241c]"
+              className="h-full w-full origin-top bg-[#ad241c] transition-transform duration-150 ease-out motion-reduce:transition-none"
+              style={{
+                transform: `scaleY(${progress})`,
+              }}
             />
           </div>
 
@@ -120,7 +147,16 @@ export default function HomeProcessTimeline({
               <li
                 key={step.step}
                 data-process-step
-                className="relative grid grid-cols-[2rem_1fr] gap-6 pb-12 last:pb-0 sm:grid-cols-[6rem_1fr] sm:gap-8"
+                className={cn(
+                  "relative grid grid-cols-[2rem_1fr] gap-6 pb-12 last:pb-0 sm:grid-cols-[6rem_1fr] sm:gap-8",
+                  "transition-all duration-700 ease-premium-out",
+                  visible
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-[18px] opacity-0",
+                )}
+                style={{
+                  transitionDelay: `${index * 80}ms`,
+                }}
               >
                 <div className="relative z-10 flex justify-start sm:justify-center">
                   <span

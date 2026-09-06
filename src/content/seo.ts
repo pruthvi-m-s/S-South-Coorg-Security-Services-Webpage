@@ -9,7 +9,7 @@ export const SEO_DEFAULTS = {
   author: "S South Coorg Security Services",
 themeColor: "#2A2828",
   keywords: ["security services Bengaluru", "security guards Bengaluru", "manpower services Bengaluru", "South Bengaluru security agency"],
-  ogImage: "/og/sscss-default.png",
+  ogImage: "/og/sscss-default.webp",
 } as const;
 
 export const HOME_SEO: SeoMeta = { title: "Security Services in Bengaluru | SSCSS", description: HERO.description, canonicalPath: ROUTES.home, schemaType: "LocalBusiness" };
