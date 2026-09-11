@@ -55,8 +55,8 @@ export const CONTACT = {
   ),
   googleBusinessProfile: getEnv(
     "VITE_GOOGLE_BUSINESS_PROFILE",
-    "https://g.page/xxxxxxxx",
-  ),
+    "",
+  ) || undefined,
   responseTime: getEnv(
     "VITE_CONTACT_RESPONSE_TIME",
     "We typically respond within one business day.",
@@ -72,6 +72,4 @@ export const EMERGENCY_HOTLINE = {
   phoneLabel: "Call us directly",
 } as const;
 
-export const SOCIAL = {
-  // Add social links when they become available.
-} as const;
+export const SOCIAL = {} as const;

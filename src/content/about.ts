@@ -64,9 +64,9 @@ heroSubtitle:
       },
       {
         year: "2018",
-        title: "10 Years of Trust",
+        title: "A Decade of Service",
         description:
-          "Marked a decade of service with over 100 guards deployed and 50+ satisfied clients across multiple sectors.",
+          "Completed ten years of security operations in Bengaluru, with growing deployments across corporate, residential, and industrial sectors.",
       },
       {
         year: "2023",

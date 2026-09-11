@@ -195,69 +195,18 @@ export default function HomePage() {
       {/* PROCESS — ONLY CREAM HIGHLIGHT SECTION */}
       <HomeProcessTimeline steps={ABOUT.process.steps} />
 
-      {/* PROOF / STATS — DARK */}
-      <section
-        className="bg-[#10100f] text-[#f5f1e8]"
-        aria-labelledby="home-proof-title"
-      >
-        <div className="section-container section-padding pb-0">
-          <div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]">
-                {HOME.proof.eyebrow}
-              </p>
-
-              <h2
-                id="home-proof-title"
-                className="mt-3 max-w-md font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
-              >
-                {HOME.proof.title}
-              </h2>
-
-              <Link
-                to={`${ROUTES.contact}#contact-form`}
-                className="mt-8 inline-flex items-center gap-2"
-                data-analytics-cta="home_proof_cta"
-              >
-                <Button variant="outline" size="lg" className="border-[#3a3835] bg-transparent text-[#f5f1e8] hover:border-[#b52b22] hover:bg-[#b52b22]/10 hover:text-[#f5f1e8]">
-                  Talk to our team
-                  <ArrowRight className="ml-1 size-4" aria-hidden="true" />
-                </Button>
-              </Link>
-            </div>
-
-            <div className="grid gap-0 border-t border-[#2b2927] sm:grid-cols-3">
-              {HOME.proof.stats.map((stat, index) => (
-                <div
-                  key={index}
-                  className={index > 0 ? "border-t border-[#2b2927] py-7 sm:border-t-0 sm:border-l sm:px-8" : "border-b border-[#2b2927] py-7 sm:border-b-0 sm:border-r sm:pr-8"}
-                >
-                  <p className="font-heading text-4xl font-semibold text-[#f5f1e8] sm:text-5xl">
-                    {stat.value}
-                  </p>
-
-                  <p className="mt-2 text-sm leading-6 text-[#b4aea5]">
-                    {stat.text}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* FOUNDER — DARK */}
+      <div className="bg-[#10100f] text-[#f5f1e8]">
+        <FounderSection content={FOUNDER} />
+      </div>
 
       {/* CERTIFICATIONS — DARK */}
-      <div className="bg-[#10100f] text-[#f5f1e8]">
+      <div className="bg-[#191918] text-[#f5f1e8]">
         <TrustStats
           certifications={CERTIFICATIONS}
           stats={STATS}
           pendingLabel={COMPLIANCE_PAGE.statusLabels.pending}
         />
-      </div>
-
-      {/* FOUNDER — DARK */}
-      <div className="bg-[#10100f] text-[#f5f1e8]">
-        <FounderSection content={FOUNDER} />
       </div>
 
       {/* FAQ — DARK */}

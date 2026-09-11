@@ -122,9 +122,9 @@ export const CLIENTS_PAGE: ClientsPageContent = {
       "Long-term partnerships built on trust, reliability, and consistent service excellence.",
     items: [
       {
-        title: "Proven Reliability",
+        title: "Structured Deployment",
         description:
-          "Our clients trust us because we deliver — day in and day out. With over 18 years of uninterrupted service, SSCSS has never missed a deployment commitment.",
+          "Every deployment is planned, supervised, and supported with clear operational procedures — from initial setup through ongoing daily management.",
         icon: "ShieldCheck",
       },
       {

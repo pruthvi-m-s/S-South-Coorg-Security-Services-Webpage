@@ -59,7 +59,7 @@ export default function FounderSection({
               />
             </div>
 
-            <div className="absolute bottom-0 left-0 bg-[#10100f] px-5 py-4 text-[#f5f1e8]">
+            <div className="absolute bottom-0 left-0 border-l-2 border-primary bg-[#10100f]/90 px-5 py-4 text-[#f5f1e8] backdrop-blur-sm">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#b4aea5]">
                 {content.designation}
               </p>
@@ -76,7 +76,7 @@ export default function FounderSection({
 
             <h2
               id="founder-title"
-              className="mt-3 max-w-2xl font-heading text-4xl font-semibold tracking-tight text-ink sm:text-6xl"
+              className="mt-3 max-w-2xl font-heading text-4xl font-semibold tracking-tight text-ink sm:text-5xl"
             >
               {content.heading}
             </h2>
@@ -96,17 +96,51 @@ export default function FounderSection({
             </p>
 
             <blockquote className="mt-8 border-l-2 border-primary pl-6">
-              <p className="max-w-xl font-heading text-2xl font-semibold leading-tight tracking-tight text-ink sm:text-3xl">
-                “{content.quote}”
+              <p className="max-w-xl font-heading text-xl font-semibold leading-tight tracking-tight text-ink sm:text-2xl">
+                &ldquo;{content.quote}&rdquo;
               </p>
             </blockquote>
 
-            <div className="mt-8 grid gap-3 border-t border-border pt-7 sm:grid-cols-2">
-              {content.achievements.slice(0, 4).map((item) => (
+            <div className="mt-8 grid gap-4 border-t border-border pt-7 sm:grid-cols-3">
+              {content.achievements.map((item) => (
                 <div
                   key={item.title}
-                  className="border-b border-border pb-3"
+                  className="flex items-start gap-3"
                 >
+                  <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full border border-primary/25 bg-primary/10 text-primary">
+                    <span className="sr-only">{item.icon}</span>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      {item.icon === "Calendar" && (
+                        <>
+                          <path d="M8 2v4" /><path d="M16 2v4" />
+                          <rect width="18" height="18" x="3" y="4" rx="2" />
+                          <path d="M3 10h18" />
+                        </>
+                      )}
+                      {item.icon === "Award" && (
+                        <>
+                          <circle cx="12" cy="8" r="6" />
+                          <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+                        </>
+                      )}
+                      {item.icon === "MapPin" && (
+                        <>
+                          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                          <circle cx="12" cy="10" r="3" />
+                        </>
+                      )}
+                    </svg>
+                  </div>
                   <p className="text-sm font-medium leading-6 text-ink">
                     {item.title}
                   </p>

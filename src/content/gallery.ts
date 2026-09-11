@@ -94,7 +94,7 @@ export const GALLERY: GalleryContent = {
   intro: {
     title: "A Glimpse Into SSCSS",
     subtitle:
-      "From guard deployment and training sessions to client sites and company events — explore the people, places, and operations that define S South Coorg Security Services.",
+      "Real images from our operations — guard deployments, team activities, and client sites across Bengaluru. These are not stock photos; they reflect the actual presence and people behind SSCSS.",
   },
 
   categories: [
@@ -302,33 +302,33 @@ export const GALLERY: GalleryContent = {
   videos: [],
 
   trustHighlights: {
-    title: "Built on Trust & Professionalism",
+    title: "Real Presence. Real Deployments.",
     subtitle:
-      "Every deployment reflects our commitment to quality, compliance, and operational excellence.",
+      "These images reflect genuine operational activity — guards on site, team deployments, and company events across Bengaluru.",
     items: [
       {
-        title: "Professionalism First",
+        title: "Personnel on Ground",
         description:
-          "Every SSCSS guard is trained to represent your organization with the highest standards of professionalism, discipline, and courtesy.",
-        icon: "Award",
+          "Our guards are deployed across client sites in South Bengaluru and greater Bengaluru, maintaining visible, professional presence.",
+        icon: "Shield",
       },
       {
-        title: "Trained & Certified Staff",
+        title: "Team Coordination",
         description:
-          "All personnel undergo structured training programs covering security protocols, customer service, emergency response, and fire safety.",
+          "Deployments are managed with clear chains of command, supervisory oversight, and structured communication protocols.",
         icon: "ClipboardCheck",
       },
       {
-        title: "Full Regulatory Compliance",
+        title: "Verified Operations",
         description:
-          "We maintain strict compliance with all statutory requirements — background verification, insurance coverage, and labour law adherence.",
+          "All personnel undergo background verification and are deployed under full regulatory compliance — PSARA, PF, ESI, and GST.",
         icon: "FileCheck",
       },
       {
-        title: "Operational Excellence",
+        title: "Company Culture",
         description:
-          "Our proven operational systems ensure consistent service delivery, proactive supervision, and rapid issue resolution across all deployments.",
-        icon: "Shield",
+          "Regular team events and functions build cohesion and reinforce the professional standards SSCSS expects from every deployment.",
+        icon: "Award",
       },
     ],
   },

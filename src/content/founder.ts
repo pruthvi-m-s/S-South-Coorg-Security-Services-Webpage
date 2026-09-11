@@ -11,7 +11,7 @@ import { companyOwner } from "@/lib/site-images";
 // ─── Founder-specific Types (co-located) ─────────────────────
 
 export interface FounderAchievement {
-  title: string;   // e.g. "27+ Years of Industry Experience"
+  title: string;
   icon: string;    // Lucide icon name — mapped in UI layer
 }
 
@@ -35,10 +35,10 @@ export const FOUNDER: FounderContent = {
   heading: "An Experienced Professional Leading SSCSS",
   name: "Machettira Subramani",
   designation: "Founder • Proprietor • Managing Director",
-  experienceBadge: "27+ Years",
-  experienceCaption: "in the Security Industry • 18+ Years Building SSCSS",
+  experienceBadge: "18+ Years",
+  experienceCaption: "Building SSCSS since 2008 in Bengaluru",
   message:
-    "For over two decades, our commitment has remained unchanged — to deliver disciplined, dependable, and professional security solutions built on integrity, accountability, and long-term client relationships. Every deployment reflects our promise to protect what matters most.",
+    "Our commitment has remained unchanged since 2008 — to deliver disciplined, dependable, and professional security solutions built on integrity, accountability, and long-term client relationships. Every deployment reflects our promise to protect what matters most.",
   quote:
     "Security isn't just about guarding property—it's about earning trust every single day.",
   image: {
@@ -48,24 +48,16 @@ export const FOUNDER: FounderContent = {
   },
   achievements: [
     {
-      title: "27+ Years of Industry Experience",
-      icon: "Calendar",
-    },
-    {
-      title: "Founder of SSCSS",
+      title: "Established SSCSS in 2008",
       icon: "Award",
     },
     {
-      title: "100+ Trained Personnel",
-      icon: "Users",
-    },
-    {
-      title: "50+ Satisfied Clients",
-      icon: "HeartHandshake",
-    },
-    {
-      title: "SSCSS Serving Bengaluru Since 2008",
+      title: "Serving Bengaluru Since 2008",
       icon: "MapPin",
+    },
+    {
+      title: "18+ Years of Company Operations",
+      icon: "Calendar",
     },
   ],
 };
