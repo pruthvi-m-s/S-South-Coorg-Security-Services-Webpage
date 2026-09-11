@@ -19,6 +19,7 @@ const CompliancePage = lazy(() => import("@/pages/Compliance"));
 const ServicesHubPage = lazy(() => import("@/pages/Services/ServicesHub"));
 const ServicePage = lazy(() => import("@/pages/Services/ServicePage"));
 const IndustriesPage = lazy(() => import("@/pages/Industries"));
+const IndustryDetailPage = lazy(() => import("@/pages/Industries/IndustryDetailPage"));
 const ClientsPage = lazy(() => import("@/pages/Clients"));
 const GalleryPage = lazy(() => import("@/pages/Gallery"));
 const FaqsPage = lazy(() => import("@/pages/Faqs"));
@@ -57,6 +58,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.industries,
         element: <IndustriesPage />,
+      },
+      {
+        path: ROUTES.industryDetail,
+        element: <IndustryDetailPage />,
       },
       {
         path: ROUTES.clients,

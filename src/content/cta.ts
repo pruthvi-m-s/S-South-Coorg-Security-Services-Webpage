@@ -4,24 +4,30 @@
 
 import type { HeroCTA } from "../types";
 import { ROUTES } from "@/lib/routes";
+import { CONTACT } from "@/content/site";
 
 export interface CtaContent {
   heading: string;
   supportingText: string;
   primaryCta: HeroCTA;
   secondaryCta?: HeroCTA;
+  tertiaryCta?: HeroCTA;
 }
 
 export const FINAL_CTA: CtaContent = {
-  heading: "Tell us what your property needs.",
+  heading: "Ready to secure your property?",
   supportingText:
-    "Whether you need security personnel, facility support, manpower or verification services, start with the requirement and we’ll help you identify the right next step.",
+    "Fill out a quick form, call us directly, or message us on WhatsApp — whichever is easiest for you.",
   primaryCta: {
-    label: "Discuss Your Requirement",
+    label: "Fill Out the Form",
     href: `${ROUTES.contact}#contact-form`,
   },
   secondaryCta: {
-    label: "View All Services",
-    href: ROUTES.services,
+    label: "Call Us Now",
+    href: `tel:${CONTACT.phone}`,
+  },
+  tertiaryCta: {
+    label: "Message on WhatsApp",
+    href: `https://wa.me/${CONTACT.whatsapp?.replace(/\D/g, "")}`,
   },
 };

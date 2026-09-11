@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { getIcon } from "@/lib/icons";
+import { industryPath } from "@/lib/routes";
 import { servicePath } from "@/lib/routes";
 import { getServiceBySlug } from "@/content/services";
 import type { Industry } from "@/types";
@@ -168,8 +169,19 @@ export default function IndustryExplorer({
               </div>
 
               <Link
-                to="/services"
+                to={industryPath(activeIndustry.slug)}
                 className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#c45a52] hover:text-white"
+              >
+                Full industry overview
+                <ArrowRight
+                  className="size-4"
+                  aria-hidden="true"
+                />
+              </Link>
+
+              <Link
+                to="/services"
+                className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[#c45a52] hover:text-white"
               >
                 Explore all services
                 <ArrowRight

@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
+import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import type { HeroContent } from "@/types";
-import { CONTACT } from "@/content";
 import { fadeUp } from "@/lib/motion";
 
 interface HeroProps {
@@ -20,6 +20,7 @@ export default function Hero({ content, className }: HeroProps) {
     description,
     primaryCta,
     secondaryCta,
+    tertiaryCta,
     heroImage,
   } = content;
 
@@ -96,34 +97,53 @@ export default function Hero({ content, className }: HeroProps) {
                 </Button>
               </Link>
 
-              <Link to={secondaryCta.href} className="w-full sm:w-auto">
-                <Button
-                  variant="outline"
-                  size="lg"
+              {secondaryCta.href.startsWith("tel:") ? (
+                <a
+                  href={secondaryCta.href}
                   className="w-full sm:w-auto"
-                  data-analytics-cta="hero_services"
+                  data-analytics-cta="hero_call"
                 >
-                  {secondaryCta.label}
-                </Button>
-              </Link>
-            </motion.div>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto"
+                  >
+                    <Phone size={16} className="mr-1" aria-hidden="true" />
+                    {secondaryCta.label}
+                  </Button>
+                </a>
+              ) : (
+                <Link to={secondaryCta.href} className="w-full sm:w-auto">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto"
+                    data-analytics-cta="hero_secondary"
+                  >
+                    {secondaryCta.label}
+                  </Button>
+                </Link>
+              )}
 
-            {CONTACT.phone && (
-              <motion.a
-                variants={fadeUp}
-                initial="hidden"
-                animate="visible"
-                transition={{ delay: 0.96 }}
-                href={`tel:${CONTACT.phone}`}
-                data-analytics-component="hero_phone"
-                className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-              >
-                <span className="flex size-8 items-center justify-center rounded-full border border-border">
-                  <Phone size={14} aria-hidden="true" />
-                </span>
-                <span>Prefer to talk now? {CONTACT.phone}</span>
-              </motion.a>
-            )}
+              {tertiaryCta && (
+                <a
+                  href={tertiaryCta.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto"
+                  data-analytics-cta="hero_whatsapp"
+                >
+                  <Button
+                    variant="ghost"
+                    size="lg"
+                    className="w-full gap-2 text-[#25D366] hover:bg-[#25D366]/10 hover:text-[#25D366] sm:w-auto"
+                  >
+                    <WhatsAppIcon className="size-4.5" />
+                    {tertiaryCta.label}
+                  </Button>
+                </a>
+              )}
+            </motion.div>
           </div>
 
           <figure className="order-1 lg:order-2">

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import Hero from "@/components/sections/Hero";
 import TrustStats from "@/components/sections/TrustStats";
 import GroupedServicesPreview from "@/components/sections/GroupedServicesPreview";
@@ -9,6 +11,7 @@ import TrustRibbon from "@/components/sections/TrustRibbon";
 import EmergencyHotlineCard from "@/components/sections/EmergencyHotlineCard";
 import FaqPreview from "@/components/sections/FaqPreview";
 import IndustryPreview from "@/components/sections/IndustryPreview";
+import { Button } from "@/components/ui/button";
 import {
   HERO,
   CERTIFICATIONS,
@@ -76,6 +79,17 @@ export default function HomePage() {
               >
                 {HOME.pain.title}
               </h2>
+
+              {HOME.pain.cta && (
+                <Link
+                  to={HOME.pain.cta.href}
+                  className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-[#b4aea5] transition-colors hover:text-[#f5f1e8]"
+                  data-analytics-cta="home_pain_cta"
+                >
+                  {HOME.pain.cta.label}
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Link>
+              )}
             </div>
 
             <div className="grid gap-0 border-t border-[#2b2927] sm:grid-cols-2">
@@ -120,6 +134,22 @@ export default function HomePage() {
               >
                 {HOME.solution.title}
               </h2>
+
+              {HOME.solution.cta && (
+                <Link
+                  to={HOME.solution.cta.href}
+                  className="mt-8 inline-flex items-center gap-2"
+                  data-analytics-cta="home_solution_cta"
+                >
+                  <Button
+                    variant="default"
+                    size="lg"
+                  >
+                    {HOME.solution.cta.label}
+                    <ArrowRight className="ml-1 size-4" aria-hidden="true" />
+                  </Button>
+                </Link>
+              )}
             </div>
 
             <div className="grid gap-0 border-t border-[#2b2927]">
@@ -183,6 +213,17 @@ export default function HomePage() {
               >
                 {HOME.proof.title}
               </h2>
+
+              <Link
+                to={`${ROUTES.contact}#contact-form`}
+                className="mt-8 inline-flex items-center gap-2"
+                data-analytics-cta="home_proof_cta"
+              >
+                <Button variant="outline" size="lg" className="border-[#3a3835] bg-transparent text-[#f5f1e8] hover:border-[#b52b22] hover:bg-[#b52b22]/10 hover:text-[#f5f1e8]">
+                  Talk to our team
+                  <ArrowRight className="ml-1 size-4" aria-hidden="true" />
+                </Button>
+              </Link>
             </div>
 
             <div className="grid gap-0 border-t border-[#2b2927] sm:grid-cols-3">
@@ -226,6 +267,7 @@ export default function HomePage() {
         faqs={FAQS}
         count={5}
         viewAllHref={ROUTES.faqs}
+        cta={HOME.faq.cta}
       />
 
       {/* FINAL CONTACT — DARK */}

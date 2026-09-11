@@ -57,6 +57,13 @@ export interface Service {
   faqs: ServiceFaq[];
   relatedServices: string[];     // 2-3 other service slugs
   seo: SeoMeta;
+  serviceCta?: {
+    heroCtaLabel?: string;       // Override hero primary CTA text
+    sectionLabel?: string;       // Label for contextual inline CTA
+    finalHeading?: string;       // Final CTA section heading
+    finalSupporting?: string;    // Final CTA section supporting text
+    finalPrimaryLabel?: string;  // Final CTA primary button label
+  };
 }
 
 // ─── Industry ────────────────────────────────────────────────
@@ -66,6 +73,16 @@ export interface Industry {
   icon: string;                  // Lucide icon name
   description: string;
   relevantServiceSlugs: string[];
+  heroSubtitle?: string;         // Industry-specific hero tagline
+  environment?: string;          // \n\n delimited paragraphs about the operating environment
+  risks?: { title: string; description: string }[];  // Typical challenges
+  approach?: string;             // \n\n delimited paragraphs about how SSCSS handles this environment
+  industryCta?: {
+    heroCtaLabel?: string;       // Hero CTA text
+    finalHeading?: string;       // Final CTA heading
+    finalSupporting?: string;    // Final CTA supporting text
+    finalPrimaryLabel?: string;  // Final CTA button label
+  };
 }
 
 // ─── Testimonial ─────────────────────────────────────────────
@@ -145,6 +162,7 @@ export interface HeroContent {
   description: string;
   primaryCta: HeroCTA;
   secondaryCta: HeroCTA;
+  tertiaryCta?: HeroCTA;
   heroImage: ImageRef;
   /** Optional trust badges / metrics — reserved for future use */
   trustElements?: {

@@ -11,6 +11,7 @@ export const ROUTES = {
   services: "/services",
   serviceDetail: "/services/:slug",
   industries: "/industries",
+  industryDetail: "/industries/:slug",
   clients: "/clients",
   gallery: "/gallery",
   faqs: "/faqs",
@@ -21,4 +22,9 @@ export const ROUTES = {
 /** Build a concrete path to a service detail page */
 export function servicePath(slug: string): string {
   return `/services/${slug}`;
+}
+
+/** Build a concrete path to an industry detail page */
+export function industryPath(slug: string): string {
+  return `/industries/${slug}`;
 }

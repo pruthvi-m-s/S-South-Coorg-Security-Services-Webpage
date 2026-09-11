@@ -142,6 +142,14 @@ heroImage: {
       "industrial-security",
       "residential-security",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss Your Security Requirement",
+      sectionLabel: "Talk to our team about security guards",
+      finalHeading: "Ready to discuss your security requirement?",
+      finalSupporting:
+        "Tell us about your property and we'll recommend the right security deployment for your site.",
+      finalPrimaryLabel: "Discuss Your Security Requirement",
+    },
     seo: {
       title:
         "Security Guards in Bengaluru | SSCSS",
@@ -267,6 +275,14 @@ heroImage: {
       "industrial-security",
       "front-office-management",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss Your Corporate Security Requirement",
+      sectionLabel: "Talk to our team about corporate security",
+      finalHeading: "Ready to discuss your corporate security requirement?",
+      finalSupporting:
+        "Tell us about your corporate facility and we'll design a security plan that fits your environment.",
+      finalPrimaryLabel: "Discuss Your Corporate Security Requirement",
+    },
     seo: {
       title:
         "Corporate Security in Bengaluru | SSCSS",
@@ -392,6 +408,14 @@ relatedServices: [
       "corporate-security",
       "integrated-facility-management-services",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss Your Industrial Security Requirement",
+      sectionLabel: "Talk to our team about industrial security",
+      finalHeading: "Ready to discuss your industrial security requirement?",
+      finalSupporting:
+        "Tell us about your facility and we'll recommend the right security deployment for your industrial site.",
+      finalPrimaryLabel: "Discuss Your Industrial Security Requirement",
+    },
     seo: {
       title:
         "Industrial Security in Bengaluru | SSCSS",
@@ -641,6 +665,14 @@ heroImage: {
       "front-office-management",
       "skilled-labour",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss Your Housekeeping Requirement",
+      sectionLabel: "Talk to our team about housekeeping",
+      finalHeading: "Ready to discuss your facility support requirement?",
+      finalSupporting:
+        "Tell us about your housekeeping needs and we'll recommend the right cleaning and maintenance plan.",
+      finalPrimaryLabel: "Discuss Your Housekeeping Requirement",
+    },
     seo: {
       title:
         "Housekeeping in Bengaluru | SSCSS",
@@ -766,6 +798,14 @@ heroImage: {
       "corporate-security",
       "housekeeping",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss Your Front Office Requirement",
+      sectionLabel: "Talk to our team about front office management",
+      finalHeading: "Ready to discuss your facility support requirement?",
+      finalSupporting:
+        "Tell us about your front office needs and we'll recommend the right setup for your facility.",
+      finalPrimaryLabel: "Discuss Your Front Office Requirement",
+    },
     seo: {
       title:
         "Front Office Management in Bengaluru | SSCSS",
@@ -891,6 +931,14 @@ heroImage: {
       "unskilled-labour",
       "corporate-staffing",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss Your Staffing Requirement",
+      sectionLabel: "Talk to our team about skilled labour",
+      finalHeading: "Ready to discuss your staffing requirement?",
+      finalSupporting:
+        "Tell us about your staffing needs and we'll deploy the right skilled workers for your site.",
+      finalPrimaryLabel: "Discuss Your Staffing Requirement",
+    },
     seo: {
       title:
         "Skilled Labour in Bengaluru | SSCSS",
@@ -1016,6 +1064,14 @@ heroImage: {
       "skilled-labour",
       "housekeeping",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss Your Staffing Requirement",
+      sectionLabel: "Talk to our team about unskilled labour",
+      finalHeading: "Ready to discuss your staffing requirement?",
+      finalSupporting:
+        "Tell us about your requirements and we'll deploy the right workers for your site.",
+      finalPrimaryLabel: "Discuss Your Staffing Requirement",
+    },
     seo: {
       title:
         "Unskilled Labour in Bengaluru | SSCSS",
@@ -1140,6 +1196,14 @@ heroImage: {
       "skilled-labour",
       "front-office-management",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss Your Staffing Requirement",
+      sectionLabel: "Talk to our team about corporate staffing",
+      finalHeading: "Ready to discuss your staffing requirement?",
+      finalSupporting:
+        "Tell us about your staffing needs and we'll source the right candidates for your organization.",
+      finalPrimaryLabel: "Discuss Your Staffing Requirement",
+    },
     seo: {
       title:
         "Corporate Staffing in Bengaluru | SSCSS",
@@ -1266,6 +1330,14 @@ heroImage: {
       "security-guards",
       "corporate-security",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss Your Security Requirement",
+      sectionLabel: "Talk to our team about ex-army security guards",
+      finalHeading: "Ready to discuss your security requirement?",
+      finalSupporting:
+        "Tell us about your security needs and we'll recommend the right ex-army personnel for your site.",
+      finalPrimaryLabel: "Discuss Your Security Requirement",
+    },
     seo: {
       title:
         "Ex-Army Guards in Bengaluru | SSCSS",
@@ -1390,6 +1462,14 @@ heroImage: {
       "security-guards",
       "corporate-security",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss Your Event Security Requirement",
+      sectionLabel: "Talk to our team about event security",
+      finalHeading: "Ready to discuss your event security requirement?",
+      finalSupporting:
+        "Tell us about your event and we'll design a security plan that keeps your guests and venue safe.",
+      finalPrimaryLabel: "Discuss Your Event Security Requirement",
+    },
     seo: {
       title:
         "Event Security in Bengaluru | SSCSS",
@@ -1516,6 +1596,14 @@ heroImage: {
       "corporate-staffing",
       "private-detective-services",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss a Verification Requirement",
+      sectionLabel: "Talk to our team about background verification",
+      finalHeading: "Need help with verification?",
+      finalSupporting:
+        "Tell us what you need verified and we'll recommend the right check for your requirement.",
+      finalPrimaryLabel: "Discuss a Verification Requirement",
+    },
     seo: {
       title:
         "Background Verification in Bengaluru | SSCSS",
@@ -1637,9 +1725,17 @@ heroImage: {
       },
     ],
     relatedServices: [
-      "background-verification",
+      "security-guards",
       "corporate-security",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss Your Investigation Requirement",
+      sectionLabel: "Talk to our team about private investigation",
+      finalHeading: "Need help with an investigation?",
+      finalSupporting:
+        "Tell us about your requirement and we'll recommend the right approach for your situation.",
+      finalPrimaryLabel: "Discuss Your Investigation Requirement",
+    },
     seo: {
       title:
         "Private Detective Services in Bengaluru | SSCSS",
@@ -1781,6 +1877,14 @@ heroImage: {
       "unskilled-labour",
       "front-office-management",
     ],
+    serviceCta: {
+      heroCtaLabel: "Discuss Your Facility Management Requirement",
+      sectionLabel: "Talk to our team about facility management",
+      finalHeading: "Ready to discuss your facility management requirement?",
+      finalSupporting:
+        "Tell us about your facility and we'll design an integrated management plan covering all service lines.",
+      finalPrimaryLabel: "Discuss Your Facility Management Requirement",
+    },
     seo: {
       title:
         "Integrated Facility Management Services in Bengaluru | SSCSS",

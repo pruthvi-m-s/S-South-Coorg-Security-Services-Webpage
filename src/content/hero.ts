@@ -6,6 +6,7 @@
 
 import type { HeroContent } from "../types";
 import { ROUTES } from "@/lib/routes";
+import { CONTACT } from "@/content/site";
 import { entranceOfficeGuards } from "@/lib/site-images";
 
 export const HERO: HeroContent = {
@@ -14,12 +15,16 @@ export const HERO: HeroContent = {
   description:
     "With 18+ years of company operations, 100+ trained personnel, and 50+ clients, SSCSS delivers enterprise-grade security and staffing services tailored to your needs. Reliable. Professional. Disciplined.",
   primaryCta: {
-    label: "Get a Quote",
+    label: "Get a Free Security Assessment",
     href: ROUTES.contact,
   },
   secondaryCta: {
-    label: "Explore Our Services",
-    href: ROUTES.services,
+    label: "Call Us Now",
+    href: `tel:${CONTACT.phone}`,
+  },
+  tertiaryCta: {
+    label: "WhatsApp Us",
+    href: `https://wa.me/${CONTACT.whatsapp?.replace(/\D/g, "")}`,
   },
   heroImage: {
     src: entranceOfficeGuards,

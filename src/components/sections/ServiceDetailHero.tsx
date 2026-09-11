@@ -1,12 +1,14 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
 import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
 import HeroSkeleton from "@/components/common/HeroSkeleton";
+import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import type { ImageRef } from "@/types";
 import { ROUTES } from "@/lib/routes";
+import { CONTACT } from "@/content";
 import {
   staggerContainer,
   fadeUp,
@@ -18,6 +20,7 @@ interface ServiceDetailHeroProps {
   name: string;
   tagline: string;
   image?: ImageRef;
+  ctaLabel?: string;
   className?: string;
 }
 
@@ -25,8 +28,11 @@ export default function ServiceDetailHero({
   name,
   tagline,
   image,
+  ctaLabel = "Discuss your requirement",
   className,
 }: ServiceDetailHeroProps) {
+  const whatsappNumber = CONTACT.whatsapp?.replace(/\D/g, "");
+
   return (
     <section
       className={cn(
@@ -71,26 +77,43 @@ export default function ServiceDetailHero({
 
             <motion.div
               variants={fadeUp}
-              className="mt-8 flex flex-col gap-3 sm:flex-row"
+              className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
             >
               <Link
                 to={`${ROUTES.contact}#contact-form`}
                 data-analytics-cta="service_detail_contact"
                 className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#b52b22] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#8f1912]"
               >
-                Discuss your requirement
+                {ctaLabel}
                 <ArrowRight
                   className="size-4"
                   aria-hidden="true"
                 />
               </Link>
 
-              <Link
-                to={ROUTES.services}
-                className="inline-flex min-h-12 items-center justify-center border border-[#3a3835] px-5 text-sm font-semibold text-[#f5f1e8] transition-colors hover:border-[#b52b22]"
-              >
-                All services
-              </Link>
+              {CONTACT.phone && (
+                <a
+                  href={`tel:${CONTACT.phone}`}
+                  data-analytics-cta="service_detail_call"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#3a3835] px-5 text-sm font-semibold text-[#f5f1e8] transition-colors hover:border-[#b52b22] hover:bg-[#b52b22]/10"
+                >
+                  <Phone size={16} aria-hidden="true" />
+                  Call Us Now
+                </a>
+              )}
+
+              {whatsappNumber && (
+                <a
+                  href={`https://wa.me/${whatsappNumber}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-analytics-cta="service_detail_whatsapp"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#25D366]/30 px-5 text-sm font-semibold text-[#25D366] transition-colors hover:border-[#25D366] hover:bg-[#25D366]/10"
+                >
+                  <WhatsAppIcon className="size-4" />
+                  WhatsApp Us
+                </a>
+              )}
             </motion.div>
 
             <motion.div

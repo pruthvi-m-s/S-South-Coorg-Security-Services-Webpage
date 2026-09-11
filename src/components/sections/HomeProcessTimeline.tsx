@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import type { ProcessStep } from "@/types";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/lib/routes";
 
 export default function HomeProcessTimeline({
   steps,
@@ -191,8 +195,21 @@ export default function HomeProcessTimeline({
               </li>
             );
           })}
-        </ol>
-      </div>
-    </section>
+          </ol>
+
+          <div className="mt-12 flex justify-center">
+            <Link to={`${ROUTES.contact}#contact-form`}>
+              <Button
+                variant="default"
+                size="lg"
+                data-analytics-cta="home_process_cta"
+              >
+                Start the conversation
+                <ArrowRight className="ml-1 size-4" aria-hidden="true" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
   );
 }

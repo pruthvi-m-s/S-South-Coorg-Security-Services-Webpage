@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
+import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import { ROUTES } from "@/lib/routes";
+import { CONTACT } from "@/content";
 import {
   staggerContainer,
   fadeUp,
@@ -66,7 +68,7 @@ export default function IndustriesHero({
 
             <motion.div
               variants={fadeUp}
-              className="mt-7"
+              className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
             >
               <Link
                 to={`${ROUTES.contact}#contact-form`}
@@ -79,6 +81,30 @@ export default function IndustriesHero({
                   aria-hidden="true"
                 />
               </Link>
+
+              {CONTACT.phone && (
+                <a
+                  href={`tel:${CONTACT.phone}`}
+                  data-analytics-cta="industries_hero_call"
+                  className="inline-flex min-h-12 items-center gap-2 border border-[#3a3835] px-5 text-sm font-semibold text-[#f5f1e8] transition-colors hover:border-[#b52b22] hover:bg-[#b52b22]/10"
+                >
+                  <Phone size={16} aria-hidden="true" />
+                  Call Us Now
+                </a>
+              )}
+
+              {CONTACT.whatsapp?.replace(/\D/g, "") && (
+                <a
+                  href={`https://wa.me/${CONTACT.whatsapp?.replace(/\D/g, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-analytics-cta="industries_hero_whatsapp"
+                  className="inline-flex min-h-12 items-center gap-2 border border-[#25D366]/30 px-5 text-sm font-semibold text-[#25D366] transition-colors hover:border-[#25D366] hover:bg-[#25D366]/10"
+                >
+                  <WhatsAppIcon className="size-4" />
+                  WhatsApp Us
+                </a>
+              )}
             </motion.div>
           </div>
         </motion.div>

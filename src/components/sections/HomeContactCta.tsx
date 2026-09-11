@@ -1,8 +1,9 @@
-import { ArrowRight, Phone, MessageCircle } from "lucide-react";
+import { Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CONTACT } from "@/content";
 import { ROUTES } from "@/lib/routes";
+import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import { gateSecurity } from "@/lib/site-images";
 import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
 import HeroSkeleton from "@/components/common/HeroSkeleton";
@@ -31,71 +32,82 @@ export default function HomeContactCta() {
 
             <p className="mt-6 max-w-xl text-base leading-7 text-[#b4aea5] sm:text-lg">
               Tell us about the property, requirement or operational problem.
-              We’ll help you work out the appropriate service and next step.
+              We'll help you work out the appropriate service and next step.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link to={`${ROUTES.contact}#contact-form`}>
-                <Button
-                  variant="default"
-                  size="lg"
-                  data-analytics-cta="home_final_contact"
-                >
-                  Discuss your requirement
-                  <ArrowRight
-                    className="ml-1 size-4"
-                    aria-hidden="true"
-                  />
-                </Button>
+            {/* Three parallel conversion paths */}
+            <div className="mt-10 grid gap-px border border-[#2b2927] bg-[#2b2927] sm:grid-cols-3">
+              {/* Path 1: Form */}
+              <Link
+                to={`${ROUTES.contact}#contact-form`}
+                className="group flex flex-col bg-[#191918] p-6 transition-colors hover:bg-[#1d1d1c] sm:p-7"
+                data-analytics-cta="home_final_form"
+              >
+                <span className="text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+                  Option 1
+                </span>
+                <span className="mt-3 font-heading text-lg font-semibold text-[#ded8cf] transition-colors group-hover:text-[#f5f1e8]">
+                  Fill Out the Form
+                </span>
+                <span className="mt-2 text-sm leading-6 text-[#b4aea5]">
+                  Quick enquiry form — we respond within one business day.
+                </span>
+                <span className="mt-auto pt-4">
+                  <Button
+                    variant="default"
+                    size="default"
+                    className="w-full"
+                  >
+                    Go to Form
+                  </Button>
+                </span>
               </Link>
 
+              {/* Path 2: Call */}
               {CONTACT.phone && (
                 <a
                   href={`tel:${CONTACT.phone}`}
-                  data-analytics-component="home_final_phone"
+                  className="group flex flex-col bg-[#191918] p-6 transition-colors hover:bg-[#1d1d1c] sm:p-7"
+                  data-analytics-cta="home_final_call"
                 >
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="border-[#3b3936] bg-transparent text-[#f5f1e8] hover:border-[#b52b22] hover:bg-[#b52b22]/10 hover:text-[#f5f1e8]"
-                  >
-                    <Phone
-                      className="mr-1 size-4"
-                      aria-hidden="true"
-                    />
-                    Call SSCSS
-                  </Button>
-                </a>
-              )}
-            </div>
-
-            <div className="mt-8 flex flex-col gap-4 border-t border-[#2b2927] pt-6 sm:flex-row sm:items-center">
-              {CONTACT.phone && (
-                <a
-                  href={`tel:${CONTACT.phone}`}
-                  className="inline-flex items-center gap-3 text-sm text-[#ded8cf] transition-colors hover:text-white"
-                >
-                  <Phone
-                    className="size-4 text-[#c45a52]"
-                    aria-hidden="true"
-                  />
-                  {CONTACT.phone}
+                  <span className="text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+                    Option 2
+                  </span>
+                  <span className="mt-3 font-heading text-lg font-semibold text-[#ded8cf] transition-colors group-hover:text-[#f5f1e8]">
+                    Call Us Now
+                  </span>
+                  <span className="mt-2 text-sm leading-6 text-[#b4aea5]">
+                    Speak directly with our team for immediate support.
+                  </span>
+                  <span className="mt-4 flex items-center gap-2 text-sm font-semibold text-[#c45a52] transition-colors group-hover:text-[#b52b22]">
+                    <Phone className="size-4" aria-hidden="true" />
+                    {CONTACT.phone}
+                  </span>
                 </a>
               )}
 
+              {/* Path 3: WhatsApp */}
               {whatsappNumber && (
                 <a
                   href={`https://wa.me/${whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  data-analytics-component="home_final_whatsapp"
-                  className="inline-flex items-center gap-3 text-sm text-[#ded8cf] transition-colors hover:text-white"
+                  className="group flex flex-col bg-[#191918] p-6 transition-colors hover:bg-[#1d1d1c] sm:p-7"
+                  data-analytics-cta="home_final_whatsapp"
                 >
-                  <MessageCircle
-                    className="size-4 text-[#c45a52]"
-                    aria-hidden="true"
-                  />
-                  WhatsApp SSCSS
+                  <span className="text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+                    Option 3
+                  </span>
+                  <span className="mt-3 font-heading text-lg font-semibold text-[#ded8cf] transition-colors group-hover:text-[#f5f1e8]">
+                    Message on WhatsApp
+                  </span>
+                  <span className="mt-2 text-sm leading-6 text-[#b4aea5]">
+                    Quick questions and deployment discussions.
+                  </span>
+                  <span className="mt-4 flex items-center gap-2 text-sm font-semibold text-[#25D366] transition-colors group-hover:text-[#20ba5a]">
+                    <WhatsAppIcon className="size-4" />
+                    Chat on WhatsApp
+                  </span>
                 </a>
               )}
             </div>

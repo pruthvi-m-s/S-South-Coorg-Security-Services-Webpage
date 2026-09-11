@@ -55,6 +55,12 @@ export const EVENTS = {
 
   /** FAQ accordion expand/collapse. */
   faqInteraction: "faq_interaction",
+
+  /** Contact form first interaction (user focuses/types in any field). */
+  formStart: "form_start",
+
+  /** Contact form progress — user completes a field group. */
+  formProgress: "form_progress",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];
@@ -132,6 +138,15 @@ export interface FaqInteractionParams {
   faq_category?: string;
 }
 
+export interface FormStartParams {
+  source_page: string;
+}
+
+export interface FormProgressParams {
+  source_page: string;
+  field_group: string;
+}
+
 // ─── Union of all event params ───────────────────────────────
 export type AnalyticsEventParams =
   | PageViewParams
@@ -146,7 +161,9 @@ export type AnalyticsEventParams =
   | OutboundLinkClickParams
   | FileDownloadClickParams
   | GalleryInteractionParams
-  | FaqInteractionParams;
+  | FaqInteractionParams
+  | FormStartParams
+  | FormProgressParams;
 
 // ─── Global typings (window.dataLayer / window.gtag) ─────────
 export type DataLayerEntry = {

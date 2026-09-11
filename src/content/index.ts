@@ -25,6 +25,7 @@ export type {
 
 export {
   INDUSTRIES,
+  getIndustryBySlug,
   getIndustriesForService,
 } from "./industries";
 

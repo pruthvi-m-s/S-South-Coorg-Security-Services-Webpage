@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import {
   staggerContainer,
   fadeUp,
@@ -32,6 +33,7 @@ export default function FinalCtaSection({
     supportingText,
     primaryCta,
     secondaryCta,
+    tertiaryCta,
   } = content;
 
   return (
@@ -77,14 +79,15 @@ export default function FinalCtaSection({
 
             <motion.div
               variants={fadeUp}
-              className="mt-7 flex flex-col gap-3 sm:flex-row"
+              className="mt-7 grid gap-3 sm:grid-cols-3"
             >
               {isExternalHref(primaryCta.href) ? (
                 <a href={primaryCta.href}>
                   <Button
                     variant="default"
                     size="lg"
-                    className="w-full sm:w-auto"
+                    className="w-full"
+                    data-analytics-cta="final_cta_primary"
                   >
                     {primaryCta.label}
                     <ArrowRight
@@ -98,8 +101,8 @@ export default function FinalCtaSection({
                   <Button
                     variant="default"
                     size="lg"
+                    className="w-full"
                     data-analytics-cta="final_cta_primary"
-                    className="w-full sm:w-auto"
                   >
                     {primaryCta.label}
                     <ArrowRight
@@ -110,40 +113,49 @@ export default function FinalCtaSection({
                 </Link>
               )}
 
-              {secondaryCta &&
-                (isExternalHref(secondaryCta.href) ? (
-                  <a
-                    href={secondaryCta.href}
-                    target={
-                      secondaryCta.href.startsWith("http")
-                        ? "_blank"
-                        : undefined
-                    }
-                    rel={
-                      secondaryCta.href.startsWith("http")
-                        ? "noopener noreferrer"
-                        : undefined
-                    }
+              {secondaryCta && (
+                <a
+                  href={secondaryCta.href}
+                  target={
+                    secondaryCta.href.startsWith("http")
+                      ? "_blank"
+                      : undefined
+                  }
+                  rel={
+                    secondaryCta.href.startsWith("http")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                >
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full border-[#3a3835] bg-transparent text-[#f5f1e8] hover:border-[#b52b22] hover:bg-[#b52b22]/10 hover:text-[#f5f1e8]"
+                    data-analytics-cta="final_cta_call"
                   >
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="w-full border-[#3a3835] bg-transparent text-[#f5f1e8] hover:border-[#b52b22] hover:bg-[#b52b22]/10 hover:text-[#f5f1e8] sm:w-auto"
-                    >
-                      {secondaryCta.label}
-                    </Button>
-                  </a>
-                ) : (
-                  <Link to={secondaryCta.href}>
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="w-full border-[#3a3835] bg-transparent text-[#f5f1e8] hover:border-[#b52b22] hover:bg-[#b52b22]/10 hover:text-[#f5f1e8] sm:w-auto"
-                    >
-                      {secondaryCta.label}
-                    </Button>
-                  </Link>
-                ))}
+                    <Phone className="mr-1 size-4" aria-hidden="true" />
+                    {secondaryCta.label}
+                  </Button>
+                </a>
+              )}
+
+              {tertiaryCta && (
+                <a
+                  href={tertiaryCta.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full border-[#25D366]/30 bg-transparent text-[#25D366] hover:border-[#25D366] hover:bg-[#25D366]/10 hover:text-[#25D366]"
+                    data-analytics-cta="final_cta_whatsapp"
+                  >
+                    <WhatsAppIcon className="mr-1 size-4" />
+                    {tertiaryCta.label}
+                  </Button>
+                </a>
+              )}
             </motion.div>
           </div>
         </motion.div>

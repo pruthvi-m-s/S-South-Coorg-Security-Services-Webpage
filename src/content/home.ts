@@ -31,6 +31,10 @@ export const HOME = {
         text: "Security, manpower and facility support become harder to manage when accountability is fragmented.",
       },
     ],
+    cta: {
+      label: "See how we solve this",
+      href: "#home-solution",
+    },
   },
 
   // ─── Solution — the SSCSS approach ──────────────────────────
@@ -56,6 +60,10 @@ export const HOME = {
         text: "Your team should know who to contact, what happens next and how issues are handled.",
       },
     ],
+    cta: {
+      label: "Discuss your requirement",
+      href: "/contact#contact-form",
+    },
   },
 
   // ─── Services — grouped preview ─────────────────────────────
@@ -100,5 +108,9 @@ export const HOME = {
     title: "Before you engage a service partner.",
     subtitle:
       "Straight answers to the practical questions buyers usually have before deployment.",
+    cta: {
+      label: "Talk to our team",
+      href: "/contact#contact-form",
+    },
   },
 } as const;
