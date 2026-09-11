@@ -28,3 +28,6 @@ dist-ssr
 
 # IDE history backup artifacts
 .history
+
+.vercel
+.env*
