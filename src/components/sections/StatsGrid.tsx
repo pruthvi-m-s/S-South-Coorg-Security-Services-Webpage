@@ -8,6 +8,13 @@ interface StatsGridProps {
   className?: string;
 }
 
+// Context labels that ground stats in evidence
+const EVIDENCE_LABELS: Record<string, string> = {
+  "stat-years": "established 2008",
+  "stat-guards": "active personnel deployed",
+  "stat-clients": "partner organizations across sectors",
+};
+
 export default function StatsGrid({
   stats,
   columns = 3,
@@ -61,7 +68,7 @@ export default function StatsGrid({
           </p>
 
           <p className="mt-2 text-sm leading-6 text-[#77716a]">
-            {stat.suffix.replace("+", "").trim()}
+            {EVIDENCE_LABELS[stat.id] ?? stat.suffix.replace("+", "").trim()}
           </p>
         </motion.div>
       ))}

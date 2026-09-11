@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
 import ImageWithSkeleton from "@/components/common/ImageWithSkeleton";
 import HeroSkeleton from "@/components/common/HeroSkeleton";
@@ -35,7 +36,7 @@ export default function AboutHero({
       )}
       aria-labelledby="about-hero-title"
     >
-      <div className="section-container py-16 sm:py-20 lg:py-24">
+      <div className="section-container py-20 sm:py-24 lg:py-28">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
@@ -76,20 +77,29 @@ export default function AboutHero({
               <Link
                 to={`${ROUTES.contact}#contact-form`}
                 data-analytics-cta="about_hero_contact"
-                className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#b52b22] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#8f1912]"
+                className="w-full sm:w-auto"
               >
-                Discuss your requirement
-                <ArrowRight
-                  className="size-4"
-                  aria-hidden="true"
-                />
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  Discuss your requirement
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Button>
               </Link>
 
               <Link
                 to={ROUTES.services}
-                className="inline-flex min-h-12 items-center justify-center border border-[#3a3835] px-5 text-sm font-semibold text-[#f5f1e8] transition-colors hover:border-[#b52b22]"
+                className="w-full sm:w-auto"
               >
-                Explore our services
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  Explore our services
+                </Button>
               </Link>
             </motion.div>
 

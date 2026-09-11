@@ -99,7 +99,7 @@ export default function GalleryDriftWall({
               variants={fadeUp}
               className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
             >
-              Visual Operations
+              Real Presence
             </motion.p>
 
             <motion.h2

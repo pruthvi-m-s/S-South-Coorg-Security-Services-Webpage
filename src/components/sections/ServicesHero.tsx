@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
 import { ROUTES } from "@/lib/routes";
 import {
@@ -42,7 +43,7 @@ export default function ServicesHero({
               variants={fadeUp}
               className="text-xs font-semibold uppercase tracking-[0.16em] text-[#c45a52]"
             >
-              Security • Manpower • Facility Support
+              Security · Manpower · Facility Support
             </motion.p>
 
             <HeadlineReveal
@@ -60,17 +61,29 @@ export default function ServicesHero({
               <Link
                 to={`${ROUTES.contact}#contact-form`}
                 data-analytics-cta="services_hero_contact"
-                className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#b52b22] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#8f1912]"
+                className="w-full sm:w-auto"
               >
-                Discuss your requirement
-                <ArrowRight className="size-4" aria-hidden="true" />
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  Discuss your requirement
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Button>
               </Link>
 
               <Link
                 to={`${ROUTES.services}#service-groups`}
-                className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#3a3835] px-5 text-sm font-semibold text-[#f5f1e8] transition-colors hover:border-[#b52b22] hover:text-white"
+                className="w-full sm:w-auto"
               >
-                Explore services
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  Explore services
+                </Button>
               </Link>
             </motion.div>
           </div>

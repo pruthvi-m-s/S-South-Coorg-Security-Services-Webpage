@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
 import OperationalImageSlider from "@/components/common/OperationalImageSlider";
 import {
@@ -78,20 +79,29 @@ export default function ClientsHero({
               <Link
                 to={`${ROUTES.contact}#contact-form`}
                 data-analytics-cta="clients_hero_contact"
-                className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#b52b22] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#8f1912]"
+                className="w-full sm:w-auto"
               >
-                Discuss your requirement
-                <ArrowRight
-                  className="size-4"
-                  aria-hidden="true"
-                />
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  Discuss your requirement
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Button>
               </Link>
 
               <Link
                 to={ROUTES.services}
-                className="inline-flex min-h-12 items-center justify-center border border-[#3a3835] px-5 text-sm font-semibold text-[#f5f1e8] transition-colors hover:border-[#b52b22]"
+                className="w-full sm:w-auto"
               >
-                Explore our services
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  Explore our services
+                </Button>
               </Link>
             </motion.div>
 

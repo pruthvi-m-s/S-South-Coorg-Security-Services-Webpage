@@ -62,6 +62,12 @@ function AnimatedStat({ stat }: { stat: Stat }) {
     return () => observer.disconnect();
   }, [stat.value]);
 
+  const evidenceLabels: Record<string, string> = {
+    "stat-years": "established 2008",
+    "stat-guards": "active personnel",
+    "stat-clients": "partner organizations",
+  };
+
   return (
     <div>
       <span
@@ -72,8 +78,12 @@ function AnimatedStat({ stat }: { stat: Stat }) {
         <span className="text-[#b52b22]">+</span>
       </span>
 
-      <p className="mt-2 text-xs uppercase tracking-[0.12em] text-[#77716a]">
+      <p className="mt-2 text-xs uppercase tracking-[0.12em] text-[#c45a52]">
         {stat.label}
+      </p>
+
+      <p className="mt-1 text-xs text-[#77716a]">
+        {evidenceLabels[stat.id] ?? ""}
       </p>
     </div>
   );
@@ -283,7 +293,7 @@ export default function ClientTrustExperience({
                     className="bg-[#10100f] p-6 sm:p-7"
                   >
                     <p className="font-heading text-xl font-medium leading-snug text-[#ded8cf]">
-                      “{item.quote}”
+                      "{item.quote}"
                     </p>
 
                     <footer className="mt-5 text-xs font-semibold uppercase tracking-[0.12em] text-[#77716a]">
@@ -293,22 +303,41 @@ export default function ClientTrustExperience({
                 ))}
               </div>
             ) : (
-              <div className="flex items-start gap-4 border border-[#2b2927] bg-[#10100f] p-6 sm:p-8">
-                <CheckCircle2
-                  className="mt-0.5 size-5 shrink-0 text-[#c45a52]"
-                  aria-hidden="true"
-                />
+              <div className="border border-[#2b2927] bg-[#10100f] p-6 sm:p-8">
+                <div className="flex items-start gap-4">
+                  <CheckCircle2
+                    className="mt-0.5 size-5 shrink-0 text-[#c45a52]"
+                    aria-hidden="true"
+                  />
 
-                <div>
-                  <h3 className="font-heading text-xl font-semibold text-[#f5f1e8]">
-                    Client proof is permission-led.
-                  </h3>
+                  <div>
+                    <h3 className="font-heading text-xl font-semibold text-[#f5f1e8]">
+                      Client proof is permission-led.
+                    </h3>
 
-                  <p className="mt-2 text-sm leading-6 text-[#77716a]">
-                    Client names, logos and testimonials are published only
-                    after the required approval is available.
-                  </p>
+                    <p className="mt-2 text-sm leading-6 text-[#77716a]">
+                      Client names, logos and testimonials are published only
+                      after the required approval is available.
+                    </p>
+                  </div>
                 </div>
+
+                <div className="mt-6 grid gap-px border border-[#2b2927] bg-[#2b2927] sm:grid-cols-3">
+                  {["Residential", "Corporate", "Healthcare"].map((sector) => (
+                    <div
+                      key={sector}
+                      className="bg-[#191918] px-4 py-3 text-center"
+                    >
+                      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#5a554f]">
+                        {sector}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="mt-4 text-xs text-[#5a554f]">
+                  Sector categories reflect active deployment environments.
+                </p>
               </div>
             )}
           </motion.div>

@@ -96,6 +96,12 @@ export default function AboutEvidenceSection({
                       ? "Documentation available on request."
                       : "Documentation available for review."}
                   </p>
+
+                  {pending && (
+                    <p className="mt-3 text-xs text-[#5a554f]">
+                      Status reflects current publication records.
+                    </p>
+                  )}
                 </article>
               );
             })}

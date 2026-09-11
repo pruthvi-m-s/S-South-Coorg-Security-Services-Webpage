@@ -20,6 +20,13 @@ interface TrustRibbonProps {
   className?: string;
 }
 
+// ─── Context labels that ground stats in evidence ──────────────
+const EVIDENCE_LABELS: Record<string, string> = {
+  "stat-years": "established 2008",
+  "stat-guards": "active personnel",
+  "stat-clients": "partner organizations",
+};
+
 // ─── TrustRibbon ──────────────────────────────────────────────
 export default function TrustRibbon({
   stats,
@@ -39,7 +46,7 @@ export default function TrustRibbon({
       viewport={viewportOptions}
       className={cn("grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0", className)}
     >
-      {/* Key stats (compact, no counters) */}
+      {/* Key stats (compact, grounded in evidence) */}
       {visibleStats.map((stat) => (
         <motion.span
           key={stat.id}
@@ -52,7 +59,7 @@ export default function TrustRibbon({
             {stat.value}<span className="text-primary">+</span>
           </span>
           <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            {stat.suffix.replace("+ ", "")}
+            {EVIDENCE_LABELS[stat.id] ?? stat.suffix.replace("+ ", "")}
           </span>
         </motion.span>
       ))}

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
 import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import { getIcon } from "@/lib/icons";
@@ -39,7 +40,7 @@ export default function IndustryDetailHero({
       )}
       aria-labelledby="industry-detail-title"
     >
-      <div className="section-container py-16 sm:py-20 lg:py-24">
+      <div className="section-container py-20 sm:py-24 lg:py-28">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
@@ -63,7 +64,7 @@ export default function IndustryDetailHero({
               variants={fadeUp}
               className="text-xs font-semibold uppercase tracking-[0.16em] text-[#c45a52]"
             >
-              INDUSTRY
+              Industry
             </motion.p>
 
             <div className="mt-4">
@@ -93,23 +94,32 @@ export default function IndustryDetailHero({
               <Link
                 to={`${ROUTES.contact}#contact-form`}
                 data-analytics-cta="industry_detail_contact"
-                className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#b52b22] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#8f1912]"
+                className="w-full sm:w-auto"
               >
-                {ctaLabel}
-                <ArrowRight
-                  className="size-4"
-                  aria-hidden="true"
-                />
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  {ctaLabel}
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Button>
               </Link>
 
               {CONTACT.phone && (
                 <a
                   href={`tel:${CONTACT.phone}`}
                   data-analytics-cta="industry_detail_call"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#3a3835] px-5 text-sm font-semibold text-[#f5f1e8] transition-colors hover:border-[#b52b22] hover:bg-[#b52b22]/10"
+                  className="w-full sm:w-auto"
                 >
-                  <Phone size={16} aria-hidden="true" />
-                  Call Us Now
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto"
+                  >
+                    <Phone size={16} aria-hidden="true" />
+                    Call Us Now
+                  </Button>
                 </a>
               )}
 
@@ -119,10 +129,16 @@ export default function IndustryDetailHero({
                   target="_blank"
                   rel="noopener noreferrer"
                   data-analytics-cta="industry_detail_whatsapp"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#25D366]/30 px-5 text-sm font-semibold text-[#25D366] transition-colors hover:border-[#25D366] hover:bg-[#25D366]/10"
+                  className="w-full sm:w-auto"
                 >
-                  <WhatsAppIcon className="size-4" />
-                  WhatsApp Us
+                  <Button
+                    variant="ghost"
+                    size="lg"
+                    className="w-full gap-2 text-[#25D366] hover:bg-[#25D366]/10 hover:text-[#25D366] sm:w-auto"
+                  >
+                    <WhatsAppIcon className="size-4" />
+                    WhatsApp Us
+                  </Button>
                 </a>
               )}
             </motion.div>

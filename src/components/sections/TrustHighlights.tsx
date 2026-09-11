@@ -93,6 +93,13 @@ export default function TrustHighlights({
               ))}
             </motion.div>
           </div>
+
+          <motion.p
+            variants={fadeUp}
+            className="mt-10 text-center text-xs text-[#5a554f]"
+          >
+            All imagery reflects actual SSCSS deployments, training, and operations.
+          </motion.p>
         </motion.div>
       </div>
     </section>

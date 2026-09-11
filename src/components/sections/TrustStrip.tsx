@@ -82,6 +82,13 @@ export default function TrustStrip({
           </Badge>
         ))}
       </motion.div>
+
+      <motion.p
+        variants={fadeUp}
+        className="mt-4 text-center text-xs text-muted-foreground"
+      >
+        All documentation available for review upon request.
+      </motion.p>
     </motion.div>
   );
 }
