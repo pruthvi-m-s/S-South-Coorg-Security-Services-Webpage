@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import Hero from "@/components/sections/Hero";
+import HeroScrollExpand from "@/components/sections/HeroScrollExpand";
 import TrustStats from "@/components/sections/TrustStats";
 import GroupedServicesPreview from "@/components/sections/GroupedServicesPreview";
 import HomeProcessTimeline from "@/components/sections/HomeProcessTimeline";
@@ -34,7 +34,7 @@ export default function HomePage() {
     <>
       {/* HERO — DARK */}
       <div className="bg-[#10100f] text-[#f5f1e8]">
-        <Hero content={HERO} />
+        <HeroScrollExpand content={HERO} />
       </div>
 
       {/* TRUST RIBBON — DARK */}

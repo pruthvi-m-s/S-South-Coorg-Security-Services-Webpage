@@ -1,4 +1,5 @@
 import GalleryHero from "@/components/sections/GalleryHero";
+import GalleryDriftWall from "@/components/sections/GalleryDriftWall";
 import GalleryGrid from "@/components/sections/GalleryGrid";
 import TrustHighlights from "@/components/sections/TrustHighlights";
 import FinalCtaSection from "@/components/sections/FinalCtaSection";
@@ -37,6 +38,8 @@ export default function GalleryPage() {
           </div>
         </div>
       </section>
+
+      <GalleryDriftWall images={GALLERY.images} />
 
       <GalleryGrid
         title="Our Photo Collection"
