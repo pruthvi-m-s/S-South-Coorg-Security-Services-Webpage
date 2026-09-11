@@ -1,0 +1,26 @@
+# SSCSS — S South Coorg Security Services
+
+> Private security and manpower services company based in Bengaluru, India. Established 2008. 18+ years, 100+ guards, 50+ clients. Serves South Bengaluru primarily and all of bengaluru (on request).
+
+## Services
+- [Security Guards](/services/security-guards): Trained, disciplined security personnel for your premises.
+- [Corporate Security](/services/corporate-security): Professional security management for corporate offices and IT parks.
+- [Industrial Security](/services/industrial-security): Robust security solutions for factories, warehouses, and industrial facilities.
+- [Residential Security](/services/residential-security): Trusted security for apartments, gated communities, and residential complexes.
+- [Housekeeping](/services/housekeeping): Professional housekeeping and cleaning services for commercial and residential spaces.
+- [Front Office Management](/services/front-office-management): Professional front desk and reception management for your business.
+- [Skilled Labour](/services/skilled-labour): Qualified skilled workers for your operational and project needs.
+- [Unskilled Labour](/services/unskilled-labour): Reliable general labour support for your operations and projects.
+- [Corporate Staffing](/services/corporate-staffing): End-to-end staffing solutions for corporate and administrative roles.
+- [Ex-Army Security Guards](/services/ex-army-security-guards): Disciplined, experienced ex-servicemen for premium security needs.
+- [Event Security](/services/event-security): Comprehensive security management for events, conferences, and gatherings.
+- [Background Verification](/services/background-verification): Thorough background checks for individuals and organizations.
+- [Private Detective Services](/services/private-detective-services): Discreet, professional investigative services for individuals and businesses.
+- [Integrated Facility Management Services](/services/integrated-facility-management-services): Complete facility operations management — security, housekeeping, staffing, and more.
+
+## Company
+- [About](/about): company history, service approach, and company information.
+- [Contact](/contact): enquiry form and available contact details.
+
+## Industries served
+- [Industries](/industries): Apartment Associations, Factories, Warehouses, IT Companies, Corporate Offices, Hospitals, Schools, Hotels, Commercial Buildings, Business Parks, Construction Sites, Government Institutions.
