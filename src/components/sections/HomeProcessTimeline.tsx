@@ -127,7 +127,8 @@ export default function HomeProcessTimeline({
           </p>
         </div>
 
-        <ol className="relative mt-14 max-w-5xl">
+        <div className="mx-auto max-w-5xl">
+        <ol className="relative mt-14">
           <div
             className="absolute bottom-8 left-[1rem] top-8 w-px bg-[#d9d1c5] sm:left-[6rem]"
             aria-hidden="true"
@@ -197,7 +198,7 @@ export default function HomeProcessTimeline({
           })}
           </ol>
 
-          <div className="mt-12 flex justify-center">
+           <div className="mt-12 flex justify-center">
             <Link to={`${ROUTES.contact}#contact-form`}>
               <Button
                 variant="default"
@@ -209,6 +210,7 @@ export default function HomeProcessTimeline({
               </Button>
             </Link>
           </div>
+        </div>
         </div>
       </section>
   );

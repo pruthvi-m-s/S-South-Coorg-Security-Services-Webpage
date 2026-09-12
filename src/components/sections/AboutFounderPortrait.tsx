@@ -81,13 +81,13 @@ export default function AboutFounderPortrait({
 
             <h2
               id="about-founder-title"
-              className="mt-3 max-w-2xl font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-6xl"
+              className="mt-3 max-w-2xl font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
             >
               {content.heading}
             </h2>
 
             <div className="mt-7 inline-flex items-center gap-4 border-y border-[#2b2927] py-5">
-              <span className="font-heading text-4xl font-semibold text-[#c45a52]">
+              <span className="font-heading text-3xl font-semibold text-[#c45a52]">
                 {content.experienceBadge}
               </span>
 
@@ -101,7 +101,7 @@ export default function AboutFounderPortrait({
             </p>
 
             <blockquote className="mt-8 border-l-2 border-[#b52b22] pl-6">
-              <p className="max-w-xl font-heading text-2xl font-semibold leading-tight tracking-tight text-[#f5f1e8] sm:text-3xl">
+              <p className="max-w-xl font-heading text-2xl font-semibold leading-tight tracking-tight text-[#f5f1e8] sm:text-2xl">
                 “{content.quote}”
               </p>
             </blockquote>

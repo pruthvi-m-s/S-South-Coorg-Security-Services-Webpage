@@ -25,7 +25,7 @@ export default function HomeContactCta() {
 
             <h2
               id="home-contact-title"
-              className="mt-3 max-w-2xl font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-6xl"
+              className="mt-3 max-w-2xl font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
             >
               Tell us what needs to be secured, staffed or managed.
             </h2>
@@ -36,7 +36,7 @@ export default function HomeContactCta() {
             </p>
 
             {/* Three parallel conversion paths */}
-            <div className="mt-10 grid gap-px border border-[#2b2927] bg-[#2b2927] sm:grid-cols-3">
+            <div className="mt-10 grid gap-px border border-[#2b2927] bg-[#2b2927] md:grid-cols-3">
               {/* Path 1: Form */}
               <Link
                 to={`${ROUTES.contact}#contact-form`}

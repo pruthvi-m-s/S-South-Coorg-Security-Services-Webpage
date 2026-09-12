@@ -59,7 +59,7 @@ export default function Hero({ content, className }: HeroProps) {
             <HeadlineReveal
               as="h1"
               delay={0.32}
-              className="mt-4 max-w-2xl font-heading text-5xl font-semibold leading-[0.98] tracking-[-0.045em] text-ink sm:text-6xl lg:text-[4.35rem]"
+              className="mt-4 max-w-2xl font-heading text-5xl font-semibold leading-[0.98] tracking-[-0.045em] text-ink sm:text-6xl lg:text-[4.25rem]"
             >
               {headline}
             </HeadlineReveal>

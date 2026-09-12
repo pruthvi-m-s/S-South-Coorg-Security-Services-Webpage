@@ -25,7 +25,7 @@ export default function IndustryEnvironment({
   return (
     <section
       className={cn(
-        "bg-[#10100f] text-[#f5f1e8]",
+        "bg-[#10100f] border-t border-[#2b2927] text-[#f5f1e8]",
         className,
       )}
       aria-labelledby="industry-environment-title"

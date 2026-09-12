@@ -62,7 +62,7 @@ export default function ServiceDetailHero({
               <HeadlineReveal
                 as="h1"
                 delay={0.12}
-                className="max-w-2xl font-heading text-5xl font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f1e8] sm:text-6xl lg:text-[4.35rem]"
+                className="max-w-2xl font-heading text-5xl font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f1e8] sm:text-6xl lg:text-[4.25rem]"
               >
                 {name}
               </HeadlineReveal>

@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import HeadlineReveal from "@/components/common/HeadlineReveal";
+import WhatsAppIcon from "@/components/common/WhatsAppIcon";
 import { ROUTES } from "@/lib/routes";
+import { CONTACT } from "@/content";
 import {
   staggerContainer,
   fadeUp,
@@ -22,6 +24,8 @@ export default function ServicesHero({
   subtitle,
   className,
 }: ServicesHeroProps) {
+  const whatsappNumber = CONTACT.whatsapp?.replace(/\D/g, "");
+
   return (
     <section
       className={cn(
@@ -49,14 +53,14 @@ export default function ServicesHero({
             <HeadlineReveal
               as="h1"
               delay={0.12}
-              className="mt-4 max-w-3xl font-heading text-5xl font-semibold leading-[1] tracking-[-0.045em] text-[#f5f1e8] sm:text-6xl lg:text-[4.5rem]"
+              className="mt-4 max-w-3xl font-heading text-5xl font-semibold leading-[1] tracking-[-0.045em] text-[#f5f1e8] sm:text-6xl lg:text-[4.25rem]"
             >
               {title}
             </HeadlineReveal>
 
             <motion.div
               variants={fadeUp}
-              className="mt-8 flex flex-col gap-3 sm:flex-row"
+              className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
             >
               <Link
                 to={`${ROUTES.contact}#contact-form`}
@@ -73,18 +77,41 @@ export default function ServicesHero({
                 </Button>
               </Link>
 
-              <Link
-                to={`${ROUTES.services}#service-groups`}
-                className="w-full sm:w-auto"
-              >
-                <Button
-                  variant="outline"
-                  size="lg"
+              {CONTACT.phone && (
+                <a
+                  href={`tel:${CONTACT.phone}`}
+                  data-analytics-cta="services_hero_call"
                   className="w-full sm:w-auto"
                 >
-                  Explore services
-                </Button>
-              </Link>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto"
+                  >
+                    <Phone size={16} aria-hidden="true" />
+                    Call Us Now
+                  </Button>
+                </a>
+              )}
+
+              {whatsappNumber && (
+                <a
+                  href={`https://wa.me/${whatsappNumber}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-analytics-cta="services_hero_whatsapp"
+                  className="w-full sm:w-auto"
+                >
+                  <Button
+                    variant="ghost"
+                    size="lg"
+                    className="w-full gap-2 text-[#25D366] hover:bg-[#25D366]/10 hover:text-[#25D366] sm:w-auto"
+                  >
+                    <WhatsAppIcon className="size-4" />
+                    WhatsApp Us
+                  </Button>
+                </a>
+              )}
             </motion.div>
           </div>
 

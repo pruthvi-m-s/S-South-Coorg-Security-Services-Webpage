@@ -52,7 +52,7 @@ export default function IndustriesHero({
               <HeadlineReveal
                 as="h1"
                 delay={0.1}
-                className="max-w-3xl font-heading text-5xl font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f1e8] sm:text-6xl lg:text-[4.5rem]"
+                className="max-w-3xl font-heading text-5xl font-semibold leading-[0.99] tracking-[-0.045em] text-[#f5f1e8] sm:text-6xl lg:text-[4.25rem]"
               >
                 {title}
               </HeadlineReveal>
