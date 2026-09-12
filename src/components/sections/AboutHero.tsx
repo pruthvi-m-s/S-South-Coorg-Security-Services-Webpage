@@ -111,7 +111,7 @@ export default function AboutHero({
                 <p className="text-2xl font-semibold text-[#f5f1e8]">
                   2008
                 </p>
-                <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[#77716a]">
+                <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[#9a9590]">
                   Founded
                 </p>
               </div>
@@ -120,7 +120,7 @@ export default function AboutHero({
                 <p className="text-2xl font-semibold text-[#f5f1e8]">
                   100+
                 </p>
-                <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[#77716a]">
+                <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[#9a9590]">
                   Personnel
                 </p>
               </div>
@@ -129,7 +129,7 @@ export default function AboutHero({
                 <p className="text-2xl font-semibold text-[#f5f1e8]">
                   50+
                 </p>
-                <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[#77716a]">
+                <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[#9a9590]">
                   Clients
                 </p>
               </div>

@@ -181,7 +181,7 @@ export default function CompanyStory({
                       {entry.title}
                     </p>
 
-                    <p className="mt-2 text-sm leading-6 text-[#77716a]">
+                    <p className="mt-2 text-sm leading-6 text-[#9a9590]">
                       {entry.description}
                     </p>
                   </div>

@@ -123,7 +123,7 @@ export default function ImageWheel() {
 
             <div className="mt-8 grid gap-4 border-t border-[#2b2927] pt-6 sm:grid-cols-2">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                   Presence
                 </p>
 
@@ -133,7 +133,7 @@ export default function ImageWheel() {
               </div>
 
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                   Professionalism
                 </p>
 

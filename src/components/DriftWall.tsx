@@ -283,8 +283,21 @@ const DriftWall = ({
         </a>
       );
     }
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        activate(id, colIndex);
+      }
+    };
     return (
-      <div key={id} tabIndex={0} role="button" aria-label={item.title ?? 'tile'} {...commonProps}>
+      <div
+        key={id}
+        tabIndex={0}
+        role="button"
+        aria-label={item.title ?? 'tile'}
+        onKeyDown={handleKeyDown}
+        {...commonProps}
+      >
         {inner}
       </div>
     );

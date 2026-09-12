@@ -226,7 +226,7 @@ export default function GalleryGrid({
                             "focus-visible:outline-2 focus-visible:outline-[#b52b22] focus-visible:outline-offset-2",
                             active
                               ? "border-[#b52b22] bg-[#b52b22] text-white"
-                              : "border-[#3a3835] bg-transparent text-[#99938c] hover:border-[#77716a] hover:text-[#f5f1e8]",
+                              : "border-[#3a3835] bg-transparent text-[#99938c] hover:border-[#9a9590] hover:text-[#f5f1e8]",
                           )}
                         >
                           {category.label}
@@ -240,7 +240,7 @@ export default function GalleryGrid({
                   variants={fadeUp}
                   role="status"
                   aria-live="polite"
-                  className="mt-5 text-xs uppercase tracking-[0.12em] text-[#77716a]"
+                  className="mt-5 text-xs uppercase tracking-[0.12em] text-[#9a9590]"
                 >
                   Showing {filteredImages.length}{" "}
                   {filteredImages.length === 1
@@ -335,7 +335,7 @@ export default function GalleryGrid({
                 </div>
               ) : (
                 <div className="border border-[#2b2927] bg-[#191918] px-6 py-14 text-center">
-                  <p className="text-sm text-[#77716a]">
+                  <p className="text-sm text-[#9a9590]">
                     No images found in this
                     category.
                   </p>
@@ -388,7 +388,7 @@ export default function GalleryGrid({
                             </svg>
                           </div>
 
-                          <p className="mt-2 text-xs text-[#77716a]">
+                          <p className="mt-2 text-xs text-[#9a9590]">
                             {video.duration ??
                               "Video"}
                           </p>

@@ -137,7 +137,7 @@ export default function ServiceDetailHero({
               className="mt-8 grid max-w-xl gap-4 border-t border-[#2b2927] pt-6 sm:grid-cols-3"
             >
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                   Requirement
                 </p>
                 <p className="mt-1 text-sm text-[#ded8cf]">
@@ -146,7 +146,7 @@ export default function ServiceDetailHero({
               </div>
 
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                   Deployment
                 </p>
                 <p className="mt-1 text-sm text-[#ded8cf]">
@@ -155,7 +155,7 @@ export default function ServiceDetailHero({
               </div>
 
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                   Support
                 </p>
                 <p className="mt-1 text-sm text-[#ded8cf]">

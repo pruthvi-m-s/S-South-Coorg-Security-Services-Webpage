@@ -76,7 +76,7 @@ export default function Footer({
             </Link>
 
             {description && (
-              <p className="mt-4 max-w-sm text-sm leading-7 text-[#77716a]">
+              <p className="mt-4 max-w-sm text-sm leading-7 text-[#9a9590]">
                 {description}
               </p>
             )}
@@ -99,7 +99,7 @@ export default function Footer({
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-sm text-[#8f8981] transition-colors duration-200 hover:text-[#f5f1e8] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
+                    className="flex min-h-[44px] items-center text-sm text-[#8f8981] transition-colors duration-200 hover:text-[#f5f1e8] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
                   >
                     {link.title}
                   </Link>
@@ -121,7 +121,7 @@ export default function Footer({
                   <li key={service.slug}>
                     <Link
                       to={`/services/${service.slug}`}
-                      className="text-sm text-[#8f8981] transition-colors duration-200 hover:text-[#f5f1e8] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
+                      className="flex min-h-[44px] items-center text-sm text-[#8f8981] transition-colors duration-200 hover:text-[#f5f1e8] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
                     >
                       {service.name}
                     </Link>
@@ -132,7 +132,7 @@ export default function Footer({
             {services.length > 8 && (
               <Link
                 to="/services"
-                className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#c45a52] hover:text-white"
+                className="mt-5 flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-[#c45a52] hover:text-white"
               >
                 View all services
                 <ArrowUpRight
@@ -154,10 +154,10 @@ export default function Footer({
                 <a
                   href={`tel:${contact.phone}`}
                   data-analytics-component="footer_phone"
-                  className="group flex items-start gap-3"
+                  className="group flex min-h-[44px] items-center gap-3 py-1"
                 >
                   <Phone
-                    className="mt-0.5 size-4 shrink-0 text-[#c45a52]"
+                    className="size-4 shrink-0 text-[#c45a52]"
                     aria-hidden="true"
                   />
                   <span className="text-sm text-[#8f8981] group-hover:text-[#f5f1e8]">
@@ -169,13 +169,13 @@ export default function Footer({
               {contact.email && (
                 <a
                   href={`mailto:${contact.email}`}
-                  className="group flex items-start gap-3"
+                  className="group flex min-h-[44px] items-center gap-3 py-1"
                 >
                   <Mail
-                    className="mt-0.5 size-4 shrink-0 text-[#c45a52]"
+                    className="size-4 shrink-0 text-[#c45a52]"
                     aria-hidden="true"
                   />
-                  <span className="break-all text-sm text-[#8f8981] group-hover:text-[#f5f1e8]">
+                  <span className="break-words text-sm text-[#8f8981] group-hover:text-[#f5f1e8]">
                     {contact.email}
                   </span>
                 </a>
@@ -187,20 +187,20 @@ export default function Footer({
                   data-analytics-component="footer_whatsapp"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-semibold text-[#c45a52] hover:text-white"
+                  className="flex min-h-[44px] items-center text-sm font-semibold text-[#c45a52] hover:text-white"
                 >
                   WhatsApp
                 </a>
               )}
 
               {contact.address && (
-                <p className="text-sm leading-7 text-[#77716a]">
+                <p className="text-sm leading-7 text-[#9a9590]">
                   {contact.address}
                 </p>
               )}
 
               {contact.officeHours && (
-                <p className="text-xs leading-6 text-[#5f5a54]">
+                <p className="text-xs leading-6 text-[#9a9590]">
                   {contact.officeHours}
                 </p>
               )}
@@ -220,7 +220,7 @@ export default function Footer({
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm capitalize text-[#77716a] hover:text-[#f5f1e8]"
+                        className="flex min-h-[44px] items-center text-sm capitalize text-[#9a9590] hover:text-[#f5f1e8]"
                         aria-label={`Follow us on ${platform}`}
                       >
                         {platform}
@@ -234,7 +234,7 @@ export default function Footer({
         </div>
 
         <div className="mt-12 border-t border-[#2b2927] pt-6">
-          <div className="flex flex-col gap-3 text-xs text-[#5f5a54] sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 text-xs text-[#9a9590] sm:flex-row sm:items-center sm:justify-between">
             <p>
               © {currentYear} {siteName}. All
               rights reserved.

@@ -98,7 +98,7 @@ export default function ServicesHero({
 
             <div className="mt-8 grid gap-6 border-t border-[#2b2927] pt-6 sm:grid-cols-2 lg:grid-cols-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                   Security
                 </p>
                 <p className="mt-2 text-sm leading-6 text-[#ded8cf]">
@@ -108,7 +108,7 @@ export default function ServicesHero({
               </div>
 
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                   Facility &amp; Front-of-House
                 </p>
                 <p className="mt-2 text-sm leading-6 text-[#ded8cf]">
@@ -117,7 +117,7 @@ export default function ServicesHero({
               </div>
 
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                   Manpower
                 </p>
                 <p className="mt-2 text-sm leading-6 text-[#ded8cf]">
@@ -126,7 +126,7 @@ export default function ServicesHero({
               </div>
 
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                   Verification &amp; Investigation
                 </p>
                 <p className="mt-2 text-sm leading-6 text-[#ded8cf]">

@@ -348,7 +348,7 @@ export default function ContactPage() {
                 {CONTACT_PAGE.hero.subtitle}
               </p>
 
-              <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+              <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold uppercase tracking-[0.13em] text-[#9a9590]">
                 <span>Security</span>
                 <span>Manpower</span>
                 <span>Facility Support</span>
@@ -402,7 +402,7 @@ export default function ContactPage() {
                   variants={fadeUp}
                   className="mt-8 border-t border-[#d9d1c5] pt-6"
                 >
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                     What happens next
                   </p>
 
@@ -461,7 +461,7 @@ export default function ContactPage() {
 
                 {(CONTACT.phone || WA_NUMBER) && (
                   <div className="mt-8 border-t border-[#d9d1c5] pt-6">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                       Prefer to speak directly?
                     </p>
 
@@ -563,7 +563,7 @@ export default function ContactPage() {
                     <p className="mt-5 font-heading text-2xl font-semibold text-[#f5f1e8]">
                       {CONTACT_PAGE.office.placeholder.title}
                     </p>
-                    <p className="mt-3 max-w-md text-sm leading-6 text-[#77716a]">
+                    <p className="mt-3 max-w-md text-sm leading-6 text-[#9a9590]">
                       {CONTACT_PAGE.office.placeholder.description}
                     </p>
                   </div>
@@ -571,7 +571,7 @@ export default function ContactPage() {
 
                 {CONTACT.address && (
                   <div className="border-t border-[#2b2927] p-6 text-center">
-                    <p className="text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+                    <p className="text-xs font-semibold uppercase tracking-[0.13em] text-[#9a9590]">
                       {CONTACT_PAGE.office.address.label}
                     </p>
                     <p className="mt-2 text-sm leading-6 text-[#ded8cf]">

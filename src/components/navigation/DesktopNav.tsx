@@ -218,7 +218,7 @@ function ServiceMegaMenu({
       >
         <div className="grid grid-cols-[0.78fr_1fr_0.8fr] gap-3">
           <div className="border-r border-[#2b2927] pr-3">
-            <p className="px-2 pb-2 pt-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+            <p className="px-2 pb-2 pt-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
               Primary categories
             </p>
 
@@ -246,7 +246,7 @@ function ServiceMegaMenu({
                         : "text-[#ded8cf]",
                     )}
                   >
-                    <span className="w-5 text-[0.68rem] tabular-nums text-[#77716a]">
+                    <span className="w-5 text-[0.68rem] tabular-nums text-[#9a9590]">
                       {String(index + 1).padStart(
                         2,
                         "0",
@@ -268,7 +268,7 @@ function ServiceMegaMenu({
           </div>
 
           <div className="border-r border-[#2b2927] pr-3">
-            <p className="px-2 pb-2 pt-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+            <p className="px-2 pb-2 pt-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
               Specific services
             </p>
 

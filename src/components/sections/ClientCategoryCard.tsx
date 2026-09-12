@@ -57,7 +57,7 @@ export default function ClientCategoryCard({
           })}
         </div>
 
-        <span className="text-xs font-semibold tracking-[0.14em] text-[#77716a]">
+        <span className="text-xs font-semibold tracking-[0.14em] text-[#9a9590]">
           {category.services.length
             .toString()
             .padStart(2, "0")}
@@ -77,7 +77,7 @@ export default function ClientCategoryCard({
           className="mt-6 border-t border-[#2b2927] pt-5"
           aria-label="Commonly used services"
         >
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
             Common support
           </p>
 

@@ -88,7 +88,7 @@ export default function IndustryExplorer({
                       "inline-flex items-center gap-2 border px-3 py-2 text-left text-xs font-semibold transition-all duration-200",
                       active
                         ? "border-[#b52b22] bg-[#b52b22] text-white"
-                        : "border-[#3a3835] bg-transparent text-[#a7a19a] hover:border-[#77716a] hover:text-[#f5f1e8]",
+                        : "border-[#3a3835] bg-transparent text-[#a7a19a] hover:border-[#9a9590] hover:text-[#f5f1e8]",
                     )}
                     aria-pressed={active}
                   >
@@ -131,7 +131,7 @@ export default function IndustryExplorer({
             </div>
 
             <div className="p-6 sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                 Relevant services
               </p>
 
@@ -155,13 +155,13 @@ export default function IndustryExplorer({
                         {service.name}
                       </span>
 
-                      <span className="mt-1 block text-xs leading-5 text-[#77716a]">
+                      <span className="mt-1 block text-xs leading-5 text-[#9a9590]">
                         {service.shortTagline}
                       </span>
                     </span>
 
                     <ArrowRight
-                      className="size-4 shrink-0 text-[#77716a] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#c45a52]"
+                      className="size-4 shrink-0 text-[#9a9590] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#c45a52]"
                       aria-hidden="true"
                     />
                   </Link>

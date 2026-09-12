@@ -86,7 +86,7 @@ export default function ContactInfo({
                       </div>
 
                       {isLink && (
-                        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[#77716a] transition-colors group-hover:text-[#c45a52]">
+                        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[#9a9590] transition-colors group-hover:text-[#c45a52]">
                           Open
                         </span>
                       )}

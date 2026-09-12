@@ -149,7 +149,7 @@ export default function IndustryDetailHero({
               variants={fadeUp}
               className="border-l-2 border-[#b52b22] pl-6"
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#77716a]">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9a9590]">
                 What we cover
               </p>
               <p className="mt-3 text-base leading-7 text-[#b4aea5]">

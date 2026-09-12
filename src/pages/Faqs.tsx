@@ -292,7 +292,7 @@ export default function FaqsPage() {
                 <Search
                   size={18}
                   strokeWidth={1.8}
-                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#77716a]"
+                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#9a9590]"
                   aria-hidden="true"
                 />
 
@@ -306,14 +306,14 @@ export default function FaqsPage() {
                   aria-label={
                     FAQ_PAGE.search.placeholder
                   }
-                  className="min-h-[52px] w-full rounded-none border border-[#3a3835] bg-[#10100f] py-3 pl-11 pr-12 text-sm text-[#f5f1e8] outline-none transition-colors placeholder:text-[#77716a] focus:border-[#b52b22] focus:ring-1 focus:ring-[#b52b22]"
+                  className="min-h-[52px] w-full rounded-none border border-[#3a3835] bg-[#10100f] py-3 pl-11 pr-12 text-sm text-[#f5f1e8] outline-none transition-colors placeholder:text-[#9a9590] focus:border-[#b52b22] focus:ring-1 focus:ring-[#b52b22]"
                 />
 
                 {searchQuery && (
                   <button
                     type="button"
                     onClick={clearSearch}
-                    className="absolute right-3 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center text-[#77716a] transition-colors hover:text-[#f5f1e8]"
+                    className="absolute right-3 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center text-[#9a9590] transition-colors hover:text-[#f5f1e8]"
                     aria-label="Clear FAQ search"
                   >
                     <X
@@ -408,7 +408,7 @@ export default function FaqsPage() {
                 variants={fadeUp}
                 role="status"
                 aria-live="polite"
-                className="mt-6 text-center text-xs uppercase tracking-[0.12em] text-[#77716a]"
+                className="mt-6 text-center text-xs uppercase tracking-[0.12em] text-[#9a9590]"
               >
                 Showing {filteredFaqs.length}{" "}
                 {filteredFaqs.length === 1

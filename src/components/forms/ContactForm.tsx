@@ -125,7 +125,7 @@ export default function ContactForm({
           </div>
 
           <div className="mt-7 border border-[#d9d1c5] bg-[#ebe5da] p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#77716a]">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9a9590]">
               What happens next
             </p>
 

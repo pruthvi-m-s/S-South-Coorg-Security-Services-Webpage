@@ -113,7 +113,7 @@ export default function ClientsHero({
                 <p className="font-heading text-3xl font-semibold text-[#f5f1e8]">
                   50+
                 </p>
-                <p className="mt-1 text-xs uppercase tracking-[0.13em] text-[#77716a]">
+                <p className="mt-1 text-xs uppercase tracking-[0.13em] text-[#9a9590]">
                   Clients
                 </p>
               </div>
@@ -122,7 +122,7 @@ export default function ClientsHero({
                 <p className="font-heading text-3xl font-semibold text-[#f5f1e8]">
                   2008
                 </p>
-                <p className="mt-1 text-xs uppercase tracking-[0.13em] text-[#77716a]">
+                <p className="mt-1 text-xs uppercase tracking-[0.13em] text-[#9a9590]">
                   Since
                 </p>
               </div>
@@ -131,7 +131,7 @@ export default function ClientsHero({
                 <p className="font-heading text-3xl font-semibold text-[#f5f1e8]">
                   100+
                 </p>
-                <p className="mt-1 text-xs uppercase tracking-[0.13em] text-[#77716a]">
+                <p className="mt-1 text-xs uppercase tracking-[0.13em] text-[#9a9590]">
                   Personnel
                 </p>
               </div>

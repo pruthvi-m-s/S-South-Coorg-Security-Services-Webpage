@@ -67,7 +67,7 @@ export default function StatsGrid({
             {stat.label}
           </p>
 
-          <p className="mt-2 text-sm leading-6 text-[#77716a]">
+          <p className="mt-2 text-sm leading-6 text-[#9a9590]">
             {EVIDENCE_LABELS[stat.id] ?? stat.suffix.replace("+", "").trim()}
           </p>
         </motion.div>

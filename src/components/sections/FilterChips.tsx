@@ -49,7 +49,7 @@ export default function FilterChips<T = string>({
           "focus-visible:outline-2 focus-visible:outline-[#b52b22] focus-visible:outline-offset-2",
           selected === null
             ? "border-[#b52b22] bg-[#b52b22] text-white"
-            : "border-[#3a3835] bg-transparent text-[#99938c] hover:border-[#77716a] hover:text-[#f5f1e8]",
+            : "border-[#3a3835] bg-transparent text-[#99938c] hover:border-[#9a9590] hover:text-[#f5f1e8]",
         )}
       >
         All
@@ -75,7 +75,7 @@ export default function FilterChips<T = string>({
               "focus-visible:outline-2 focus-visible:outline-[#b52b22] focus-visible:outline-offset-2",
               isActive
                 ? "border-[#b52b22] bg-[#b52b22] text-white"
-                : "border-[#3a3835] bg-transparent text-[#99938c] hover:border-[#77716a] hover:text-[#f5f1e8]",
+                : "border-[#3a3835] bg-transparent text-[#99938c] hover:border-[#9a9590] hover:text-[#f5f1e8]",
             )}
           >
             {item.label}

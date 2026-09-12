@@ -229,7 +229,7 @@ export default function ThankYouPage() {
                           </span>
 
                           <ArrowRight
-                            className="mt-1 size-4 text-[#77716a] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#c45a52]"
+                            className="mt-1 size-4 text-[#9a9590] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#c45a52]"
                             aria-hidden="true"
                           />
                         </div>
@@ -313,7 +313,7 @@ export default function ThankYouPage() {
                         )}
                       </span>
 
-                      <h3 className="mt-5 text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+                      <h3 className="mt-5 text-xs font-semibold uppercase tracking-[0.13em] text-[#9a9590]">
                         {item.label}
                       </h3>
 

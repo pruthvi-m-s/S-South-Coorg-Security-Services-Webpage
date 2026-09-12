@@ -86,7 +86,7 @@ export default function TrustHighlights({
                     {item.title}
                   </h3>
 
-                  <p className="mt-3 text-sm leading-7 text-[#77716a]">
+                  <p className="mt-3 text-sm leading-7 text-[#9a9590]">
                     {item.description}
                   </p>
                 </motion.article>
@@ -96,7 +96,7 @@ export default function TrustHighlights({
 
           <motion.p
             variants={fadeUp}
-            className="mt-10 text-center text-xs text-[#5a554f]"
+            className="mt-10 text-center text-xs text-[#9a9590]"
           >
             All imagery reflects actual SSCSS deployments, training, and operations.
           </motion.p>

@@ -138,7 +138,7 @@ export default function ComplianceSection({
                         "inline-flex items-center gap-2 text-xs font-medium sm:justify-self-end",
                         isVerified
                           ? "text-[#8ec49c]"
-                          : "text-[#77716a]",
+                          : "text-[#9a9590]",
                       )}
                     >
                       {isVerified && (

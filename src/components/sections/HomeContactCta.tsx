@@ -43,7 +43,7 @@ export default function HomeContactCta() {
                 className="group flex flex-col bg-[#191918] p-6 transition-colors hover:bg-[#1d1d1c] sm:p-7"
                 data-analytics-cta="home_final_form"
               >
-                <span className="text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+                <span className="text-xs font-semibold uppercase tracking-[0.13em] text-[#9a9590]">
                   Option 1
                 </span>
                 <span className="mt-3 font-heading text-lg font-semibold text-[#ded8cf] transition-colors group-hover:text-[#f5f1e8]">
@@ -70,7 +70,7 @@ export default function HomeContactCta() {
                   className="group flex flex-col bg-[#191918] p-6 transition-colors hover:bg-[#1d1d1c] sm:p-7"
                   data-analytics-cta="home_final_call"
                 >
-                  <span className="text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+                  <span className="text-xs font-semibold uppercase tracking-[0.13em] text-[#9a9590]">
                     Option 2
                   </span>
                   <span className="mt-3 font-heading text-lg font-semibold text-[#ded8cf] transition-colors group-hover:text-[#f5f1e8]">
@@ -95,7 +95,7 @@ export default function HomeContactCta() {
                   className="group flex flex-col bg-[#191918] p-6 transition-colors hover:bg-[#1d1d1c] sm:p-7"
                   data-analytics-cta="home_final_whatsapp"
                 >
-                  <span className="text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+                  <span className="text-xs font-semibold uppercase tracking-[0.13em] text-[#9a9590]">
                     Option 3
                   </span>
                   <span className="mt-3 font-heading text-lg font-semibold text-[#ded8cf] transition-colors group-hover:text-[#f5f1e8]">

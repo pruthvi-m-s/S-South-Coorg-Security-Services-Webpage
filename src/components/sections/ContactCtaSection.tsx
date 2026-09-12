@@ -98,7 +98,7 @@ export default function ContactCtaSection({
                       aria-hidden="true"
                     />
 
-                    <p className="mt-5 text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+                    <p className="mt-5 text-xs font-semibold uppercase tracking-[0.13em] text-[#9a9590]">
                       {phoneLabel}
                     </p>
 
@@ -119,7 +119,7 @@ export default function ContactCtaSection({
                       aria-hidden="true"
                     />
 
-                    <p className="mt-5 text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]">
+                    <p className="mt-5 text-xs font-semibold uppercase tracking-[0.13em] text-[#9a9590]">
                       {emailLabel}
                     </p>
 

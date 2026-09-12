@@ -138,7 +138,7 @@ export default function Accordion({
                   size={19}
                   strokeWidth={1.8}
                   className={cn(
-                    "mt-0.5 shrink-0 text-[#77716a] transition-transform duration-300",
+                    "mt-0.5 shrink-0 text-[#9a9590] transition-transform duration-300",
                     isOpen && "rotate-180 text-[#c45a52]",
                   )}
                   aria-hidden="true"

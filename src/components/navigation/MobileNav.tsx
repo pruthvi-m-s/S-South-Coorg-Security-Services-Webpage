@@ -320,7 +320,7 @@ export default function MobileNav({
                                         }
                                         className="flex min-h-[44px] items-center gap-2 rounded-md px-2 text-sm font-semibold text-[#ded8cf] hover:bg-[#10100f] hover:text-[#c45a52] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
                                       >
-                                        <span className="w-5 text-[0.68rem] tabular-nums text-[#77716a]">
+                                        <span className="w-5 text-[0.68rem] tabular-nums text-[#9a9590]">
                                           {String(
                                             index +
                                               1,
@@ -348,7 +348,7 @@ export default function MobileNav({
                                               onClick={
                                                 onClose
                                               }
-                                              className="flex min-h-[44px] items-center rounded-md px-2 py-2 text-sm text-[#77716a] hover:bg-[#10100f] hover:text-[#c45a52] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
+                                              className="flex min-h-[44px] items-center rounded-md px-2 py-2 text-sm text-[#9a9590] hover:bg-[#10100f] hover:text-[#c45a52] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
                                             >
                                               {
                                                 service.name

@@ -82,7 +82,7 @@ function AnimatedStat({ stat }: { stat: Stat }) {
         {stat.label}
       </p>
 
-      <p className="mt-1 text-xs text-[#77716a]">
+      <p className="mt-1 text-xs text-[#9a9590]">
         {evidenceLabels[stat.id] ?? ""}
       </p>
     </div>
@@ -110,7 +110,7 @@ export default function ClientTrustExperience({
           {categories.map((category) => (
             <span
               key={category.title}
-              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[#77716a]"
+              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[#9a9590]"
             >
               <span
                 className="size-1.5 rounded-full bg-[#b52b22]"
@@ -191,7 +191,7 @@ export default function ClientTrustExperience({
 
               <Link
                 to={ROUTES.contact}
-                className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#c45a52] transition-colors hover:text-white"
+                className="mt-7 inline-flex min-h-[44px] items-center gap-2 py-2 text-sm font-semibold text-[#c45a52] transition-colors hover:text-white"
               >
                 Start a conversation
                 <ArrowRight className="size-4" aria-hidden="true" />
@@ -232,7 +232,7 @@ export default function ClientTrustExperience({
                     {item.title}
                   </h3>
 
-                  <p className="text-sm leading-6 text-[#77716a] sm:text-base">
+                  <p className="text-sm leading-6 text-[#9a9590] sm:text-base">
                     {item.text}
                   </p>
                 </motion.article>
@@ -296,7 +296,7 @@ export default function ClientTrustExperience({
                       "{item.quote}"
                     </p>
 
-                    <footer className="mt-5 text-xs font-semibold uppercase tracking-[0.12em] text-[#77716a]">
+                    <footer className="mt-5 text-xs font-semibold uppercase tracking-[0.12em] text-[#9a9590]">
                       {item.authorName}
                     </footer>
                   </blockquote>
@@ -315,7 +315,7 @@ export default function ClientTrustExperience({
                       Client proof is permission-led.
                     </h3>
 
-                    <p className="mt-2 text-sm leading-6 text-[#77716a]">
+                    <p className="mt-2 text-sm leading-6 text-[#9a9590]">
                       Client names, logos and testimonials are published only
                       after the required approval is available.
                     </p>
@@ -328,14 +328,14 @@ export default function ClientTrustExperience({
                       key={sector}
                       className="bg-[#191918] px-4 py-3 text-center"
                     >
-                      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#5a554f]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#9a9590]">
                         {sector}
                       </p>
                     </div>
                   ))}
                 </div>
 
-                <p className="mt-4 text-xs text-[#5a554f]">
+                <p className="mt-4 text-xs text-[#9a9590]">
                   Sector categories reflect active deployment environments.
                 </p>
               </div>

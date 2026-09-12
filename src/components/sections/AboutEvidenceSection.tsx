@@ -91,14 +91,14 @@ export default function AboutEvidenceSection({
                     {certification.label}
                   </h3>
 
-                  <p className="mt-2 text-sm leading-6 text-[#77716a]">
+                  <p className="mt-2 text-sm leading-6 text-[#9a9590]">
                     {pending
                       ? "Documentation available on request."
                       : "Documentation available for review."}
                   </p>
 
                   {pending && (
-                    <p className="mt-3 text-xs text-[#5a554f]">
+                    <p className="mt-3 text-xs text-[#9a9590]">
                       Status reflects current publication records.
                     </p>
                   )}

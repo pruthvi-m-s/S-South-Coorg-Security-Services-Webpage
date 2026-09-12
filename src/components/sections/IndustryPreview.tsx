@@ -104,7 +104,7 @@ export default function IndustryPreview({
                   </span>
 
                   <ArrowUpRight
-                    className="size-4 text-[#77716a] transition-colors group-hover:text-[#b52b22]"
+                    className="size-4 text-[#9a9590] transition-colors group-hover:text-[#b52b22]"
                     aria-hidden="true"
                   />
                 </Link>
