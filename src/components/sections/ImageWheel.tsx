@@ -53,6 +53,7 @@ const COLUMN_TWO = [
 export default function ImageWheel() {
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
+  const [marqueeOffset, setMarqueeOffset] = useState(-620);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -71,6 +72,21 @@ export default function ImageWheel() {
     observer.observe(section);
 
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const computeOffset = () => {
+      const w = window.innerWidth;
+      if (w < 640) return -460;
+      if (w < 1024) return -580;
+      return -720;
+    };
+
+    setMarqueeOffset(computeOffset());
+
+    const onResize = () => setMarqueeOffset(computeOffset());
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   return (
@@ -95,7 +111,7 @@ export default function ImageWheel() {
 
             <h2
               id="people-title"
-              className="mt-3 max-w-lg font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-6xl"
+              className="mt-3 max-w-lg font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
             >
               Security is ultimately about people.
             </h2>
@@ -130,7 +146,7 @@ export default function ImageWheel() {
 
           <div
             data-people-reveal
-            className={`relative h-[520px] overflow-hidden transition-all duration-700 ease-premium-out ${
+            className={`relative h-[320px] overflow-hidden transition-all duration-700 ease-premium-out sm:h-[420px] lg:h-[520px] ${
               visible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-6 opacity-0"
@@ -138,12 +154,12 @@ export default function ImageWheel() {
             style={{ transitionDelay: "120ms" }}
           >
             <div
-              className="pointer-events-none absolute inset-x-0 top-0 z-20 h-24 bg-gradient-to-b from-[#10100f] to-transparent"
+              className="pointer-events-none absolute inset-x-0 top-0 z-20 h-16 bg-gradient-to-b from-[#10100f] to-transparent sm:h-20 lg:h-24"
               aria-hidden="true"
             />
 
             <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-24 bg-gradient-to-t from-[#10100f] to-transparent"
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-16 bg-gradient-to-t from-[#10100f] to-transparent sm:h-20 lg:h-24"
               aria-hidden="true"
             />
 
@@ -151,12 +167,14 @@ export default function ImageWheel() {
               <MarqueeColumn
                 images={COLUMN_ONE}
                 duration={20}
+                marqueeOffset={marqueeOffset}
               />
 
               <MarqueeColumn
                 images={COLUMN_TWO}
                 duration={24}
                 reverse
+                marqueeOffset={marqueeOffset}
               />
             </div>
           </div>
@@ -170,6 +188,7 @@ function MarqueeColumn({
   images,
   duration,
   reverse = false,
+  marqueeOffset = -620,
 }: {
   images: Array<{
     src: string;
@@ -177,6 +196,7 @@ function MarqueeColumn({
   }>;
   duration: number;
   reverse?: boolean;
+  marqueeOffset?: number;
 }) {
   return (
     <div className="relative h-full overflow-hidden">
@@ -187,6 +207,7 @@ function MarqueeColumn({
         style={
           {
             "--people-marquee-duration": `${duration}s`,
+            "--people-marquee-offset": `${marqueeOffset}px`,
           } as React.CSSProperties
         }
       >
@@ -224,7 +245,7 @@ function Photo({
   };
 }) {
   return (
-    <div className="relative h-[150px] w-full shrink-0 overflow-hidden bg-[#191918] sm:h-[165px]">
+    <div className="relative h-[100px] w-full shrink-0 overflow-hidden bg-[#191918] sm:h-[130px] lg:h-[165px]">
       <ImageWithSkeleton
         src={image.src}
         alt={image.alt}
