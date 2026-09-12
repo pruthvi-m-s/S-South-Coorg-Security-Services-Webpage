@@ -294,7 +294,7 @@ export default function MobileNav({
                                     ROUTES.services
                                   }
                                   onClick={onClose}
-                                  className="block rounded-md px-2 py-2 text-sm font-semibold text-[#c45a52] hover:bg-[#10100f] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
+                                  className="flex min-h-[44px] items-center rounded-md px-2 py-2 text-sm font-semibold text-[#c45a52] hover:bg-[#10100f] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
                                 >
                                   All services
                                 </Link>
@@ -318,7 +318,7 @@ export default function MobileNav({
                                         onClick={
                                           onClose
                                         }
-                                        className="flex min-h-10 items-center gap-2 rounded-md px-2 text-sm font-semibold text-[#ded8cf] hover:bg-[#10100f] hover:text-[#c45a52] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
+                                        className="flex min-h-[44px] items-center gap-2 rounded-md px-2 text-sm font-semibold text-[#ded8cf] hover:bg-[#10100f] hover:text-[#c45a52] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
                                       >
                                         <span className="w-5 text-[0.68rem] tabular-nums text-[#77716a]">
                                           {String(
@@ -333,7 +333,7 @@ export default function MobileNav({
                                         {category.name}
                                       </Link>
 
-                                      <div className="mt-1 grid grid-cols-2 gap-1 pl-7">
+                                      <div className="mt-1 grid grid-cols-2 gap-2 pl-7">
                                         {category.services.map(
                                           (
                                             service,
@@ -348,7 +348,7 @@ export default function MobileNav({
                                               onClick={
                                                 onClose
                                               }
-                                              className="rounded-md px-2 py-2 text-sm text-[#77716a] hover:bg-[#10100f] hover:text-[#c45a52] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
+                                              className="flex min-h-[44px] items-center rounded-md px-2 py-2 text-sm text-[#77716a] hover:bg-[#10100f] hover:text-[#c45a52] focus-visible:outline-2 focus-visible:outline-[#c45a52]"
                                             >
                                               {
                                                 service.name
