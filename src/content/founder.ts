@@ -36,7 +36,7 @@ export const FOUNDER: FounderContent = {
   name: "Machettira Subramani",
   designation: "Founder • Proprietor • Managing Director",
   experienceBadge: "18+ Years",
-  experienceCaption: "Building SSCSS since 2008 in Bengaluru",
+  experienceCaption: "Building trust since 2008",
   message:
     "Our commitment has remained unchanged since 2008 — to deliver disciplined, dependable, and professional security solutions built on integrity, accountability, and long-term client relationships. Every deployment reflects our promise to protect what matters most.",
   quote:
@@ -48,16 +48,12 @@ export const FOUNDER: FounderContent = {
   },
   achievements: [
     {
-      title: "Established SSCSS in 2008",
+      title: "Established in 2008, serving Bengaluru",
       icon: "Award",
     },
     {
-      title: "Serving Bengaluru Since 2008",
-      icon: "MapPin",
-    },
-    {
-      title: "18+ Years of Company Operations",
-      icon: "Calendar",
+      title: "50+ clients across Bengaluru",
+      icon: "Building2",
     },
   ],
 };

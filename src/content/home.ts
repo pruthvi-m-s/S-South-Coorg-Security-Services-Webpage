@@ -82,26 +82,6 @@ export const HOME = {
       "From apartment associations and tech parks to schools and construction sites — security and staffing adapted to the way your environment runs day to day.",
   },
 
-  // ─── Proof — not promises ───────────────────────────────────
-  proof: {
-    eyebrow: "Proof, not promises",
-    title: "A security partner should be able to show how it works.",
-    stats: [
-      {
-        value: "2008",
-        text: "SSCSS company operations began in Bengaluru.",
-      },
-      {
-        value: "100+",
-        text: "Trained personnel represented in the current business information.",
-      },
-      {
-        value: "50+",
-        text: "Clients represented across the current company profile.",
-      },
-    ],
-  },
-
   // ─── FAQ preview ────────────────────────────────────────────
   faq: {
     eyebrow: "Common questions",

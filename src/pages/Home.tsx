@@ -204,7 +204,6 @@ export default function HomePage() {
       <div className="bg-[#191918] text-[#f5f1e8]">
         <TrustStats
           certifications={CERTIFICATIONS}
-          stats={STATS}
           pendingLabel={COMPLIANCE_PAGE.statusLabels.pending}
         />
       </div>

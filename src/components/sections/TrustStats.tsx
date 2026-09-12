@@ -15,12 +15,11 @@ import {
   fadeUp,
   viewportOptions,
 } from "@/lib/motion";
-import type { Certification, Stat } from "@/types";
+import type { Certification } from "@/types";
 
 // ─── Props ────────────────────────────────────────────────────
 interface TrustStatsProps {
   certifications: Certification[];
-  stats: Stat[];
   pendingLabel?: string;
   className?: string;
 }
@@ -28,12 +27,10 @@ interface TrustStatsProps {
 // ─── TrustStats ───────────────────────────────────────────────
 export default function TrustStats({
   certifications,
-  stats,
   pendingLabel,
   className,
 }: TrustStatsProps) {
-  const hasContent = certifications.length > 0 || stats.length > 0;
-  if (!hasContent) return null;
+  if (certifications.length === 0) return null;
 
   return (
     <section
