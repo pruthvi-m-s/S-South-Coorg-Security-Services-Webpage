@@ -37,8 +37,9 @@ export default function GalleryDriftWall({
 }: GalleryDriftWallProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const isVerySmall = useMediaQuery("(max-width: 429px)");
   const isMobile = useMediaQuery("(max-width: 639px)");
-  const columns = isMobile ? 3 : 5;
+  const columns = isVerySmall ? 2 : isMobile ? 3 : 5;
 
   const driftWallItems = useMemo<DriftWallItem[]>(() => {
     return images.map((image) => ({
@@ -121,9 +122,9 @@ export default function GalleryDriftWall({
         <DriftWall
           items={driftWallItems}
           columns={columns}
-          tileWidth={isMobile ? 140 : 200}
-          tileHeight={isMobile ? 93 : 132}
-          gap={isMobile ? 12 : 18}
+          tileWidth={isVerySmall ? 110 : isMobile ? 140 : 200}
+          tileHeight={isVerySmall ? 73 : isMobile ? 93 : 132}
+          gap={isVerySmall ? 8 : isMobile ? 12 : 18}
           tilt={16}
           turn={-14}
           perspective={1200}

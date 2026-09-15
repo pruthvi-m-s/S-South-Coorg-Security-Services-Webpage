@@ -801,13 +801,13 @@ html {
   }
 
   to {
-    transform: translateY(var(--people-marquee-offset, -620px));
+    transform: translateY(var(--people-marquee-offset, -460px));
   }
 }
 
 @keyframes people-marquee-down {
   from {
-    transform: translateY(var(--people-marquee-offset, -620px));
+    transform: translateY(var(--people-marquee-offset, -460px));
   }
 
   to {

@@ -97,7 +97,7 @@ export default function IndustryPreview({
               <li key={industry.slug}>
                 <Link
                   to={ROUTES.industries}
-                  className="group flex min-h-full flex-col justify-between gap-4 bg-[#191918] p-6 transition-colors hover:bg-[#1d1d1c]"
+                  className="group flex min-h-full flex-col justify-between gap-4 bg-[#191918] p-6 sm:p-7 transition-colors hover:bg-[#1d1d1c]"
                 >
                   <span className="text-sm font-semibold leading-5 text-[#ded8cf] transition-colors group-hover:text-[#b52b22]">
                     {industry.name}

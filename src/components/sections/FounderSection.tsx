@@ -81,12 +81,12 @@ export default function FounderSection({
               {content.heading}
             </h2>
 
-            <div className="mt-6 inline-flex items-center gap-3 border-y border-border py-4">
+            <div className="mt-6 inline-flex flex-wrap items-center gap-3 border-y border-border py-4">
               <span className="font-heading text-3xl font-semibold text-primary">
                 {content.experienceBadge}
               </span>
 
-              <span className="max-w-xs text-xs leading-5 text-muted-foreground">
+              <span className="text-xs leading-5 text-muted-foreground">
                 {content.experienceCaption}
               </span>
             </div>

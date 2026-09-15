@@ -51,7 +51,7 @@ export default function Hero({ content, className }: HeroProps) {
               initial="hidden"
               animate="visible"
               transition={{ delay: 0.2 }}
-              className="text-xs font-semibold uppercase tracking-[0.15em] text-primary"
+              className="text-xs font-semibold uppercase tracking-[0.14em] text-primary"
             >
               {eyebrow}
             </motion.p>

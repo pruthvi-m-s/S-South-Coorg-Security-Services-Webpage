@@ -86,7 +86,7 @@ export default function CompliancePage() {
         className="bg-[#f3efe6] text-[#171615]"
         aria-labelledby="compliance-intro-title"
       >
-        <div className="section-container py-16 sm:py-20 lg:py-24">
+        <div className="section-container section-padding">
           <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#ad241c]">

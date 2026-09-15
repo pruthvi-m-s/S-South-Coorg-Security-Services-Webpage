@@ -60,7 +60,7 @@ export default function TrustStats({
           {certifications.length > 0 && (
             <motion.div
               variants={fadeUp}
-              className="mb-12 w-full md:mb-16"
+              className="w-full sm:mb-12 lg:mb-16"
             >
               <TrustStrip
                 certifications={certifications}

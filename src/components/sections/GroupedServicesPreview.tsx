@@ -98,7 +98,7 @@ export default function GroupedServicesPreview({
               {groups.map((group, index) => (
                 <article
                   key={group.id}
-                  className="flex flex-col bg-[#191918] p-7 sm:p-8"
+                  className="flex flex-col bg-[#191918] p-6 sm:p-7"
                 >
                   <span className="text-xs font-semibold tracking-[0.14em] text-[#c45a52]">
                     {String(index + 1).padStart(2, "0")}

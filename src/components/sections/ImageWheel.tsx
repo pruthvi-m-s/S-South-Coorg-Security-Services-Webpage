@@ -53,7 +53,15 @@ const COLUMN_TWO = [
 export default function ImageWheel() {
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
-  const [marqueeOffset, setMarqueeOffset] = useState(-620);
+  const getInitialOffset = () => {
+    if (typeof window === "undefined") return -460;
+    const w = window.innerWidth;
+    if (w < 640) return -460;
+    if (w < 1024) return -580;
+    return -720;
+  };
+
+  const [marqueeOffset, setMarqueeOffset] = useState(getInitialOffset);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -81,8 +89,6 @@ export default function ImageWheel() {
       if (w < 1024) return -580;
       return -720;
     };
-
-    setMarqueeOffset(computeOffset());
 
     const onResize = () => setMarqueeOffset(computeOffset());
     window.addEventListener("resize", onResize);
@@ -188,7 +194,7 @@ function MarqueeColumn({
   images,
   duration,
   reverse = false,
-  marqueeOffset = -620,
+  marqueeOffset = -460,
 }: {
   images: Array<{
     src: string;

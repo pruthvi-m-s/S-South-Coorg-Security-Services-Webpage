@@ -52,13 +52,13 @@ export default function TrustRibbon({
           key={stat.id}
           variants={fadeUp}
           className={cn(
-            "flex items-baseline justify-between gap-4 px-1 py-5 sm:flex-col sm:items-start sm:justify-center sm:py-6 sm:px-7 first:sm:pl-0 last:sm:pr-0",
+            "flex items-baseline justify-between gap-4 px-3 py-5 sm:flex-col sm:items-start sm:justify-center sm:py-6 sm:px-7 first:sm:pl-0 last:sm:pr-0",
           )}
         >
           <span className="font-heading text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             {stat.value}<span className="text-primary">+</span>
           </span>
-          <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          <span className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
             {EVIDENCE_LABELS[stat.id] ?? stat.suffix.replace("+ ", "")}
           </span>
         </motion.span>
@@ -66,7 +66,7 @@ export default function TrustRibbon({
 
       {/* PSARA badge */}
       {psara && psaraLabels && (
-        <motion.span variants={fadeUp} className="col-span-full flex items-center justify-center border-t border-border px-1 py-4 sm:col-span-3">
+        <motion.span variants={fadeUp} className="col-span-full flex items-center justify-center border-t border-border px-3 py-4 sm:col-span-3">
           <PSARABadge
             certification={psara}
             labels={psaraLabels}

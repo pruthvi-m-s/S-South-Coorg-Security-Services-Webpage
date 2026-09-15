@@ -45,7 +45,7 @@ export default function ServicesHero({
           <div>
             <motion.p
               variants={fadeUp}
-              className="text-xs font-semibold uppercase tracking-[0.16em] text-[#c45a52]"
+              className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
             >
               Security · Manpower · Facility Support
             </motion.p>

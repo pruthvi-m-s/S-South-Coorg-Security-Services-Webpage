@@ -102,7 +102,7 @@ export default function FaqPreview({
               {displayedFaqs.map((faq, index) => (
                 <article
                   key={faq.id}
-                  className="border-b border-[#2b2927] py-6 sm:py-7"
+                  className="border-b border-[#2b2927] py-6"
                 >
                   <div className="flex gap-5">
                     <span className="pt-1 text-xs font-semibold tracking-[0.14em] text-[#c45a52]">
