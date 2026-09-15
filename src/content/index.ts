@@ -76,7 +76,12 @@ export type { IndustriesPageContent } from "./industries-page";
 export { CLIENTS_PAGE } from "./clients-page";
 export type { ClientsPageContent, ClientCategory } from "./clients-page";
 
-export { GALLERY } from "./gallery";
+export {
+  GALLERY,
+  getRealImages,
+  getRealVideos,
+  getPopulatedCategories,
+} from "./gallery";
 export type {
   GalleryImage,
   GalleryVideo,

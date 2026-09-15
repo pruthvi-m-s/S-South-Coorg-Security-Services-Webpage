@@ -3,7 +3,6 @@ import ClientTrustExperience from "@/components/sections/ClientTrustExperience";
 import FinalCtaSection from "@/components/sections/FinalCtaSection";
 import {
   CLIENTS_PAGE,
-  TESTIMONIALS,
   FINAL_CTA,
   STATS,
 } from "@/content";
@@ -19,7 +18,7 @@ export default function ClientsPage() {
       <ClientTrustExperience
         categories={CLIENTS_PAGE.categories}
         stats={STATS}
-        testimonials={TESTIMONIALS}
+        process={CLIENTS_PAGE.process}
       />
 
       <FinalCtaSection content={FINAL_CTA} />

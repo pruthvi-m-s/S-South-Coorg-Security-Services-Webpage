@@ -66,6 +66,13 @@ export const FAQS: Faq[] = [
     answer:
       "Contract periods are flexible and depend on the service type and scope. We offer both short-term and long-term engagement options. Contact us for a customized proposal.",
   },
+  {
+    id: "faq-process-4",
+    category: "Process",
+    question: "How does SSCSS determine pricing?",
+    answer:
+      "Every deployment is different. Pricing is provided after understanding your specific requirements, service scope, and site conditions. There is no standard rate card — each proposal is tailored.",
+  },
   // ── Careers ──────────────────────────────────────────────
   {
     id: "faq-careers-1",

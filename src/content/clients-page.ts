@@ -25,10 +25,6 @@ export interface ClientsPageContent {
     description: string;
   };
   categories: ClientCategory[];
-  successStories: {
-    title: string;
-    subtitle: string;
-  };
   whyClientsStay: {
     title: string;
     subtitle: string;
@@ -49,9 +45,9 @@ export const CLIENTS_PAGE: ClientsPageContent = {
       "Over 50 organizations across Bengaluru trust SSCSS for their security and manpower needs — apartment associations, corporate offices, hospitals, schools, hotels, factories, and more.",
   },
   intro: {
-    title: "Trusted by Leading Organizations",
+    title: "Sectors We Serve",
     description:
-      "Since 2008, SSCSS has been the preferred security and manpower partner for over 50 clients across diverse industries in Bengaluru. Our client roster includes apartment associations, corporate offices, hospitals, educational institutions, industrial facilities, hotels, and government establishments. We are proud of the long-term relationships we have built through consistent service quality, reliability, and professional integrity.",
+      "SSCSS works across residential, corporate, healthcare, educational, hospitality, industrial, and institutional environments. Our deployments are shaped around how each sector operates — not a one-size-fits-all staffing model.",
   },
   categories: [
     {
@@ -111,11 +107,6 @@ export const CLIENTS_PAGE: ClientsPageContent = {
       services: ["security-guards", "ex-army-security-guards", "corporate-security"],
     },
   ],
-  successStories: {
-    title: "Client Success Stories",
-    subtitle:
-      "Hear from the organizations that have partnered with SSCSS for their security and manpower needs.",
-  },
   whyClientsStay: {
     title: "Why Clients Stay With SSCSS",
     subtitle:

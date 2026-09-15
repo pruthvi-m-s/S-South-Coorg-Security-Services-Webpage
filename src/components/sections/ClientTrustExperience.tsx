@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import type { ClientCategory } from "@/content/clients-page";
-import type { Stat, Testimonial } from "@/types";
+import type { Stat, ProcessStep } from "@/types";
 import ClientCategoryCard from "@/components/sections/ClientCategoryCard";
+import ProcessSection from "@/components/sections/ProcessSection";
 import { ROUTES } from "@/lib/routes";
 import {
   staggerContainer,
-  fadeUp,
   viewportOptions,
 } from "@/lib/motion";
 
@@ -92,14 +92,16 @@ function AnimatedStat({ stat }: { stat: Stat }) {
 export default function ClientTrustExperience({
   categories,
   stats,
-  testimonials,
+  process,
 }: {
   categories: ClientCategory[];
   stats: Stat[];
-  testimonials: Testimonial[];
+  process: {
+    title: string;
+    subtitle: string;
+    steps: ProcessStep[];
+  };
 }) {
-  const published = testimonials.filter((item) => !item.isPlaceholder);
-
   return (
     <>
       <section
@@ -248,101 +250,11 @@ export default function ClientTrustExperience({
         </div>
       </section>
 
-      <section
-        className="bg-[#191918] text-[#f5f1e8]"
-        aria-labelledby="client-proof-title"
-      >
-        <div className="section-container section-padding">
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOptions}
-            className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20"
-          >
-            <div>
-              <motion.p
-                variants={fadeUp}
-                className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c45a52]"
-              >
-                Partnership proof
-              </motion.p>
-
-              <motion.h2
-                id="client-proof-title"
-                variants={fadeUp}
-                className="mt-3 font-heading text-4xl font-semibold tracking-tight text-[#f5f1e8] sm:text-5xl"
-              >
-                Proof before promotion.
-              </motion.h2>
-
-              <motion.p
-                variants={fadeUp}
-                className="mt-4 max-w-md text-sm leading-7 text-[#b4aea5] sm:text-base"
-              >
-                Client names, logos and testimonials are presented only when
-                the appropriate permission is available.
-              </motion.p>
-            </div>
-
-            {published.length > 0 ? (
-              <div className="grid gap-px border border-[#2b2927] bg-[#2b2927] sm:grid-cols-2">
-                {published.map((item) => (
-                  <blockquote
-                    key={item.id}
-                    className="bg-[#10100f] p-6 sm:p-7"
-                  >
-                    <p className="font-heading text-xl font-medium leading-snug text-[#ded8cf]">
-                      "{item.quote}"
-                    </p>
-
-                    <footer className="mt-5 text-xs font-semibold uppercase tracking-[0.12em] text-[#9a9590]">
-                      {item.authorName}
-                    </footer>
-                  </blockquote>
-                ))}
-              </div>
-            ) : (
-              <div className="border border-[#2b2927] bg-[#10100f] p-6 sm:p-8">
-                <div className="flex items-start gap-4">
-                  <CheckCircle2
-                    className="mt-0.5 size-5 shrink-0 text-[#c45a52]"
-                    aria-hidden="true"
-                  />
-
-                  <div>
-                    <h3 className="font-heading text-xl font-semibold text-[#f5f1e8]">
-                      Client proof is permission-led.
-                    </h3>
-
-                    <p className="mt-2 text-sm leading-6 text-[#9a9590]">
-                      Client names, logos and testimonials are published only
-                      after the required approval is available.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-6 grid gap-px border border-[#2b2927] bg-[#2b2927] sm:grid-cols-3">
-                  {["Residential", "Corporate", "Healthcare"].map((sector) => (
-                    <div
-                      key={sector}
-                      className="bg-[#191918] px-4 py-3 text-center"
-                    >
-                      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#9a9590]">
-                        {sector}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                <p className="mt-4 text-xs text-[#9a9590]">
-                  Sector categories reflect active deployment environments.
-                </p>
-              </div>
-            )}
-          </motion.div>
-        </div>
-      </section>
+      <ProcessSection
+        title={process.title}
+        subtitle={process.subtitle}
+        steps={process.steps}
+      />
     </>
   );
 }

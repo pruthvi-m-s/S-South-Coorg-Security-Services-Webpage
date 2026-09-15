@@ -74,6 +74,31 @@ export interface GalleryContent {
 const PLACEHOLDER_BASE = "/images/gallery";
 const REAL_BASE = "/images/real";
 
+// ─── Helper: Real images only ────────────────────────────────
+
+/** Returns only images where isPlaceholder is false. */
+export function getRealImages(images: GalleryImage[]): GalleryImage[] {
+  return images.filter((img) => !img.isPlaceholder);
+}
+
+/** Returns only videos where isPlaceholder is false. */
+export function getRealVideos(videos: GalleryVideo[]): GalleryVideo[] {
+  return videos.filter((v) => !v.isPlaceholder);
+}
+
+/** Returns only categories that have at least one real image. */
+export function getPopulatedCategories(
+  categories: GalleryCategory[],
+  images: GalleryImage[],
+): GalleryCategory[] {
+  const realImages = getRealImages(images);
+  return categories.filter(
+    (cat) =>
+      cat.slug === "all" ||
+      realImages.some((img) => img.category === cat.slug),
+  );
+}
+
 // ─── Gallery Content ─────────────────────────────────────────
 
 export const GALLERY: GalleryContent = {

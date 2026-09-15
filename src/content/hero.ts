@@ -13,7 +13,7 @@ export const HERO: HeroContent = {
   eyebrow: "S South Coorg Security Services",
   headline: "Trusted Security & Manpower Solutions Across Bengaluru",
   description:
-    "Enterprise-grade security, manpower, and facility support for Bengaluru properties. We handle the people and processes so your team doesn't have to.",
+    "Reliable security and facility support for Bengaluru properties. We manage the people and processes so your team doesn't have to.",
   primaryCta: {
     label: "Get a Free Security Assessment",
     href: ROUTES.contact,

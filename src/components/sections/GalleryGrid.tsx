@@ -26,25 +26,10 @@ import type {
   GalleryVideo,
   GalleryCategory,
 } from "@/content/gallery";
-import {
-  entranceOfficeGuards,
-  gateSecurity,
-  soloGuard,
-  techPark,
-  techParkGuards,
-} from "@/lib/site-images";
 
 const MediaLightbox = lazy(
   () => import("@/components/sections/MediaLightbox"),
 );
-
-const galleryAssets = [
-  entranceOfficeGuards,
-  gateSecurity,
-  soloGuard,
-  techParkGuards,
-  techPark,
-];
 
 interface GalleryGridProps {
   title: string;
@@ -76,19 +61,7 @@ export default function GalleryGrid({
     useState(0);
 
   const availableImages = useMemo(
-    () =>
-      images.map((image, index) =>
-        image.isPlaceholder
-          ? {
-              ...image,
-              src:
-                galleryAssets[
-                  index % galleryAssets.length
-                ],
-              isPlaceholder: false,
-            }
-          : image,
-      ),
+    () => images,
     [images],
   );
 

@@ -3,9 +3,22 @@ import GalleryDriftWall from "@/components/sections/GalleryDriftWall";
 import GalleryGrid from "@/components/sections/GalleryGrid";
 import TrustHighlights from "@/components/sections/TrustHighlights";
 import FinalCtaSection from "@/components/sections/FinalCtaSection";
-import { GALLERY, FINAL_CTA } from "@/content";
+import {
+  GALLERY,
+  FINAL_CTA,
+  getRealImages,
+  getRealVideos,
+  getPopulatedCategories,
+} from "@/content";
 
 export default function GalleryPage() {
+  const realImages = getRealImages(GALLERY.images);
+  const realVideos = getRealVideos(GALLERY.videos);
+  const populatedCategories = getPopulatedCategories(
+    GALLERY.categories,
+    GALLERY.images,
+  );
+
   return (
     <div className="bg-[#10100f] text-[#f5f1e8]">
       <GalleryHero
@@ -39,14 +52,14 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      <GalleryDriftWall images={GALLERY.images} />
+      <GalleryDriftWall images={realImages} />
 
       <GalleryGrid
         title="Our Photo Collection"
-        subtitle="Browse through images of SSCSS people, deployments, training, equipment, and events."
-        categories={GALLERY.categories}
-        images={GALLERY.images}
-        videos={GALLERY.videos}
+        subtitle="Browse through images of SSCSS people, deployments, and events."
+        categories={populatedCategories}
+        images={realImages}
+        videos={realVideos}
       />
 
       <TrustHighlights
